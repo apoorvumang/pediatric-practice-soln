@@ -118,6 +118,10 @@ th, td {
 	border-width: 1px;
   	border-style: solid;
 }
+#focus_green {
+	background: #9AFF9A;
+	color:black;
+}
 th {
   	padding: .8em 1em;
 	background: #2C76A6;

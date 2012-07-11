@@ -91,24 +91,24 @@ if($_GET['id'])
 
 	<?php
 	$result = mysql_query("SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date");
-	//To show lower and upper limit, we subtract noofdays from vaccine's schedule, to get dependent's date
-	//the lower and upper limits are then added to this date
+	//To show lower and upper limit, we add them to birth date 
 	$count = 0;
 	while($row = mysql_fetch_assoc($result))
 	{
 		$vac = mysql_fetch_assoc(mysql_query("SELECT * FROM vaccines WHERE id = {$row['v_id']}"));
-		$temp_nofdays = "-".$vac['no_of_days']." days";
-		$dep_date_ts = strtotime($temp_nofdays, strtotime($row['date']));
 		$temp_nofdays = "+".$vac['lower_limit']." days";
-		$lower_limit = date('d-F-Y', strtotime($temp_nofdays, $dep_date_ts));
-		if($vac['upper_limit'] > 9999)
+		$lower_limit = date('d-F-Y', strtotime($temp_nofdays, strtotime($patient['dob'])));
+		if($vac['upper_limit'] > 36500)
 			$upper_limit = "None";
 		else
 		{
 			$temp_nofdays = "+".$vac['upper_limit']." days";
-			$upper_limit = date('d-F-Y', strtotime($temp_nofdays, $dep_date_ts));
+			$upper_limit = date('d-F-Y', strtotime($temp_nofdays, strtotime($patient['dob'])));
 		}
-		echo "<tr>";
+		echo "<tr ";
+		if ($row['given']=='Y')
+			echo "id=\"focus_green\"";	//green focus if vaccine has been given
+		echo " >";
 		echo "<td>";
 		?>
 		<select name="given[]" style="">

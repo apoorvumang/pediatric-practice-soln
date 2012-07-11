@@ -148,6 +148,19 @@ if($_SESSION['msg']['reg-success'])
 	<input type="text" name="mother_occ" id="mother_occ"  />
 	</p>
 
+	<p>
+	<label class="grey" for="sibling">Sibling:&nbsp;&nbsp;</label>
+	<select name="dependent" style="margin-right:60px;">
+	<option value=0>None</option>
+	<?php
+	$result = mysql_query("SELECT name, id FROM patients WHERE 1");
+	while($pat_sib = mysql_fetch_assoc($result))
+	{
+		echo "<option value=".$pat_sib['id'].">".$pat_sib['name']."</option>\n";
+	}
+	?>
+	</select>
+	</p>
 
 
 	<p>

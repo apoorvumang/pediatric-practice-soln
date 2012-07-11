@@ -9,15 +9,15 @@
 	</p>
 
 	<p>
-	<label for="no_of_days">No. of days:</label>
+	<label for="no_of_days">Recommended interval to next dose (days):</label>
 	<input type="text" name="no_of_days" id="no_of_days" />
 	</p>
 	<p>
-	<label for="lower_limit">Lower limit (days):</label>
+	<label for="lower_limit">Recommended min age (days):</label>
 	<input type="text" name="lower_limit" id="lower_limit" />
 	</p>
 	<p>
-	<label for="upper_limit">Upper limit (days):</label>
+	<label for="upper_limit">Recommended max age (days):</label>
 	<input type="text" name="upper_limit" id="upper_limit" />
 	</p>
 
