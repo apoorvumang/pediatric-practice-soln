@@ -68,10 +68,13 @@ echo $title;
 ?>
 </title>
 
-<link rel="stylesheet" type="text/css" media="all" href="css/jsDatePick_ltr.min.css" />
-<script type="text/javascript" src="js/jsDatePick.min.1.3.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
 
-<link rel="stylesheet" type="text/css" media="screen" href="css/coolblue.css" />
+<!-- datepicker things from jqueryui -->
+<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+
 </head>
 <body>
 <!--header -->

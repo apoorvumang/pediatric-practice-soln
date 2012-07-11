@@ -90,14 +90,17 @@ if($_SESSION['msg']['reg-success'])
 }
 ?>
 
-<script type="text/javascript">
-	window.onload = function(){
-		new JsDatePick({
-			useMode:2,
-			target:"dob",
-			dateFormat:"%Y-%m-%d"
-		});
-	};
+<script>
+$(function() {
+	$( "#dob_show" ).datepicker({
+		changeMonth: true,
+		changeYear: true,
+		yearRange: "1989:2022",
+		dateFormat:"dd/mm/yy",
+		altField: "#dob",
+		altFormat: "yy-mm-dd"
+	});
+});
 </script>
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
@@ -115,7 +118,8 @@ if($_SESSION['msg']['reg-success'])
 
 	<p>
 	<label for="dob">Date of Birth:&nbsp;&nbsp;</label>
-	<input type="text" name="dob" id="dob" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="hidden" name="dob" id="dob" />
+	<input type="text" name="dob_show" id="dob_show" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 	<label class="grey" for="sex">Sex:&nbsp;&nbsp;</label>
 	<select name="sex" style="margin-right:60px;">

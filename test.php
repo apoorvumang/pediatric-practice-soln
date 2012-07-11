@@ -11,6 +11,7 @@
 			changeMonth: true,
 			changeYear: true,
 			yearRange: "1989:2022",
+			dateFormat:"dd/mm/yy",
 			altField: "#actualDate1",
 			altFormat: "yy-mm-dd"
 		});
