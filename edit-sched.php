@@ -75,6 +75,22 @@ if($_GET['id'])
 <p>
 <strong>Address :</strong> <?php echo $patient['address']; ?>
 </p>
+<p>
+<strong>Sibling :</strong> <?php 
+if($patient['sibling']==0)
+	echo "None";
+else
+{
+	echo "<a href=edit-sched.php?id=".$patient['sibling'].">";
+
+	$sibling_row = mysql_fetch_assoc(mysql_query("SELECT name FROM patients WHERE id={$patient['sibling']}"));
+	echo $sibling_row['name'];
+	
+	echo "</a>";
+}
+
+?>
+</p>
 <h4>Schedule</h4>
 <form action="" method="post" style="width:800px;">
 <table>

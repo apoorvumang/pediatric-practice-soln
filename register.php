@@ -45,7 +45,7 @@ if(isset($_POST['submit']))
 		
 		// Escape the input data
 
-		mysql_query("INSERT INTO patients(name,first_name,last_name,email,dob,phone,sex,father_name,father_occ,mother_name,mother_occ,address)
+		mysql_query("INSERT INTO patients(name,first_name,last_name,email,dob,phone,sex,father_name,father_occ,mother_name,mother_occ,address,sibling)
 					VALUES(
 					'".$_POST['name']."', '".$_POST['first_name']."', '".$_POST['last_name']."',
 					'".$_POST['email']."',
@@ -56,11 +56,17 @@ if(isset($_POST['submit']))
 					'".$_POST['father_occ']."',
 					'".$_POST['mother_name']."',
 					'".$_POST['mother_occ']."',
-					'".$_POST['address']."')");
+					'".$_POST['address']."',
+					".$_POST['sibling'].")");
 
 		if(mysql_affected_rows($link)==1)
 		{	
-			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".mysql_insert_id()."</strong>";
+			$new_patient_id = mysql_insert_id();
+			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
+			if($_POST['sibling']!=0)
+			{
+				mysql_query("UPDATE patients SET sibling={$new_patient_id} WHERE id={$_POST['sibling']}");
+			}
 		}
 		else $err[]='An unknown error has occured.';
 	}
@@ -150,7 +156,7 @@ if($_SESSION['msg']['reg-success'])
 
 	<p>
 	<label class="grey" for="sibling">Sibling:&nbsp;&nbsp;</label>
-	<select name="dependent" style="margin-right:60px;">
+	<select name="sibling" style="margin-right:60px;">
 	<option value=0>None</option>
 	<?php
 	$result = mysql_query("SELECT name, id FROM patients WHERE 1");
