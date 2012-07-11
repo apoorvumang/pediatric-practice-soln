@@ -1,0 +1,11 @@
+table called VACCINES will store 
+ID 
+NAME
+NO_OF_DAYS
+DEPENDENT (ID from VACCINES)
+SEX
+LOWER_LIMIT
+UPPER_LIMIT
+STATUS
+
+Right now, if make schedule is clicked, old schedule is deleted. Maybe this should be changed to retaining schedule of old vaccines and adding new vaccines

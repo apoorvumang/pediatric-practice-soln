@@ -1,0 +1,14 @@
+Search using:
+1. born before some year
+2. born in some year
+3. appointments at a particular day
+
+1. Growth chart
+2. BMI calculator
+
+Printing:
+1. vaccine schedule for a certain patient
+2. growth chart for a patient
+
+~1. Editable schedule of patients
+~2. Edit/delete vaccine - slight error, if i click edit and save without making changes, it shows error
