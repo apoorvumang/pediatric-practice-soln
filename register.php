@@ -1,5 +1,5 @@
 <?php include('header.php'); 
-
+include('gen-sched-func.php');
 function checkEmail($str)
 {
 	return preg_match("/^[\.A-z0-9_\-\+]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $str);
@@ -65,7 +65,12 @@ if(isset($_POST['submit']))
 			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
 			if($_POST['sibling']!=0)
 			{
-				mysql_query("UPDATE patients SET sibling={$new_patient_id} WHERE id={$_POST['sibling']}");
+				if(!mysql_query("UPDATE patients SET sibling={$new_patient_id} WHERE id={$_POST['sibling']}"))
+					$err[]="Some error in adding sibling";
+			}
+			if($_POST['gen_sched']=='1')
+			{
+				generate_patient_schedule($new_patient_id);
 			}
 		}
 		else $err[]='An unknown error has occured.';
@@ -170,11 +175,11 @@ $(function() {
 	}
 	?>
 	</select>
+	<input type="checkbox" name="gen_sched" value="1" checked="true"/> Generate New Schedule
 	</p>
-
-
 	<p>
 	<input type="submit" name="submit" value="Register"/>
 	</p>
+
 </form>
 <?php include('footer.php'); ?>
