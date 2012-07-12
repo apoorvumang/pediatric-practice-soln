@@ -10,12 +10,20 @@ if($_POST['vac_date'])
 			$err[] = "Unknown error";
 	}
 	foreach ($_POST['vac_given_date'] as $key => $value) {
-		if(!mysql_query("UPDATE vac_schedule SET date_given='{$value}' WHERE id={$_POST['vac_id'][$key]}"))
-			$err[] = "Unknown error";
+		if($value!="0000-00-00"&&$value!="")
+		{
+			if(!mysql_query("UPDATE vac_schedule SET date_given='{$value}' WHERE id={$_POST['vac_id'][$key]}"))
+				$err[] = "Unknown error";
+			if(!mysql_query("UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_id'][$key]}"))
+				$err[] = "Unknown error";
+		}
 	}
 	foreach ($_POST['given'] as $key => $value) {
-		if(!mysql_query("UPDATE vac_schedule SET given='{$value}' WHERE id={$_POST['vac_id'][$key]}"))
-			$err[] = "Unknown error";
+		if($value=='Y')
+		{
+			if(!mysql_query("UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_id'][$key]}"))
+				$err[] = "Unknown error";
+		}
 	}
 	if(!$err)
 	{
@@ -32,21 +40,32 @@ if($_GET['id'])
 	$patient = mysql_fetch_assoc(mysql_query("SELECT * FROM patients WHERE id = {$_GET['id']}"));
 ?>
 <script type="text/javascript">
-	window.onload = function(){
+	
 	<?php for ($i=0; $i < 51; $i++) { ?>
-			new JsDatePick({
-			useMode:2,
-			target:<?php echo "\"vac_date".$i."\"" ?>,
-			dateFormat:"%Y-%m-%d"
-		});
-			new JsDatePick({
-			useMode:2,
-			target:<?php echo "\"vac_given_date".$i."\"" ?>,
-			dateFormat:"%Y-%m-%d"
-		});
-	<?php } ?>
-	};
 
+			$(function() {
+				$( <?php echo "\"#vac_given_date_show".$i."\""; ?> ).datepicker({
+					changeMonth: true,
+					changeYear: true,
+					yearRange: "1985:2022",
+					dateFormat:"d M yy",
+					altField: <?php echo "\"#vac_given_date".$i."\"" ?> ,
+					altFormat: "yy-mm-dd"
+				});
+			});
+			$(function() {
+				$( <?php echo "\"#vac_date_show".$i."\""; ?> ).datepicker({
+					changeMonth: true,
+					changeYear: true,
+					yearRange: "1985:2022",
+					dateFormat:"d M yy",
+					altField: <?php echo "\"#vac_date".$i."\"" ?> ,
+					altFormat: "yy-mm-dd"
+				});
+			});
+			
+	<?php } ?>
+	
 </script>
 
 <h4>Patient Information</h4>
@@ -106,7 +125,7 @@ else
 		</tr>
 
 	<?php
-	$result = mysql_query("SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date");
+	$result = mysql_query("SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date, v_id");
 	//To show lower and upper limit, we add them to birth date 
 	$count = 0;
 	while($row = mysql_fetch_assoc($result))
@@ -136,13 +155,21 @@ else
 		echo "<td>";
 		echo $vac['name'];
 		echo "</td>";
-		echo "<td>";
-		echo "<input type=\"text\" style=\"width:70px;margin:0px;\"name=\"vac_date[]\" id=\"vac_date".$count."\" value=\"".$row['date']."\" />";
-		echo "</td>";
-		?>
-		<td>
-	<input type="text" style="width:70px" name="vac_given_date[]" <?php echo "id=\"vac_given_date".$count."\""; ?> value=<?php echo "\"{$row['date_given']}\"";?>/>
 
+		?>
+
+		<td>
+	<input type="hidden" name="vac_date[]" <?php echo "id=\"vac_date".$count."\""; ?> value=<?php echo "\"{$row['date']}\"";?>/>
+	<input type="text" style="width:80px" <?php echo "id=\"vac_date_show".$count."\""; ?> value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
+		</td>
+
+		<td>
+	<input type="hidden" name="vac_given_date[]" <?php echo "id=\"vac_given_date".$count."\""; ?> value=<?php echo "\"{$row['date_given']}\"";?>/>
+	<input type="text" style="width:80px" <?php echo "id=\"vac_given_date_show".$count."\""; ?> value=<?php 
+	if($row['date_given']=='0000-00-00'||$row['date_given']=='')
+		echo "\"nil\"";
+	else
+		echo "\"".date('j M Y',strtotime($row['date_given']))."\"";?>/>
 		</td>		
 		<?php
 		echo "<td>";

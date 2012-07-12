@@ -7,7 +7,7 @@ foreach ($_POST['id'] as $key => $patient_id)
 	$err = "";
 	mysql_query("DELETE FROM vac_schedule WHERE p_id = {$patient_id}");
 	$patient = mysql_fetch_assoc(mysql_query("SELECT * FROM patients WHERE id = {$patient_id}"));
-	$result = mysql_query("SELECT * FROM vaccines WHERE 1");
+	$result = mysql_query("SELECT * FROM vaccines WHERE 1 ORDER BY dependent ASC");	//Those with lower dep come first (very important!)
 	while($vaccine = mysql_fetch_assoc($result))	//Select vaccines one by one from vaccines table
 	{
 		if(!(($vaccine['sex']=='B')||($vaccine['sex']==$patient['sex'])))	//Checking if sex is correct
