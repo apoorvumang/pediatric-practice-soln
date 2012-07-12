@@ -2,9 +2,14 @@
 if($_POST['choice']=="delete")
 {
 	if(mysql_query("DELETE FROM vaccines WHERE id={$_POST['vac_id']}"))
-		echo "Deletion successful!";
+	{
+		if(mysql_query("DELETE FROM vac_schedule WHERE v_id={$_POST['vac_id']}"))
+			echo "Deletion successful!";
+		else
+			echo "Error deleting from vac_schedule";
+	}
 	else
-		echo "Unknown error.";
+		echo "Error deleting from vaccines";
 }
 else if($_POST['choice']=="edit")
 {
