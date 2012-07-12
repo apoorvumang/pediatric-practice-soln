@@ -75,7 +75,7 @@ if($_GET['id'])
 </p>
 
 <p>
-<strong>Date of Birth :</strong> <?php echo $patient['dob']; ?>
+<strong>Date of Birth :</strong> <?php echo  date('d-F-Y', strtotime($patient['dob'])); ?>
 </p>
 
 <p>
