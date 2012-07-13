@@ -1,4 +1,5 @@
 <?php include('header.php'); 
+//This file is used both to add new vaccine as well as edit existing one
 if(isset($_POST['submit']))
 {  //If the Register form has been submitted
 	$err = array();
