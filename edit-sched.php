@@ -6,7 +6,7 @@ if($_POST['vac_date'])
 		mysql_query("DELETE FROM vac_schedule WHERE id={$value}");		
 	}
 	foreach ($_POST['vac_date'] as $key => $value) {
-		if(!mysql_query("UPDATE vac_schedule SET date='{$value}' WHERE id={$_POST['vac_id'][$key]}"))
+		if(!mysql_query("UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_id'][$key]}"))
 			$err[] = "Unknown error";
 	}
 	foreach ($_POST['vac_given_date'] as $key => $value) {
@@ -121,6 +121,7 @@ else
 			<th>Given Date</th>
 			<th>Lower Limit</th>
 			<th>Upper Limit</th>
+			<th>Product Name</th>
 			<th>Remove</th>
 		</tr>
 
@@ -178,6 +179,23 @@ else
 		echo "<td>";
 		echo $upper_limit;
 		echo "</td>";
+		?>
+		<td>
+			<select name="make[]">
+				<option value=0 <?php if($row['make']==0) echo "selected"; ?> >None</option>
+				<?php
+				$result_make = mysql_query("SELECT * FROM vac_make WHERE 1");
+				while($vac_make = mysql_fetch_assoc($result_make))
+				{
+					echo "<option value=".$vac_make['id'];
+					if($row['make']==$vac_make['id'])
+						echo " selected ";
+					echo ">".$vac_make['name']."</option>\n";
+				}
+				?>
+			</select>
+		</td>
+		<?php
 		echo "<td>";
 		echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_vac[]\">";
 		echo "<input type=\"hidden\" value=\"".$row['id']."\" name=\"vac_id[]\">";
