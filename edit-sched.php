@@ -102,10 +102,18 @@ else
 {
 	echo "<a href=edit-sched.php?id=".$patient['sibling'].">";
 
-	$sibling_row = mysql_fetch_assoc(mysql_query("SELECT name FROM patients WHERE id={$patient['sibling']}"));
+	$sibling_row = mysql_fetch_assoc(mysql_query("SELECT name,dob,sex FROM patients WHERE id={$patient['sibling']}"));
 	echo $sibling_row['name'];
 	
 	echo "</a>";
+	?>
+	</p>
+	<p>
+		<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
+	</p>
+	<p>
+		<strong>Sibling sex:</strong> <?php echo $sibling_row['sex']; ?>
+	<?php
 }
 
 ?>
@@ -184,7 +192,7 @@ else
 			<select name="make[]">
 				<option value=0 <?php if($row['make']==0) echo "selected"; ?> >None</option>
 				<?php
-				$result_make = mysql_query("SELECT * FROM vac_make WHERE 1");
+				$result_make = mysql_query("SELECT * FROM vac_make WHERE 1 ORDER BY name ASC");
 				while($vac_make = mysql_fetch_assoc($result_make))
 				{
 					echo "<option value=".$vac_make['id'];

@@ -54,7 +54,7 @@ else {
 	<label class="grey" for="id">Choose Product :&nbsp;&nbsp;</label>
 	<select name="id" style="margin-right:60px;">
 	<?php
-	$result = mysql_query("SELECT name, id FROM vac_make WHERE 1");
+	$result = mysql_query("SELECT name, id FROM vac_make WHERE 1 ORDER BY name ASC");
 	while($vac_make = mysql_fetch_assoc($result))
 	{
 		echo "<option value=".$vac_make['id'].">".$vac_make['name']."</option>\n";

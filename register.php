@@ -141,9 +141,10 @@ $(function() {
 	<p>
 	<label for="phone">Mobile number:&nbsp;&nbsp;</label>
 	<input type="text" name="phone" id="phone"  />
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<label for="address">Address:&nbsp;&nbsp;</label>
-	<input type="text" name="address" id="address"  />
+	</p>
+	<p>
+	<label for="address">Address:&nbsp;&nbsp;</label><br />
+	<textarea name="address" id="address" rows=3 cols=70></textarea>
 	</p>
 
 	<p>

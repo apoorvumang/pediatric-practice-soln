@@ -23,10 +23,10 @@ if(isset($_POST['submit']))
 
 
 <form action="" method="post" enctype="multipart/form-data">
-	<h3>Add Vaccine Make</h3>
+	<h3>Add Product</h3>
 	
 	<p>
-	<label for="name">Name of make:</label><br />
+	<label for="name">Name of product:</label><br />
 	<input type="text" name="name" id="name" autofocus="autofocus" />
 	</p>
 
