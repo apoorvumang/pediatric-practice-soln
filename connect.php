@@ -5,10 +5,10 @@
 
 /* Database config */
 
-$db_host		= 'localhost';
-$db_user		= 'root';//'a8151hos_akshay';
-$db_pass		= '';//'P$m,;EO^XAsD';
-$db_database	= 'mummy_software';//'a8151hos_w3c'; 
+$db_host		= 'localhost';//'mysql.iakshay.net'
+$db_user		= 'root';//'apoorv';
+$db_pass		= '';//'patient';
+$db_database	= 'mummy_software';//'apoorv_heroku';
 
 /* End config */
 
