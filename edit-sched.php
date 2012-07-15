@@ -14,9 +14,7 @@ if($_POST['vac_date'])
 		if($value!="0000-00-00"&&$value!=""&&$value!='nil')
 		{
 			$value =date('Y-m-d', strtotime($value));
-			if(!mysql_query("UPDATE vac_schedule SET date_given='{$value}' WHERE id={$_POST['vac_id'][$key]}"))
-				$err[] = "Unknown error";
-			if(!mysql_query("UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_id'][$key]}"))
+			if(!mysql_query("UPDATE vac_schedule SET date_given='{$value}', given='Y' WHERE id={$_POST['vac_id'][$key]}"))
 				$err[] = "Unknown error";
 		}
 	}
