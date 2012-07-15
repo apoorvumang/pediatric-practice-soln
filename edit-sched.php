@@ -6,12 +6,14 @@ if($_POST['vac_date'])
 		mysql_query("DELETE FROM vac_schedule WHERE id={$value}");		
 	}
 	foreach ($_POST['vac_date'] as $key => $value) {
+		$value =date('Y-m-d', strtotime($value));
 		if(!mysql_query("UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_id'][$key]}"))
 			$err[] = "Unknown error";
 	}
 	foreach ($_POST['vac_given_date'] as $key => $value) {
-		if($value!="0000-00-00"&&$value!="")
+		if($value!="0000-00-00"&&$value!=""&&$value!='nil')
 		{
+			$value =date('Y-m-d', strtotime($value));
 			if(!mysql_query("UPDATE vac_schedule SET date_given='{$value}' WHERE id={$_POST['vac_id'][$key]}"))
 				$err[] = "Unknown error";
 			if(!mysql_query("UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_id'][$key]}"))
@@ -44,23 +46,19 @@ if($_GET['id'])
 	<?php for ($i=0; $i < 51; $i++) { ?>
 
 			$(function() {
-				$( <?php echo "\"#vac_given_date_show".$i."\""; ?> ).datepicker({
+				$( <?php echo "\"#vac_given_date".$i."\""; ?> ).datepicker({
 					changeMonth: true,
 					changeYear: true,
 					yearRange: "1985:2022",
-					dateFormat:"d M yy",
-					altField: <?php echo "\"#vac_given_date".$i."\"" ?> ,
-					altFormat: "yy-mm-dd"
+					dateFormat:"d M yy"
 				});
 			});
 			$(function() {
-				$( <?php echo "\"#vac_date_show".$i."\""; ?> ).datepicker({
+				$( <?php echo "\"#vac_date".$i."\""; ?> ).datepicker({
 					changeMonth: true,
 					changeYear: true,
 					yearRange: "1985:2022",
-					dateFormat:"d M yy",
-					altField: <?php echo "\"#vac_date".$i."\"" ?> ,
-					altFormat: "yy-mm-dd"
+					dateFormat:"d M yy"
 				});
 			});
 			
@@ -168,13 +166,11 @@ else
 		?>
 
 		<td>
-	<input type="hidden" name="vac_date[]" <?php echo "id=\"vac_date".$count."\""; ?> value=<?php echo "\"{$row['date']}\"";?>/>
-	<input type="text" style="width:80px" <?php echo "id=\"vac_date_show".$count."\""; ?> value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
+	<input type="text" name="vac_date[]" style="width:80px" <?php echo "id=\"vac_date".$count."\""; ?> value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
 		</td>
 
 		<td>
-	<input type="hidden" name="vac_given_date[]" <?php echo "id=\"vac_given_date".$count."\""; ?> value=<?php echo "\"{$row['date_given']}\"";?>/>
-	<input type="text" style="width:80px" <?php echo "id=\"vac_given_date_show".$count."\""; ?> value=<?php 
+	<input type="text" name="vac_given_date[]" style="width:80px" <?php echo "id=\"vac_given_date".$count."\""; ?> value=<?php 
 	if($row['date_given']=='0000-00-00'||$row['date_given']=='')
 		echo "\"nil\"";
 	else
