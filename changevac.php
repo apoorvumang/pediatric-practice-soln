@@ -36,34 +36,10 @@ else if($_POST['choice']=="edit")
 	<label for="upper_limit">Recommended max age (days):</label>
 	<input type="text" name="upper_limit" id="upper_limit" value=<?php echo "\"{$vaccine['upper_limit']}\"";?>/>
 	</p>
-
 	<p>
-	<label class="grey" for="dependent">Dependent on:&nbsp;&nbsp;</label>
-	<select name="dependent" style="margin-right:60px;" >
-	<option value=0 <?php if($vaccine['dependent']==0) echo "selected"; ?> >Birth</option>
-	<?php
-	$result = mysql_query("SELECT name, id FROM vaccines WHERE 1");
-	while($vac = mysql_fetch_assoc($result))
-	{
-		echo "<option value=".$vac['id']." ";
-		if($vaccine['dependent']==$vac['id']) echo "selected";
-		echo " >".$vac['name']."</option>\n";
-	}
-	?>
-	</select>
+		<input type="checkbox" name="update" value="1" checked="checked" /> 
+		<strong> Update for existing patients </strong>
 	</p>
-
-	<p>
-	<label class="grey" for="sex">Sex:&nbsp;&nbsp;</label>
-	<select name="sex" style="margin-right:60px;">
-	<option value='B' <?php if($vaccine['sex']=='B') echo "selected"; ?> >Both</option>
-	<option value='M' <?php if($vaccine['sex']=='M') echo "selected"; ?> >Male</option>
-	<option value='F' <?php if($vaccine['sex']=='F') echo "selected"; ?> >Female</option>
-	</select>
-
-	</p>
-
-
 	<p>
 	<input type="submit" name="submit" value="Save changes"/>
 	</p>
@@ -91,7 +67,7 @@ else {
 	?>
 	</select>
 	<br />
-	<input type="radio" name="choice" value="edit" checked="true" /> Edit
+	<input type="radio" name="choice" value="edit" checked="checked" /> Edit
 	<input type="radio" name="choice" value="delete" /> Delete
 	<input type="submit" name="submit" value="Go" />
 	</p>

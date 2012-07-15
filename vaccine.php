@@ -46,6 +46,10 @@
 
 	</p>
 
+	<p>
+		<input type="checkbox" name="update" value="1" checked="checked" /> 
+		<strong> Update for existing patients </strong>
+	</p>
 
 	<p>
 	<input type="submit" name="submit" value="Add"/>
