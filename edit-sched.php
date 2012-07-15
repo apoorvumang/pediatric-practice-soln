@@ -117,7 +117,7 @@ else
 ?>
 </p>
 <h4>Schedule</h4>
-<form action="" method="post" style="width:800px;">
+<form action="" method="post" style="width:800px;background:none;border:none">
 <table>
 	<tbody>
 		<tr>
