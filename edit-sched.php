@@ -65,7 +65,9 @@ if($_GET['id'])
 </script>
 
 <h4>Patient Information</h4>
-
+<p>
+	<strong>Patient ID: <?php echo $patient['id'] ?> </strong>
+</p>
 <p>
 <strong>Name :</strong> <?php echo $patient['name']; ?>
 </p>
