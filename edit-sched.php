@@ -65,6 +65,7 @@ if($_GET['id'])
 </script>
 
 <h4>Patient Information</h4>
+<div style="float:right"> <a href= <?php echo "editpatient.php?id={$patient['id']}" ?> ><strong> Edit patient </strong> </a></div>
 <p>
 	<strong>Patient ID: <?php echo $patient['id'] ?> </strong>
 </p>
