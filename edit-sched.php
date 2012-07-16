@@ -93,30 +93,39 @@ if($_GET['id'])
 <p>
 <strong>Address :</strong> <?php echo $patient['address']; ?>
 </p>
-<p>
-<strong>Sibling :</strong> <?php 
+
+<?php 
 if($patient['sibling']==0)
 	echo "None";
 else
 {
-	echo "<a href=edit-sched.php?id=".$patient['sibling'].">";
+	$siblist = explode(",", $patient['sibling']);
+	foreach ($siblist as $key => $value) 
+	{
+		?>
+		<p>
+		<strong>Sibling :</strong> 
+		<?php
+		echo "<a href=edit-sched.php?id=".$value.">";
 
-	$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$patient['sibling']}"));
-	echo $sibling_row['name'];
-	
-	echo "</a>";
-	?>
-	</p>
-	<p>
-		<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
-	</p>
-	<p>
-		<strong>Sibling sex:</strong> <?php echo $sibling_row['sex']; ?>
-	<?php
+		$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$value}"));
+		echo $sibling_row['name'];
+		
+		echo "</a>";
+		?>
+		</p>
+		<p>
+			<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
+		</p>
+		<p>
+			<strong>Sibling sex:</strong> <?php echo $sibling_row['sex']; ?>
+		</p>
+		<?php
+	}
 }
 
 ?>
-</p>
+
 <h4>Schedule</h4>
 <form action="" method="post" style="width:800px;background:none;border:none">
 <table>
