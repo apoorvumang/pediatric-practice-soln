@@ -3,16 +3,16 @@ if($_POST['makechange']=='1')
 {
 	if(!$_POST['name'])
 		echo "Please enter a name!";
-	else if(mysql_query("UPDATE vac_make SET name='{$_POST['name']}' WHERE id={$_POST['id']}"))
+	else if(mysqli_query($link, "UPDATE vac_make SET name='{$_POST['name']}' WHERE id={$_POST['id']}"))
 		echo "Changes save successfully!";
 	else
 		echo "Error making changes.";
 }
 else if($_POST['choice']=="delete")
 {
-	if(mysql_query("DELETE FROM vac_make WHERE id={$_POST['id']}"))
+	if(mysqli_query($link, "DELETE FROM vac_make WHERE id={$_POST['id']}"))
 	{
-		if(mysql_query("UPDATE vac_schedule SET make=0 WHERE make={$_POST['id']}"))
+		if(mysqli_query($link, "UPDATE vac_schedule SET make=0 WHERE make={$_POST['id']}"))
 			echo "Deletion successful!";
 		else
 			echo "Error updating vac_schedule";
@@ -22,7 +22,7 @@ else if($_POST['choice']=="delete")
 }
 else if($_POST['choice']=="edit")
 {
-	$vac_make_row = mysql_fetch_assoc(mysql_query("SELECT * FROM vac_make WHERE id={$_POST['id']}"));
+	$vac_make_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vac_make WHERE id={$_POST['id']}"));
 ?>
 
 <form action="" method="post" enctype="multipart/form-data">
@@ -54,8 +54,8 @@ else {
 	<label class="grey" for="id">Choose Product :&nbsp;&nbsp;</label>
 	<select name="id" style="margin-right:60px;">
 	<?php
-	$result = mysql_query("SELECT name, id FROM vac_make WHERE 1 ORDER BY name ASC");
-	while($vac_make = mysql_fetch_assoc($result))
+	$result = mysqli_query($link, "SELECT name, id FROM vac_make WHERE 1 ORDER BY name ASC");
+	while($vac_make = mysqli_fetch_assoc($result))
 	{
 		echo "<option value=".$vac_make['id'].">".$vac_make['name']."</option>\n";
 	}

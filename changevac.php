@@ -1,9 +1,9 @@
 <?php include('header.php'); 
 if($_POST['choice']=="delete")
 {
-	if(mysql_query("DELETE FROM vaccines WHERE id={$_POST['vac_id']}"))
+	if(mysqli_query($link, "DELETE FROM vaccines WHERE id={$_POST['vac_id']}"))
 	{
-		if(mysql_query("DELETE FROM vac_schedule WHERE v_id={$_POST['vac_id']}"))
+		if(mysqli_query($link, "DELETE FROM vac_schedule WHERE v_id={$_POST['vac_id']}"))
 			echo "Deletion successful!";
 		else
 			echo "Error deleting from vac_schedule";
@@ -13,7 +13,7 @@ if($_POST['choice']=="delete")
 }
 else if($_POST['choice']=="edit")
 {
-	$vaccine = mysql_fetch_assoc(mysql_query("SELECT * FROM vaccines WHERE id={$_POST['vac_id']}"));
+	$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE id={$_POST['vac_id']}"));
 ?>
 
 <form action="addvac.php" method="post" enctype="multipart/form-data">
@@ -59,8 +59,8 @@ else {
 	<label class="grey" for="vac_id">Choose Vaccine :&nbsp;&nbsp;</label>
 	<select name="vac_id" style="margin-right:60px;">
 	<?php
-	$result = mysql_query("SELECT name, id FROM vaccines WHERE 1");
-	while($vac = mysql_fetch_assoc($result))
+	$result = mysqli_query($link, "SELECT name, id FROM vaccines WHERE 1");
+	while($vac = mysqli_fetch_assoc($result))
 	{
 		echo "<option value=".$vac['id'].">".$vac['name']."</option>\n";
 	}

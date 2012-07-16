@@ -46,11 +46,11 @@ if($_POST['submit'])
 	if(!count($err))
 	{
 		// Escaping all input data
-		$_POST['username'] = mysql_real_escape_string($_POST['username']);
-		$_POST['password'] = mysql_real_escape_string($_POST['password']);
+		$_POST['username'] = mysqli_real_escape_string($link, $_POST['username']);
+		$_POST['password'] = mysqli_real_escape_string($link, $_POST['password']);
 		$_POST['rememberMe'] = (int)$_POST['rememberMe'];
 		
-		$row = mysql_fetch_assoc(mysql_query("SELECT username,name FROM doctors WHERE username='{$_POST['username']}' AND password='".md5($_POST['password'])."'"));
+		$row = mysqli_fetch_assoc(mysqli_query($link, "SELECT username,name FROM doctors WHERE username='{$_POST['username']}' AND password='".md5($_POST['password'])."'"));
 
 		if($row['username'])
 		{

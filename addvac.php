@@ -17,26 +17,26 @@ if(isset($_POST['submit']))
 
 	if(!count($err))
 	{
-		$_POST['name'] = mysql_real_escape_string($_POST['name']);
+		$_POST['name'] = mysqli_real_escape_string($link, $_POST['name']);
 		
 		if(isset($_POST['id']))	//If editing vac
 		{
 			echo 'here';
 			if($_POST['update']=='1')	//If need to update existing schedule
 			{
-				$vac_temp = mysql_fetch_assoc(mysql_query("SELECT no_of_days FROM vaccines WHERE id={$_POST['id']}"));
+				$vac_temp = mysqli_fetch_assoc(mysqli_query($link, "SELECT no_of_days FROM vaccines WHERE id={$_POST['id']}"));
 				$daystoadd = intval($_POST['no_of_days']) - intval($vac_temp['no_of_days']);
-				if(!mysql_query("UPDATE vac_schedule SET date=date + {$daystoadd} WHERE v_id = {$_POST['id']} AND given='N'"))
+				if(!mysqli_query($link, "UPDATE vac_schedule SET date=date + {$daystoadd} WHERE v_id = {$_POST['id']} AND given='N'"))
 					echo "Error updating in current records";
 			}
-			mysql_query("UPDATE vaccines SET name='{$_POST['name']}', 
+			mysqli_query($link, "UPDATE vaccines SET name='{$_POST['name']}', 
 				no_of_days={$_POST['no_of_days']}, 
 				lower_limit={$_POST['lower_limit']}, 
 				upper_limit={$_POST['upper_limit']} WHERE id={$_POST['id']}");
 		}
 		else 	//If adding new vac
 		{
-			mysql_query("INSERT INTO vaccines(name, no_of_days, dependent, sex, lower_limit, upper_limit)
+			mysqli_query($link, "INSERT INTO vaccines(name, no_of_days, dependent, sex, lower_limit, upper_limit)
 					VALUES(
 					'".$_POST['name']."',
 					".$_POST['no_of_days'].",
@@ -46,16 +46,11 @@ if(isset($_POST['submit']))
 					".$_POST['upper_limit'].")");
 			if($_POST['update']=='1')
 			{
-				$_POST['id'] = mysql_insert_id();
+				$_POST['id'] = mysqli_insert_id($link);
 				generate_vaccine_schedule($_POST);
 			}
 		}
 
-		if(mysql_affected_rows($link)==1)
-		{	
-			$_SESSION['msg']['reg-success']='Vaccine successfully added!';
-		}
-		else $err[]='An unknown error has occured.';
 	}
 	
 	if(count($err))

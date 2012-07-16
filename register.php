@@ -38,14 +38,14 @@ if(isset($_POST['submit']))
 
 	if(!count($err))
 	{
-		$_POST['email'] = mysql_real_escape_string($_POST['email']);
-		$_POST['name'] = mysql_real_escape_string($_POST['name']);
-		$_POST['phone'] = mysql_real_escape_string($_POST['phone']);
-		$_POST['dob'] = mysql_real_escape_string($_POST['dob']);
+		$_POST['email'] = mysqli_real_escape_string($link, $_POST['email']);
+		$_POST['name'] = mysqli_real_escape_string($link, $_POST['name']);
+		$_POST['phone'] = mysqli_real_escape_string($link, $_POST['phone']);
+		$_POST['dob'] = mysqli_real_escape_string($link, $_POST['dob']);
 		
 		// Escape the input data
 
-		mysql_query("INSERT INTO patients(name,first_name,last_name,email,dob,phone,sex,father_name,father_occ,mother_name,mother_occ,address,sibling)
+		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,dob,phone,sex,father_name,father_occ,mother_name,mother_occ,address,sibling)
 					VALUES(
 					'".$_POST['name']."', '".$_POST['first_name']."', '".$_POST['last_name']."',
 					'".$_POST['email']."',
@@ -57,15 +57,13 @@ if(isset($_POST['submit']))
 					'".$_POST['mother_name']."',
 					'".$_POST['mother_occ']."',
 					'".$_POST['address']."',
-					".$_POST['sibling'].")");
-
-		if(mysql_affected_rows($link)==1)
+					".$_POST['sibling'].")"))
 		{	
-			$new_patient_id = mysql_insert_id();
+			$new_patient_id = mysqli_insert_id($link);
 			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
 			if($_POST['sibling']!=0)
 			{
-				if(!mysql_query("UPDATE patients SET sibling={$new_patient_id} WHERE id={$_POST['sibling']}"))
+				if(!mysqli_query($link, "UPDATE patients SET sibling={$new_patient_id} WHERE id={$_POST['sibling']}"))
 					$err[]="Some error in adding sibling";
 			}
 			if($_POST['gen_sched']=='1')
@@ -169,8 +167,8 @@ $(function() {
 	<select name="sibling" style="margin-right:60px;">
 	<option value=0>None</option>
 	<?php
-	$result = mysql_query("SELECT name, id FROM patients WHERE 1");
-	while($pat_sib = mysql_fetch_assoc($result))
+	$result = mysqli_query($link, "SELECT name, id FROM patients WHERE 1");
+	while($pat_sib = mysqli_fetch_assoc($result))
 	{
 		echo "<option value=".$pat_sib['id'].">".$pat_sib['name']."</option>\n";
 	}

@@ -10,8 +10,8 @@
 			<th>Phone</th>
 			<th>Sex</th>
 		</tr>
-		<?php $result = mysql_query("SELECT * FROM patients WHERE 1");
-		while($row = mysql_fetch_assoc($result))
+		<?php $result = mysqli_query($link, "SELECT * FROM patients WHERE 1");
+		while($row = mysqli_fetch_assoc($result))
 		{
 			
 			echo "<tr>";

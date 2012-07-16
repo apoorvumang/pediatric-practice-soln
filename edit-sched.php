@@ -3,25 +3,25 @@ if($_POST['vac_date'])
 {
 	$err = array();
 	foreach ($_POST['delete_vac'] as $key => $value) {
-		mysql_query("DELETE FROM vac_schedule WHERE id={$value}");		
+		mysqli_query($link, "DELETE FROM vac_schedule WHERE id={$value}");		
 	}
 	foreach ($_POST['vac_date'] as $key => $value) {
 		$value =date('Y-m-d', strtotime($value));
-		if(!mysql_query("UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_id'][$key]}"))
+		if(!mysqli_query($link, "UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_id'][$key]}"))
 			$err[] = "Unknown error";
 	}
 	foreach ($_POST['vac_given_date'] as $key => $value) {
 		if($value!="0000-00-00"&&$value!=""&&$value!='nil')
 		{
 			$value =date('Y-m-d', strtotime($value));
-			if(!mysql_query("UPDATE vac_schedule SET date_given='{$value}', given='Y' WHERE id={$_POST['vac_id'][$key]}"))
+			if(!mysqli_query($link, "UPDATE vac_schedule SET date_given='{$value}', given='Y' WHERE id={$_POST['vac_id'][$key]}"))
 				$err[] = "Unknown error";
 		}
 	}
 	foreach ($_POST['given'] as $key => $value) {
 		if($value=='Y')
 		{
-			if(!mysql_query("UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_id'][$key]}"))
+			if(!mysqli_query($link, "UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_id'][$key]}"))
 				$err[] = "Unknown error";
 		}
 	}
@@ -37,7 +37,7 @@ if($_POST['vac_date'])
 }
 if($_GET['id'])
 {
-	$patient = mysql_fetch_assoc(mysql_query("SELECT * FROM patients WHERE id = {$_GET['id']}"));
+	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
 ?>
 <script type="text/javascript">
 	
@@ -100,7 +100,7 @@ else
 {
 	echo "<a href=edit-sched.php?id=".$patient['sibling'].">";
 
-	$sibling_row = mysql_fetch_assoc(mysql_query("SELECT name,dob,sex FROM patients WHERE id={$patient['sibling']}"));
+	$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$patient['sibling']}"));
 	echo $sibling_row['name'];
 	
 	echo "</a>";
@@ -132,12 +132,12 @@ else
 		</tr>
 
 	<?php
-	$result = mysql_query("SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date, v_id");
+	$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date, v_id");
 	//To show lower and upper limit, we add them to birth date 
 	$count = 0;
-	while($row = mysql_fetch_assoc($result))
+	while($row = mysqli_fetch_assoc($result))
 	{
-		$vac = mysql_fetch_assoc(mysql_query("SELECT * FROM vaccines WHERE id = {$row['v_id']}"));
+		$vac = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE id = {$row['v_id']}"));
 		$temp_nofdays = "+".$vac['lower_limit']." days";
 		$lower_limit = date('d-F-Y', strtotime($temp_nofdays, strtotime($patient['dob'])));
 		if($vac['upper_limit'] > 36500)
@@ -188,8 +188,8 @@ else
 			<select name="make[]">
 				<option value=0 <?php if($row['make']==0) echo "selected"; ?> >None</option>
 				<?php
-				$result_make = mysql_query("SELECT * FROM vac_make WHERE 1 ORDER BY name ASC");
-				while($vac_make = mysql_fetch_assoc($result_make))
+				$result_make = mysqli_query($link, "SELECT * FROM vac_make WHERE 1 ORDER BY name ASC");
+				while($vac_make = mysqli_fetch_assoc($result_make))
 				{
 					echo "<option value=".$vac_make['id'];
 					if($row['make']==$vac_make['id'])

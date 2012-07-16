@@ -27,8 +27,8 @@
 	<select name="dependent" style="margin-right:60px;">
 	<option value=0>Birth</option>
 	<?php
-	$result = mysql_query("SELECT name, id FROM vaccines WHERE 1");
-	while($vac = mysql_fetch_assoc($result))
+	$result = mysqli_query($link, "SELECT name, id FROM vaccines WHERE 1");
+	while($vac = mysqli_fetch_assoc($result))
 	{
 		echo "<option value=".$vac['id'].">".$vac['name']."</option>\n";
 	}

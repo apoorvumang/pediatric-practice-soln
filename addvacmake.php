@@ -7,8 +7,8 @@ if(isset($_POST['submit']))
 	}
 	else
 	{
-		$_POST['name'] = mysql_real_escape_string($_POST['name']);
-		if(mysql_query("INSERT INTO vac_make(name) VALUES('{$_POST['name']}')"))
+		$_POST['name'] = mysqli_real_escape_string($link, $_POST['name']);
+		if(mysqli_query($link, "INSERT INTO vac_make(name) VALUES('{$_POST['name']}')"))
 		{
 			echo "Successfully added vaccine make {$_POST['name']}!";
 		}
