@@ -57,14 +57,27 @@ if(isset($_POST['submit']))
 					'".$_POST['mother_name']."',
 					'".$_POST['mother_occ']."',
 					'".$_POST['address']."',
-					".$_POST['sibling'].")"))
+					'".$_POST['sibling']."')"))
 		{	
 			$new_patient_id = mysqli_insert_id($link);
 			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
 			if($_POST['sibling']!=0)
 			{
-				if(!mysqli_query($link, "UPDATE patients SET sibling={$new_patient_id} WHERE id={$_POST['sibling']}"))
-					$err[]="Some error in adding sibling";
+				$row_sibling = mysqli_fetch_assoc(mysqli_query($link, "SELECT sibling FROM patients WHERE id={$_POST['sibling']}"));
+				if(!$row_sibling['sibling'])	//If sibling does not have any other sibling
+				{
+					if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_patient_id}' WHERE id={$_POST['sibling']}"))
+						$err[]="Some error in adding sibling";
+				}
+				else //If sibling has other sibling(s)
+				{
+					$new_sibling = $row_sibling['sibling'].",".$_POST['sibling'];
+					echo "UPDATE patients SET sibling={$new_sibling} WHERE id={$_POST['sibling']}";
+					if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_sibling}' WHERE id={$_POST['sibling']}"))
+						$err[]="Some error in adding sibling";
+					if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_sibling}' WHERE id={$new_patient_id}"))
+						$err[]="Some error in adding sibling";
+				}
 			}
 			if($_POST['gen_sched']=='1')
 			{

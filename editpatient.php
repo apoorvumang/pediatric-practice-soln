@@ -53,7 +53,7 @@ if(isset($_POST['submit']))
 				email = '".$_POST['email']."',
 				dob = '".$_POST['dob']."',
 				phone = '".$_POST['phone']."',
-				sex = '".$_POST['father_name']."',
+				sex = '".$_POST['sex']."',
 				father_name = '".$_POST['father_name']."',
 				father_occ = '".$_POST['father_occ']."',
 				mother_name = '".$_POST['mother_name']."',
