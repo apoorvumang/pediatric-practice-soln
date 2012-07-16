@@ -65,6 +65,9 @@ switch($currentFile)
 	case "changevacmake.php":
 	$title = "Change product";
 	break;
+	case "editpatient.php":
+	$title="Edit patient";
+	break;
 }
 
 echo $title;
@@ -96,6 +99,7 @@ echo $title;
 			<li <?php if($currentFile=="index.php") { ?> id="current" <?php }?>><a href="index.php">Home</a></li>
 			<?php if($_SESSION['name']) { ?>
 			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">Add patient</a></li>
+			<li <?php if($currentFile=="editpatient.php") { ?> id="current" <?php }?>><a href="editpatient.php">Edit patient</a></li>
 			<li <?php if($currentFile=="vaccine.php") { ?> id="current" <?php }?>><a href="vaccine.php">Add Vac</a></li>
 			<li <?php if($currentFile=="changevac.php") { ?> id="current" <?php }?>><a href="changevac.php">Edit/Del Vac</a></li>
 			<li <?php if($currentFile=="schedule.php") { ?> id="current" <?php }?>><a href="schedule.php">Sched Vac</a></li>

@@ -306,9 +306,9 @@ fieldset.search {
 #header #nav ul li a {
 	float:left;
 	margin: 0;
-	padding: 0 15px 29px 15px;
+	padding: 0 0px 29px 15px;
 	color: #baa7a7;
-	font: bold 12px 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
+	font: bold 10px 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
 }
 #header #nav ul li a:hover, 
 #header #nav ul li a:active {
