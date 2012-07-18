@@ -5,23 +5,55 @@ if($_POST['vac_date'])
 	foreach ($_POST['delete_vac'] as $key => $value) {
 		mysqli_query($link, "DELETE FROM vac_schedule WHERE id={$value}");		
 	}
-	// foreach ($_POST['vac_date'] as $key => $value) {
-	// 	$value =date('Y-m-d', strtotime($value));
-	// 	if(!mysqli_query($link, "UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_id'][$key]}"))
-	// 		$err[] = "Unknown error";
-	// }
+	//Old values are in same format as new values (slight overhead)
 	foreach ($_POST['vac_given_date'] as $key => $value) {
 		if($value!="0000-00-00"&&$value!=""&&$value!='nil')
 		{
+			if($value!=$_POST['vac_given_date_hidden'][$key])			//if changed
+			{
+				$value = date('Y-m-d', strtotime($value));
+				if(!mysqli_query($link, "UPDATE vac_schedule SET date_given='{$value}', given='Y' WHERE id={$_POST['vac_sched_id'][$key]}"))
+					$err[] = "Unknown error";	//set own given_date first
+				//Now begins setting of dates of those dependent on this
+				//If some vaccination from vac_schedule has been deleted, this code should not cause problem, as no value from vac_schedule is being read to 
+				//calculate further values
+				//TODO: optimize this thing, only select things that are needed
+				$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE dependent ={$_POST['v_id'][$key]}"));
+				//loop start
+				while($vaccine)
+				{
+					$vaccine_schedule = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vac_schedule WHERE v_id ={$vaccine['id']} AND p_id={$_POST['p_id']}"));
+					if($vaccine_schedule['given']=='Y')
+						break;//if vaccine given, exit loop
+					$date_temp = date("Y-m-d", strtotime("+".$vaccine['no_of_days']." days", strtotime($value)));
+					mysqli_query($link, "UPDATE vac_schedule SET date = '{$date_temp}' WHERE v_id ={$vaccine['id']} AND p_id={$_POST['p_id']}"); //set its date accordingly
+					$value = $date_temp;//$value = $date_temp
+					$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE dependent ={$vaccine['id']}"));//$vaccine = new vaccine with dep as $vaccine['id']
+				}//loop end
+				
+				
+			}
+		}
+		else
+		{
+			if($value!=$_POST['vac_given_date_hidden'][$key])	//if value changed
+				if(!mysqli_query($link, "UPDATE vac_schedule SET date_given='', given='N' WHERE id={$_POST['vac_sched_id'][$key]}"))
+					$err[] = "Unknown error";	//set given date to null, set given to N
+		}
+	}
+	foreach ($_POST['vac_date'] as $key => $value) {
+		//if changed
+		if($value!=$_POST['vac_date_hidden'][$key])
+		{
 			$value =date('Y-m-d', strtotime($value));
-			if(!mysqli_query($link, "UPDATE vac_schedule SET date_given='{$value}', given='Y' WHERE id={$_POST['vac_id'][$key]}"))
+			if(!mysqli_query($link, "UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_sched_id'][$key]}"))
 				$err[] = "Unknown error";
 		}
 	}
 	foreach ($_POST['given'] as $key => $value) {
 		if($value=='Y')
 		{
-			if(!mysqli_query($link, "UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_id'][$key]}"))
+			if(!mysqli_query($link, "UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_sched_id'][$key]}"))
 				$err[] = "Unknown error";
 		}
 	}
@@ -128,6 +160,7 @@ else
 
 <h4>Schedule</h4>
 <form action="" method="post" style="width:800px;background:none;border:none">
+	<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
 <table>
 	<tbody>
 		<tr>
@@ -176,10 +209,16 @@ else
 		?>
 
 		<td>
+	<input type="hidden" name="vac_date_hidden[]" value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
 	<input type="text" name="vac_date[]" style="width:80px" <?php echo "id=\"vac_date".$count."\""; ?> value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
 		</td>
 
 		<td>
+	<input type="hidden" name="vac_given_date_hidden[]" value=<?php 
+	if($row['date_given']=='0000-00-00'||$row['date_given']=='')
+		echo "\"nil\"";
+	else
+		echo "\"".date('j M Y',strtotime($row['date_given']))."\"";?>/>
 	<input type="text" name="vac_given_date[]" style="width:80px" <?php echo "id=\"vac_given_date".$count."\""; ?> value=<?php 
 	if($row['date_given']=='0000-00-00'||$row['date_given']=='')
 		echo "\"nil\"";
@@ -212,7 +251,8 @@ else
 		<?php
 		echo "<td>";
 		echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_vac[]\">";
-		echo "<input type=\"hidden\" value=\"".$row['id']."\" name=\"vac_id[]\">";
+		echo "<input type=\"hidden\" value=\"".$row['id']."\" name=\"vac_sched_id[]\">";
+		echo "<input type=\"hidden\" value=\"".$row['v_id']."\" name=\"v_id[]\">";
 		echo "</td>";
 		echo "</tr>";
 		$count++;
