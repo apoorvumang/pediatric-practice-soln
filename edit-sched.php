@@ -193,6 +193,12 @@ else
 		echo "<tr ";
 		if ($row['given']=='Y')
 			echo "id=\"focus_green\"";	//green focus if vaccine has been given
+		else if (strtotime("now") < strtotime($row['date']))
+			echo "id=\"focus_yellow\"";	//yellow focus if sched date is yet to come
+		else if (($vac['upper_limit'] > 36500)||(strtotime("now") < strtotime("+".$vac['upper_limit']." days", strtotime($patient['dob']))))
+			echo "id=\"focus_orange\"";	//orange focus if sched date has gone but vac can still be given
+		else
+			echo "id=\"focus_red\"";	//red focus if vaccine cant be given now
 		echo " >";
 		echo "<td>";
 		?>

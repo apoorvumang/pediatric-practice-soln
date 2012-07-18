@@ -122,6 +122,18 @@ th, td {
 	background: #9AFF9A;
 	color:black;
 }
+#focus_yellow {
+	background: #FFE87C;
+	color:black;
+}
+#focus_orange {
+	background: orange;
+	color:white;
+}
+#focus_red {
+	background: #F75D59;
+	color:white;
+}
 th {
   	padding: .8em 1em;
 	background: #2C76A6;
