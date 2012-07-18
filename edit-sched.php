@@ -161,6 +161,7 @@ else
 <h4>Schedule</h4>
 <form action="" method="post" style="width:800px;background:none;border:none">
 	<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
+<input type="submit" name="submit" value="Save Changes" />
 <table>
 	<tbody>
 		<tr>
@@ -195,7 +196,7 @@ else
 			echo "id=\"focus_green\"";	//green focus if vaccine has been given
 		else if (strtotime("now") < strtotime($row['date']))
 			echo "id=\"focus_yellow\"";	//yellow focus if sched date is yet to come
-		else if (($vac['upper_limit'] > 36500)||(strtotime("now") < strtotime("+".$vac['upper_limit']." days", strtotime($patient['dob']))))
+		else if (($vac['upper_limit'] > 36500)||(strtotime("now") < strtotime("+".$vac['upper_limit']." days", strtotime($patient['dob']))))	//strtotime causes error if too large value is given
 			echo "id=\"focus_orange\"";	//orange focus if sched date has gone but vac can still be given
 		else
 			echo "id=\"focus_red\"";	//red focus if vaccine cant be given now
