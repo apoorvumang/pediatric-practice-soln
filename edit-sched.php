@@ -114,7 +114,10 @@ if($_GET['id'])
 </p>
 
 <p>
-<strong>Phone :</strong> <?php echo $patient['phone']; ?>
+<strong>Phone 1:</strong> <?php echo $patient['phone']; ?>
+</p>
+<p>
+<strong>Phone 2:</strong> <?php echo $patient['phone2']; ?>
 </p>
 <p>
 <strong>Father's name :</strong> <?php echo $patient['father_name']; ?>

@@ -25,7 +25,15 @@ function validatePatient($patient_var)
 	{
 		if( !preg_match("/^[0-9]{1,}$/", $patient_var['phone']) )
 		{
-			$err[]='Your mobile phone number is not valid!';
+			$err[]='Your phone number 1 is not valid!';
+		}
+	}
+
+	if(($patient_var['phone2']))
+	{
+		if( !preg_match("/^[0-9]{1,}$/", $patient_var['phone2']) )
+		{
+			$err[]='Your phone number 2 is not valid!';
 		}
 	}
 	
@@ -68,12 +76,13 @@ function addPatient($patient_var)
 		$patient_var['dob'] = mysqli_real_escape_string($link, $patient_var['dob']);
 		
 		// Escape the input data
-		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,dob,phone,sex,father_name,father_occ,mother_name,mother_occ,address,sibling)
+		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,dob,phone,phone2,sex,father_name,father_occ,mother_name,mother_occ,address,sibling)
 					VALUES(
 					'".$patient_var['name']."', '".$patient_var['first_name']."', '".$patient_var['last_name']."',
 					'".$patient_var['email']."',
 					'".$patient_var['dob']."',
 					'".$patient_var['phone']."',
+					'".$patient_var['phone2']."',
 					'".$patient_var['sex']."',
 					'".$patient_var['father_name']."',
 					'".$patient_var['father_occ']."',
@@ -139,6 +148,7 @@ function editPatient($patient_var)
 			email = '".$patient_var['email']."',
 			dob = '".$patient_var['dob']."',
 			phone = '".$patient_var['phone']."',
+			phone2 = '".$patient_var['phone2']."',
 			sex = '".$patient_var['sex']."',
 			father_name = '".$patient_var['father_name']."',
 			father_occ = '".$patient_var['father_occ']."',

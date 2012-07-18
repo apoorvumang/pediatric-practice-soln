@@ -70,9 +70,13 @@ $(function() {
 	</p>
 
 	<p>
-	<label for="phone">Mobile number:&nbsp;&nbsp;</label>
+	<label for="phone">Phone number 1:&nbsp;&nbsp;</label>
 	<input type="text" name="phone" id="phone" <?php echo "value=\"{$patient['phone']}\""; ?> />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label for="phone2">Phone number 2:&nbsp;&nbsp;</label>
+	<input type="text" name="phone2" id="phone2" <?php echo "value=\"{$patient['phone2']}\""; ?> />
 	</p>
+
 	<p>
 	<label for="address">Address:&nbsp;&nbsp;</label><br />
 	<textarea name="address" id="address" rows=3 cols=70><?php echo $patient['address']; ?></textarea>
