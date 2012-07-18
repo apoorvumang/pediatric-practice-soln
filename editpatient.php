@@ -1,6 +1,14 @@
 <?php include('header.php');
 include_once('add-patient-func.php');
-
+if($_GET['delete']=='999'&&isset($_GET['id']))
+{
+	//Delete patient from patients, and corresponding records from vac_schedule
+	if(mysqli_query($link, "DELETE FROM patients WHERE id = {$_GET['id']}")&&mysqli_query($link, "DELETE FROM vac_schedule WHERE p_id = {$_GET['id']}"))
+		echo "Deletion successful.";
+	else
+		echo "Some problem in deleting.";
+	exit();
+}
 if(isset($_POST['submit']))
 {
 	editPatient($_POST);
@@ -89,6 +97,9 @@ $(function() {
 
 	<p>
 	<input type="submit" name="submit" value="Save"/>
+	</p>
+	<p>
+		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&delete=999\"" ?> ><strong><font color="red">Delete patient</font></strong></a>
 	</p>
 
 </form>
