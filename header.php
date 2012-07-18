@@ -68,6 +68,12 @@ switch($currentFile)
 	case "editpatient.php":
 	$title="Edit patient";
 	break;
+	case "search-sched.php":
+	$title="Search schedule";
+	break;
+	case "search-sched-results.php":
+	$title="Search schedule - Results";
+	break;
 }
 
 echo $title;
@@ -103,6 +109,7 @@ echo $title;
 			<li <?php if($currentFile=="changevac.php") { ?> id="current" <?php }?>><a href="changevac.php">Edit/Del Vac</a></li>
 			<li <?php if($currentFile=="schedule.php") { ?> id="current" <?php }?>><a href="schedule.php">Sched Vac</a></li>
 			<li <?php if($currentFile=="show.php") { ?> id="current" <?php }?>><a href="show.php">Patient info</a></li>
+			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Search Schedule</a></li>
 			<li <?php if($currentFile=="addvacmake.php") { ?> id="current" <?php }?>><a href="addvacmake.php">Add product</a></li>
 			<li <?php if($currentFile=="changevacmake.php") { ?> id="current" <?php }?>><a href="changevacmake.php">Change product</a></li>
 			<li><a href="index.php?logout=1">Logout</a></li>

@@ -31,11 +31,13 @@ if(isset($_GET['id']))
 
 <script>
 $(function() {
-	$( "#dob" ).datepicker({
+	$( "#dob_show" ).datepicker({
 		changeMonth: true,
 		changeYear: true,
 		yearRange: "1985:2022",
-		dateFormat:"yy-mm-dd"
+		dateFormat:"dd/mm/yy",
+		altField: "#dob",
+		altFormat: "yy-mm-dd"
 	});
 });
 </script>
@@ -55,7 +57,8 @@ $(function() {
 
 	<p>
 	<label for="dob">Date of Birth:&nbsp;&nbsp;</label>
-	<input type="text" name="dob" id="dob" <?php echo "value=\"{$patient['dob']}\""; ?> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="hidden" name="dob" id="dob" <?php echo "value=\"".$patient['dob']."\""; ?> />
+	<input type="text" name="dob_show" id="dob_show" <?php echo "value=\"".date('d/m/Y',strtotime($patient['dob']))."\""; ?> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 	<label class="grey" for="sex">Sex:&nbsp;&nbsp;</label>
 	<select name="sex" style="margin-right:60px;">
