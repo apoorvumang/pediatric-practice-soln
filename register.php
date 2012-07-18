@@ -1,96 +1,10 @@
 <?php include('header.php'); 
-include('gen-sched-func.php');
-function checkEmail($str)
-{
-	return preg_match("/^[\.A-z0-9_\-\+]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $str);
-}
+include_once('gen-sched-func.php');
+include_once('add-patient-func.php');
 
 if(isset($_POST['submit']))
 {  //If the Register form has been submitted
-	$err = array();
-	$_POST['name'] = $_POST['first_name']." ".$_POST['last_name'];
-	if(($_POST['email']))
-	{
-		if(!checkEmail($_POST['email']))
-		{
-			$err[]='Your email is not valid!';
-		}
-	}
-
-	if(($_POST['phone']))
-	{
-		if( !preg_match("/^[0-9]{1,}$/", $_POST['phone']) )
-		{
-			$err[]='Your mobile phone number is not valid!';
-		}
-	}
-	
-	if(!$_POST['name'] || !$_POST['dob'])
-	{
-		$err[] = 'All fields must be filled!';
-	}
-
-	$tempdate = $_POST['dob'] . "12:00";
-	if(strtotime($tempdate) > strtotime('now'))
-	{
-		$err[] = 'Enter a valid date!';
-	}
-
-	if(!count($err))
-	{
-		$_POST['email'] = mysqli_real_escape_string($link, $_POST['email']);
-		$_POST['name'] = mysqli_real_escape_string($link, $_POST['name']);
-		$_POST['phone'] = mysqli_real_escape_string($link, $_POST['phone']);
-		$_POST['dob'] = mysqli_real_escape_string($link, $_POST['dob']);
-		
-		// Escape the input data
-
-		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,dob,phone,sex,father_name,father_occ,mother_name,mother_occ,address,sibling)
-					VALUES(
-					'".$_POST['name']."', '".$_POST['first_name']."', '".$_POST['last_name']."',
-					'".$_POST['email']."',
-					'".$_POST['dob']."',
-					'".$_POST['phone']."',
-					'".$_POST['sex']."',
-					'".$_POST['father_name']."',
-					'".$_POST['father_occ']."',
-					'".$_POST['mother_name']."',
-					'".$_POST['mother_occ']."',
-					'".$_POST['address']."',
-					'".$_POST['sibling']."')"))
-		{	
-			$new_patient_id = mysqli_insert_id($link);
-			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
-			if($_POST['sibling']!=0)
-			{
-				$row_sibling = mysqli_fetch_assoc(mysqli_query($link, "SELECT sibling FROM patients WHERE id={$_POST['sibling']}"));
-				if(!$row_sibling['sibling'])	//If sibling does not have any other sibling
-				{
-					if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_patient_id}' WHERE id={$_POST['sibling']}"))
-						$err[]="Some error in adding sibling";
-				}
-				else //If sibling has other sibling(s)
-				{
-					$new_sibling = $row_sibling['sibling'].",".$_POST['sibling'];
-					echo "UPDATE patients SET sibling={$new_sibling} WHERE id={$_POST['sibling']}";
-					if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_sibling}' WHERE id={$_POST['sibling']}"))
-						$err[]="Some error in adding sibling";
-					if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_sibling}' WHERE id={$new_patient_id}"))
-						$err[]="Some error in adding sibling";
-				}
-			}
-			if($_POST['gen_sched']=='1')
-			{
-				generate_patient_schedule($new_patient_id);
-			}
-		}
-		else $err[]='An unknown error has occured.';
-	}
-	
-	if(count($err))
-	{
-		$_SESSION['msg']['reg-err'] = implode('<br />',$err);
-	}	
+	addPatient($_POST);
 }
 						
 if($_SESSION['msg']['reg-err'])

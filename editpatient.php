@@ -1,78 +1,9 @@
 <?php include('header.php');
+include_once('add-patient-func.php');
+
 if(isset($_POST['submit']))
 {
-	function checkEmail($str)
-	{
-		return preg_match("/^[\.A-z0-9_\-\+]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $str);
-	}
-
-	if(isset($_POST['submit']))
-	{  //If the Register form has been submitted
-		$err = array();
-		$_POST['name'] = $_POST['first_name']." ".$_POST['last_name'];
-		if(($_POST['email']))
-		{
-			if(!checkEmail($_POST['email']))
-			{
-				$err[]='Your email is not valid!';
-			}
-		}
-
-		if(($_POST['phone']))
-		{
-			if( !preg_match("/^[0-9]{10}$/", $_POST['phone']) )
-			{
-				$err[]='Your mobile phone number is not valid!';
-			}
-		}
-		
-		if(!$_POST['name'] || !$_POST['dob'])
-		{
-			$err[] = 'All fields must be filled!';
-		}
-
-		$tempdate = $_POST['dob'] . "12:00";
-		if(strtotime($tempdate) > strtotime('now'))
-		{
-			$err[] = 'Enter a valid date!';
-		}
-
-		if(!count($err))
-		{
-			$_POST['email'] = mysqli_real_escape_string($link, $_POST['email']);
-			$_POST['name'] = mysqli_real_escape_string($link, $_POST['name']);
-			$_POST['phone'] = mysqli_real_escape_string($link, $_POST['phone']);
-			$_POST['dob'] = mysqli_real_escape_string($link, $_POST['dob']);
-			
-			// Escape the input data
-
-			if(mysqli_query($link, "UPDATE patients SET 
-				name = '{$_POST['name']}',
-				first_name = '".$_POST['first_name']."',
-				last_name =  '".$_POST['last_name']."',
-				email = '".$_POST['email']."',
-				dob = '".$_POST['dob']."',
-				phone = '".$_POST['phone']."',
-				sex = '".$_POST['sex']."',
-				father_name = '".$_POST['father_name']."',
-				father_occ = '".$_POST['father_occ']."',
-				mother_name = '".$_POST['mother_name']."',
-				mother_occ = '".$_POST['mother_occ']."',
-				address = '".$_POST['address']."' WHERE id = {$_POST['id']}"))
-			{	
-				
-				$_SESSION['msg']['reg-success']="Patient successfully edited!";
-				
-			}
-			else $err[]='An unknown error has occured.';
-		}
-		
-		if(count($err))
-		{
-			$_SESSION['msg']['reg-err'] = implode('<br />',$err);
-		}	
-	}
-							
+	editPatient($_POST);
 	if($_SESSION['msg']['reg-err'])
 	{
 		echo '<div class="err">'.$_SESSION['msg']['reg-err'].'</div>';
