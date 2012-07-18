@@ -96,7 +96,7 @@ if($_GET['id'])
 
 <?php 
 if($patient['sibling']==0)
-	echo "None";
+	echo "<p><strong>Sibling: None</strong></p>";
 else
 {
 	$siblist = explode(",", $patient['sibling']);
