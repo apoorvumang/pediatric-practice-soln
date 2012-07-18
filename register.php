@@ -19,7 +19,7 @@ if(isset($_POST['submit']))
 
 	if(($_POST['phone']))
 	{
-		if( !preg_match("/^[0-9]{10}$/", $_POST['phone']) )
+		if( !preg_match("/^[0-9]{1,}$/", $_POST['phone']) )
 		{
 			$err[]='Your mobile phone number is not valid!';
 		}

@@ -5,11 +5,11 @@ if($_POST['vac_date'])
 	foreach ($_POST['delete_vac'] as $key => $value) {
 		mysqli_query($link, "DELETE FROM vac_schedule WHERE id={$value}");		
 	}
-	foreach ($_POST['vac_date'] as $key => $value) {
-		$value =date('Y-m-d', strtotime($value));
-		if(!mysqli_query($link, "UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_id'][$key]}"))
-			$err[] = "Unknown error";
-	}
+	// foreach ($_POST['vac_date'] as $key => $value) {
+	// 	$value =date('Y-m-d', strtotime($value));
+	// 	if(!mysqli_query($link, "UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_id'][$key]}"))
+	// 		$err[] = "Unknown error";
+	// }
 	foreach ($_POST['vac_given_date'] as $key => $value) {
 		if($value!="0000-00-00"&&$value!=""&&$value!='nil')
 		{
