@@ -21,7 +21,6 @@ if(isset($_POST['submit']))
 		
 		if(isset($_POST['id']))	//If editing vac
 		{
-			echo 'here';
 			if($_POST['update']=='1')	//If need to update existing schedule
 			{
 				$vac_temp = mysqli_fetch_assoc(mysqli_query($link, "SELECT no_of_days FROM vaccines WHERE id={$_POST['id']}"));

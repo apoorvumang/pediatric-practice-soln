@@ -70,10 +70,12 @@ if($_POST['vac_date'])
 if($_GET['id'])
 {
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
+	$temp_result = mysqli_query($link, "SELECT id FROM vaccines WHERE 1");
+	$temp_nrows = mysqli_num_rows($temp_result);
 ?>
 <script type="text/javascript">
-	
-	<?php for ($i=0; $i < 51; $i++) { ?>
+	//TODO 51 is total vaccines right now. This should actually be total number of vaccines in table vaccines
+	<?php for ($i=0; $i < $temp_nrows; $i++) { ?>
 
 			$(function() {
 				$( <?php echo "\"#vac_given_date".$i."\""; ?> ).datepicker({
@@ -92,7 +94,10 @@ if($_GET['id'])
 				});
 			});
 			
-	<?php } ?>
+	<?php } 
+	unset($temp_result);
+	unset($temp_nrows); 
+	?>
 	
 </script>
 
