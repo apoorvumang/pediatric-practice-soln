@@ -56,6 +56,7 @@ function prePatient(&$patient_var)
 {
 	$patient_var['first_name'] = ucwords($patient_var['first_name']);
 	$patient_var['last_name'] = ucwords($patient_var['last_name']);
+	$patient_var['address'] = ucwords($patient_var['address']);
 	$patient_var['name'] = $patient_var['first_name']." ".$patient_var['last_name'];
 	$patient_var['father_name'] = ucwords($patient_var['father_name']);
 	$patient_var['mother_name'] = ucwords($patient_var['mother_name']);
