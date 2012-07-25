@@ -50,6 +50,14 @@ if($_POST['vac_date'])
 				$err[] = "Unknown error";
 		}
 	}
+	foreach ($_POST['make'] as $key => $value) {
+		//if changed
+		if($value!=$_POST['make_hidden'][$key])
+		{
+			if(!mysqli_query($link, "UPDATE vac_schedule SET make={$value} WHERE id={$_POST['vac_sched_id'][$key]}"))
+				$err[] = "Unknown error";
+		}
+	}
 	foreach ($_POST['given'] as $key => $value) {
 		if($value=='Y')
 		{
@@ -262,6 +270,7 @@ else
 				}
 				?>
 			</select>
+			<input type="hidden" name="make_hidden[]" value=<?php echo "\"{$row['make']}\"";?> />
 		</td>
 		<?php
 		echo "<td>";
