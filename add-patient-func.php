@@ -122,7 +122,12 @@ function addPatient($patient_var)
 	if(count($err))
 	{
 		$_SESSION['msg']['reg-err'] = implode('<br />',$err);
-	}	
+		return 0;
+	}
+	else
+	{
+		return $new_patient_id;
+	}
 }
 
 

@@ -4,7 +4,13 @@ include_once('add-patient-func.php');
 
 if(isset($_POST['submit']))
 {  //If the Register form has been submitted
-	addPatient($_POST);
+	//Returns 0 on error, otherwise new patient id
+	$retval = addPatient($_POST);
+	if($retval)
+	{
+		header("Location: edit-sched.php?id={$retval}");
+		exit();
+	}
 }
 						
 if($_SESSION['msg']['reg-err'])
