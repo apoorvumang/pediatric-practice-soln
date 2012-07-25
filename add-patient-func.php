@@ -39,7 +39,7 @@ function validatePatient($patient_var)
 	
 	if(!$patient_var['name'] || !$patient_var['dob'])
 	{
-		$err[] = 'All fields must be filled!';
+		$err[] = 'First name and date of birth must be filled!';
 	}
 
 	if(strtotime($patient_var['dob']) > strtotime('now'))
