@@ -43,17 +43,17 @@ $(function() {
 	<h3>Add patient</h3>
 	
 	<p>
-	<label for="name">First Name:&nbsp;&nbsp;</label>
-	<input type="text" name="first_name" id="name"  />
+	<label for="first_name">First Name:&nbsp;&nbsp;</label>
+	<input type="text" name="first_name" id="first_name" style="width:477px" />
 	</p>
 
 	<p>
-	<label for="name">Last Name:&nbsp;&nbsp;</label>
-	<input type="text" name="last_name" id="name"  />
+	<label for="last_name">Last Name:&nbsp;&nbsp;</label>
+	<input type="text" name="last_name" id="last_name" style="width:477px" />
 	</p>
 
 	<p>
-	<label for="dob">Date of Birth:&nbsp;&nbsp;</label>
+	<label for="dob_show">Date of Birth:&nbsp;&nbsp;</label>
 	<input type="hidden" name="dob" id="dob" />
 	<input type="text" name="dob_show" id="dob_show" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -100,17 +100,19 @@ $(function() {
 	</p>
 
 	<p>
-	<label class="grey" for="sibling">Sibling:&nbsp;&nbsp;</label>
-	<select name="sibling" style="margin-right:60px;">
+	<label class="grey" for="sibling">Sibling ID:&nbsp;&nbsp;</label>
+	<input type="text" name="sibling" value="0" style="width:20px" id="sibling"/>
+<!--	<select name="sibling" style="margin-right:60px;">
 	<option value=0>None</option>
 	<?php
-	$result = mysqli_query($link, "SELECT name, id FROM patients WHERE 1");
-	while($pat_sib = mysqli_fetch_assoc($result))
-	{
-		echo "<option value=".$pat_sib['id'].">".$pat_sib['name']."</option>\n";
-	}
+	// $result = mysqli_query($link, "SELECT name, id FROM patients WHERE 1");
+	// while($pat_sib = mysqli_fetch_assoc($result))
+	// {
+	// 	echo "<option value=".$pat_sib['id'].">".$pat_sib['name']."</option>\n";
+	// }
 	?>
 	</select>
+-->
 	<input type="checkbox" name="gen_sched" value="1" checked="true"/> Generate New Schedule
 	</p>
 	<p>
