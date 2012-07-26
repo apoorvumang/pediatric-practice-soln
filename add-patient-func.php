@@ -77,7 +77,8 @@ function addPatient($patient_var)
 		$patient_var['dob'] = mysqli_real_escape_string($link, $patient_var['dob']);
 		
 		// Escape the input data
-		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,dob,phone,phone2,sex,father_name,father_occ,mother_name,mother_occ,address,sibling)
+		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,dob,phone,phone2,sex,father_name,father_occ,mother_name,mother_occ,address,
+			birth_weight,born_at,head_circum,length,mode_of_delivery,gestation,sibling)
 					VALUES(
 					'".$patient_var['name']."', '".$patient_var['first_name']."', '".$patient_var['last_name']."',
 					'".$patient_var['email']."',
@@ -90,6 +91,12 @@ function addPatient($patient_var)
 					'".$patient_var['mother_name']."',
 					'".$patient_var['mother_occ']."',
 					'".$patient_var['address']."',
+					'".$patient_var['birth_weight']."',
+					'".$patient_var['born_at']."',
+					'".$patient_var['head_circum']."',
+					'".$patient_var['length']."',
+					'".$patient_var['mode_of_delivery']."',
+					'".$patient_var['gestation']."',
 					'".$patient_var['sibling']."')"))
 		{	
 			$new_patient_id = mysqli_insert_id($link);
@@ -160,6 +167,12 @@ function editPatient($patient_var)
 			father_occ = '".$patient_var['father_occ']."',
 			mother_name = '".$patient_var['mother_name']."',
 			mother_occ = '".$patient_var['mother_occ']."',
+			birth_weight = '".$patient_var['birth_weight']."',
+			born_at = '".$patient_var['born_at']."',
+			head_circum = '".$patient_var['head_circum']."',
+			length = '".$patient_var['length']."',
+			mode_of_delivery = '".$patient_var['mode_of_delivery']."',
+			gestation = '".$patient_var['gestation']."',
 			address = '".$patient_var['address']."' WHERE id = {$patient_var['id']}"))
 		{	
 			

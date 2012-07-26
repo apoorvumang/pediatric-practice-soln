@@ -103,6 +103,40 @@ $(function() {
 	</p>
 
 	<p>
+	<label class="grey" for="birth_weight">Birth Weight:&nbsp;&nbsp;</label>
+	<input type="text" name="birth_weight" id="birth_weight" <?php echo "value=\"{$patient['birth_weight']}\""; ?>/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label class="grey" for="born_at">Birth Time:&nbsp;&nbsp;</label>
+	<input type="text" name="born_at" id="born_at" <?php echo "value=\"{$patient['born_at']}\""; ?>/>
+	</p>
+
+	<p>
+	<label class="grey" for="head_circum">Head Circumference:&nbsp;&nbsp;</label>
+	<input type="text" name="head_circum" id="head_circum" <?php echo "value=\"{$patient['head_circum']}\""; ?>/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label class="grey" for="length">Length:&nbsp;&nbsp;</label>
+	<input type="text" name="length" id="length" <?php echo "value=\"{$patient['length']}\""; ?>/>
+	</p>
+
+	<p>
+	<label class="grey" for="mode_of_delivery">Mode of Delivery:&nbsp;&nbsp;</label>
+	<select name="mode_of_delivery" style="margin-right:60px;">
+		<option value="Normal" <?php if($patient['mode_of_delivery']=='Normal') echo "selected";?>>Normal</option>
+		<option value="Caesarean" <?php if($patient['mode_of_delivery']=='Caesarean') echo "selected";?>>Caesarean</option>
+		<option value="Forceps" <?php if($patient['mode_of_delivery']=='Forceps') echo "selected";?>>Forceps</option>
+		<option value="Vacuum" <?php if($patient['mode_of_delivery']=='Vacuum') echo "selected";?>>Vacuum</option>
+	</select>
+
+	<label class="grey" for="gestation">Gestation:&nbsp;&nbsp;</label>
+	<select name="gestation" style="margin-right:60px;">
+		<option value="FT" <?php if($patient['gestation']=='FT') echo "selected";?>>FT</option>
+		<option value="PT" <?php if($patient['gestation']=='PT') echo "selected";?>>PT</option>
+		<option value="LPT" <?php if($patient['gestation']=='LPT') echo "selected";?>>LPT</option>
+	</select>
+	</p>
+
+
+	<p>
 	<input type="submit" name="submit" value="Save"/>
 	</p>
 	<p>

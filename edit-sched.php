@@ -127,6 +127,30 @@ if($_GET['id'])
 </p>
 
 <p>
+<strong>Birth Weight :</strong> <?php echo $patient['birth_weight']; ?>
+</p>
+
+<p>
+<strong>Birth Time :</strong> <?php echo $patient['born_at']; ?>
+</p>
+
+<p>
+<strong>Head Circumference :</strong> <?php echo $patient['head_circum']; ?>
+</p>
+
+<p>
+<strong>Length :</strong> <?php echo $patient['length']; ?>
+</p>
+
+<p>
+<strong>Mode of Delivery :</strong> <?php echo $patient['mode_of_delivery']; ?>
+</p>
+
+<p>
+<strong>Gestation :</strong> <?php echo $patient['gestation']; ?>
+</p>
+
+<p>
 <strong>Phone 1:</strong> <?php echo $patient['phone']; ?>
 </p>
 <p>

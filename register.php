@@ -112,7 +112,41 @@ $(function() {
 	// }
 	?>
 	</select>
--->
+--></p>
+	<p>
+	<label class="grey" for="birth_weight">Birth Weight:&nbsp;&nbsp;</label>
+	<input type="text" name="birth_weight" id="birth_weight"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label class="grey" for="born_at">Birth Time:&nbsp;&nbsp;</label>
+	<input type="text" name="born_at" id="born_at"/>
+	</p>
+
+	<p>
+	<label class="grey" for="head_circum">Head Circumference:&nbsp;&nbsp;</label>
+	<input type="text" name="head_circum" id="head_circum"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label class="grey" for="length">Length:&nbsp;&nbsp;</label>
+	<input type="text" name="length" id="length"/>
+	</p>
+
+	<p>
+	<label class="grey" for="mode_of_delivery">Mode of Delivery:&nbsp;&nbsp;</label>
+	<select name="mode_of_delivery" style="margin-right:60px;">
+		<option value="Normal">Normal</option>
+		<option value="Caesarean">Caesarean</option>
+		<option value="Forceps">Forceps</option>
+		<option value="Vacuum">Vacuum</option>
+	</select>
+
+	<label class="grey" for="gestation">Gestation:&nbsp;&nbsp;</label>
+	<select name="gestation" style="margin-right:60px;">
+		<option value="FT">FT</option>
+		<option value="PT">PT</option>
+		<option value="LPT">LPT</option>
+	</select>
+	</p>
+
+	<p>
 	<input type="checkbox" name="gen_sched" value="1" checked="true"/> Generate New Schedule
 	</p>
 	<p>
