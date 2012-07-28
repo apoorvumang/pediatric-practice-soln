@@ -101,6 +101,8 @@ function addPatient($patient_var)
 		{	
 			$new_patient_id = mysqli_insert_id($link);
 			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
+			//The previous code for sibling was COMPLETELY WRONG
+			//Implementing timestamp based method
 			if($patient_var['sibling']!=0)
 			{
 				$row_sibling = mysqli_fetch_assoc(mysqli_query($link, "SELECT sibling FROM patients WHERE id={$patient_var['sibling']}"));
