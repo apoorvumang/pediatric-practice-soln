@@ -1,17 +1,7 @@
 <?php include('header.php'); 
 include_once('gen-sched-func.php');
 include_once('add-patient-func.php');
-function Redirect($Str_Location, $Bln_Replace = 1, $Int_HRC = NULL)
-{
-        if(!headers_sent())
-        {
-            header('location: ' . urldecode($Str_Location), $Bln_Replace, $Int_HRC);
-            exit;
-        }
 
-    exit('<meta http-equiv="refresh" content="0; url=' . urldecode($Str_Location) . '"/>'); # | exit('<script>document.location.href=' . urldecode($Str_Location) . ';</script>');
-    return;
-}
 if(isset($_POST['submit']))
 {  //If the Register form has been submitted
 	//Returns 0 on error, otherwise new patient id
@@ -19,7 +9,7 @@ if(isset($_POST['submit']))
 	if($retval)
 	{
 		Redirect("edit-sched.php?id={$retval}");
-		// header("Location: edit-sched.php?id={$retval}");
+		// Redirect("edit-sched.php?id={$retval}");
 		// exit();
 	}
 }

@@ -319,7 +319,7 @@ else
 }
 else
 {
-	header("Location: show.php");
+	Redirect("show.php");
 	exit;
 }
 include('footer.php'); ?>

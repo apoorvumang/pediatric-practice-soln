@@ -28,7 +28,7 @@ if(isset($_GET['logout']))
 	$_SESSION = array();
 	session_destroy();
 	
-	header("Location: index.php");
+	Redirect("index.php");
 	exit;
 }
 
@@ -63,7 +63,7 @@ if($_POST['submit'])
 			// Store some data in the session
 			
 			setcookie('tzRemember',$_POST['rememberMe']);
-			header("Location: index.php");
+			Redirect("index.php");
 			exit;
 		}
 		else $err[]='Wrong username and/or password!';
