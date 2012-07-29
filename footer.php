@@ -23,7 +23,7 @@
 		<a href="mailto:apoorvumang@gmail.com?subject=Feedback">Feedback</a> |
       <strong><a href="#top">Back to Top</a></strong>
    </p>
-
+<?php mysqli_close($link); //Closing connection. hopefully error on website will be removed??>
 <!-- /footer-bottom-->
 </div>
 

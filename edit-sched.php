@@ -18,20 +18,23 @@ if($_POST['vac_date'])
 				//If some vaccination from vac_schedule has been deleted, this code should not cause problem, as no value from vac_schedule is being read to 
 				//calculate further values
 				//TODO: optimize this thing, only select things that are needed
-				$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE dependent ={$_POST['v_id'][$key]}"));
-				//loop start
-				while($vaccine)
-				{
-					$vaccine_schedule = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vac_schedule WHERE v_id ={$vaccine['id']} AND p_id={$_POST['p_id']}"));
-					if($vaccine_schedule['given']=='Y')
-						break;//if vaccine given, exit loop
-					$date_temp = date("Y-m-d", strtotime("+".$vaccine['no_of_days']." days", strtotime($value)));
-					mysqli_query($link, "UPDATE vac_schedule SET date = '{$date_temp}' WHERE v_id ={$vaccine['id']} AND p_id={$_POST['p_id']}"); //set its date accordingly
-					$value = $date_temp;//$value = $date_temp
-					$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE dependent ={$vaccine['id']}"));//$vaccine = new vaccine with dep as $vaccine['id']
-				}//loop end
-				
-				
+				//PROBLEM: multiple vaccines are dependent on same
+				//SOLUTION added loop in beginning(assuming multiple dependence only on vaccine whose date has changed)
+				//TODO: if multiple dependence down the line also, loop will have to be added inside loop
+				$result = mysqli_query($link, "SELECT * FROM vaccines WHERE dependent ={$_POST['v_id'][$key]}");
+				while($vaccine = mysqli_fetch_assoc($result))
+				{//loop start
+					while($vaccine)
+					{
+						$vaccine_schedule = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vac_schedule WHERE v_id ={$vaccine['id']} AND p_id={$_POST['p_id']}"));
+						if($vaccine_schedule['given']=='Y')
+							break;//if vaccine given, exit loop
+						$date_temp = date("Y-m-d", strtotime("+".$vaccine['no_of_days']." days", strtotime($value)));
+						mysqli_query($link, "UPDATE vac_schedule SET date = '{$date_temp}' WHERE v_id ={$vaccine['id']} AND p_id={$_POST['p_id']}"); //set its date accordingly
+						$value = $date_temp;//$value = $date_temp
+						$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE dependent ={$vaccine['id']}"));//$vaccine = new vaccine with dep as $vaccine['id']
+					}//loop end
+				}			
 			}
 		}
 		else

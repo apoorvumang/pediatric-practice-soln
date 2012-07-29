@@ -7,16 +7,35 @@
 <h3>Search Results</h3>
 <?php
 
-if(isset($_POST['date']))
+if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If some submit button clicked
 {
-	$_POST['date'] = date('Y-m-d', strtotime($_POST['date']));
-	$_POST['date'] = mysqli_real_escape_string($link, $_POST['date']);
-	$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date ='{$_POST['date']}'");
-	$nrows = mysqli_num_rows($result);
+	if($_POST['specificdate'])
+	{
+		$_POST['date'] = date('Y-m-d', strtotime($_POST['date']));
+		$_POST['date'] = mysqli_real_escape_string($link, $_POST['date']);
+		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date ='{$_POST['date']}'");
+		$nrows = mysqli_num_rows($result);
+	}
+	else if($_POST['tofromdate'])
+	{
+		$_POST['todate'] = date('Y-m-d', strtotime($_POST['todate']));
+		$_POST['todate'] = mysqli_real_escape_string($link, $_POST['todate']);
+		$_POST['fromdate'] = date('Y-m-d', strtotime($_POST['fromdate']));
+		$_POST['fromdate'] = mysqli_real_escape_string($link, $_POST['fromdate']);
+
+		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date >='{$_POST['fromdate']}' AND date <='{$_POST['todate']}' ORDER BY date");
+		$nrows = mysqli_num_rows($result);
+	}
+	else if($_POST['patientsearch'])
+	{
+		$_POST['patientid'] = mysqli_real_escape_string($link, $_POST['patientid']);
+		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id ='{$_POST['patientid']}' ORDER BY date");
+		$nrows = mysqli_num_rows($result);
+	}
 ?>
 
 <script type="text/javascript">
-	//TODO 51 is total vaccines right now. This should actually be total number of vaccines in table vaccines
+
 	<?php for ($i=0; $i < $nrows; $i++) { ?>
 
 			$(function() {
