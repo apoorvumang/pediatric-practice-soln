@@ -96,23 +96,18 @@ if($_GET['id'])
 	function checkRed()
 	{
 		var array = document.getElementsByTagName("input");
-
-
 		for(var ii = 0; ii < array.length; ii++)
 		{
-
 		   if(array[ii].type == "checkbox")
 		   {
 		      if(array[ii].className == "focus_red")
 		       {
 		        array[ii].checked = true;
-
 		       }
-
-
 		   }
 		}
 	};
+
 
 	<?php for ($i=0; $i < $temp_nrows; $i++) { ?>
 
@@ -235,7 +230,8 @@ else
 	<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
 <input type="submit" name="submit" value="Save Changes" />
 <br />
-<input type="button" name="CHECKRED" value="Check Red" onClick="checkRed()" />
+<input type="button" name="CHECKRED" value="Check vaccines which cannot be given now" onClick="checkRed()" />
+<input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" />
 <table>
 	<tbody>
 		<tr>

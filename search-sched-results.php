@@ -94,7 +94,11 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 	</tbody>
 </table>
 <input type="submit" name="save" value="Save Changes" />
-<input type="submit" name="sendsms" value="Send SMS" style="float:right"/>
+<input type="button" name="check" value="Check All" onClick="checkAll()" style="float:right;margin-right:20px" />
+<input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" style="float:right;margin-right:20px" />
+<input type="submit" name="sendautosms" value="Send Auto SMS" style="float:right;margin-right:20px"/>
+<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px"/>
+<textarea rows="3" cols="80" name="customsms"></textarea>
 </form>
 <?php
 }
@@ -118,7 +122,7 @@ else if(isset($_POST['save']))
 		echo "Error in updating schedule.";
 	}
 }
-else if(isset($_POST['sendsms']))
+else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 {
 	foreach ($_POST['send_sms_id'] as $key => $value) 
 	{
@@ -126,20 +130,27 @@ else if(isset($_POST['sendsms']))
 		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT phone, phone2, first_name FROM patients WHERE id={$row['p_id']}"));
 		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM vaccines WHERE id={$row['v_id']}"));
 		
-		if(strtotime($row['date']) < strtotime("now"))	//If date has passed
+		if(isset($_POST['sendautosms']))
 		{
-			$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination\nDr. Mahima";
+			if(strtotime($row['date']) < strtotime("now"))	//If date has passed
+			{
+				$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination\nDr. Mahima";
+			}
+			else
+			{
+				$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination on ".date('j M Y',strtotime($row['date']))."\nDr. Mahima";
+			}
 		}
 		else
 		{
-			$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination on ".date('j M Y',strtotime($row['date']))."\nDr. Mahima";
+			$message = $_POST['customsms'];
 		}
 		
 		if($patient['phone'])
 			mail("sms@drmahima.com", $patient['phone'], $message);
 		if($patient['phone2'])
 			mail("sms@drmahima.com", $patient['phone2'], $message);
-		echo "SMS sent to {$patient['name']} <br>";
+		echo "SMS sent to {$patient['first_name']} <br>";
 	}
 }
 else
