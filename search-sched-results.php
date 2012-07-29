@@ -13,7 +13,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 	{
 		$_POST['date'] = date('Y-m-d', strtotime($_POST['date']));
 		$_POST['date'] = mysqli_real_escape_string($link, $_POST['date']);
-		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date ='{$_POST['date']}'");
+		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date ='{$_POST['date']}' AND given='N'");
 		$nrows = mysqli_num_rows($result);
 	}
 	else if($_POST['tofromdate'])
@@ -23,13 +23,13 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 		$_POST['fromdate'] = date('Y-m-d', strtotime($_POST['fromdate']));
 		$_POST['fromdate'] = mysqli_real_escape_string($link, $_POST['fromdate']);
 
-		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date >='{$_POST['fromdate']}' AND date <='{$_POST['todate']}' ORDER BY date");
+		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date >='{$_POST['fromdate']}' AND date <='{$_POST['todate']}' AND given='N' ORDER BY date");
 		$nrows = mysqli_num_rows($result);
 	}
 	else if($_POST['patientsearch'])
 	{
 		$_POST['patientid'] = mysqli_real_escape_string($link, $_POST['patientid']);
-		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id ='{$_POST['patientid']}' ORDER BY date");
+		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id ='{$_POST['patientid']}' AND given='N' ORDER BY date");
 		$nrows = mysqli_num_rows($result);
 	}
 ?>
@@ -42,7 +42,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 				$( <?php echo "\"#vac_date".$i."\""; ?> ).datepicker({
 					changeMonth: true,
 					changeYear: true,
-					yearRange: "1985:2022",
+					yearRange: "1985:2032",
 					dateFormat:"d M yy"
 				});
 			});
@@ -59,13 +59,14 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 			<th>Patient</th>
 			<th>Vaccine</th>
 			<th>Scheduled Date</th>
+			<th>Phone</th>
 			<th>Send SMS</th>
 		</tr>
 <?php
 	$count = 0;
 	while($row = mysqli_fetch_assoc($result))
 	{
-		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id FROM patients WHERE id={$row['p_id']}"));
+		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id,phone FROM patients WHERE id={$row['p_id']}"));
 		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM vaccines WHERE id={$row['v_id']}"));
 
 ?>
@@ -74,7 +75,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 			<?php echo $row['given'];?>
 		</td>
 		<td>
-			<?php echo $patient['name']; ?>
+			<a href= <?php echo "\"edit-sched.php?id={$patient['id']}\""; ?> ><?php echo $patient['name']; ?></a>
 		</td>
 		<td>
 			<?php echo $vaccine['name']; ?>
@@ -82,6 +83,9 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 		<td>
 			<input type="text" name="vac_date[]" style="width:80px" <?php echo "id=\"vac_date".$count."\""; ?> value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
 			<input type="hidden" name="vac_id[]" style="width:80px" value=<?php echo "\"{$row['id']}\""; ?> />
+		</td>
+		<td>
+			<?php echo $patient['phone']; ?>
 		</td>
 		<td>
 			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> />

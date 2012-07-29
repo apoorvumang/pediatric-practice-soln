@@ -144,12 +144,12 @@ function checkAll()
 		<ul>
 			<li <?php if($currentFile=="index.php") { ?> id="current" <?php }?>><a href="index.php">Home</a></li>
 			<?php if($_SESSION['name']) { ?>
-			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">Add patient</a></li>
+			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">New patient</a></li>
+			<li <?php if($currentFile=="show.php") { ?> id="current" <?php }?>><a href="show.php">Patient info</a></li>
+			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
 			<li <?php if($currentFile=="vaccine.php") { ?> id="current" <?php }?>><a href="vaccine.php">Add Vac</a></li>
 			<li <?php if($currentFile=="changevac.php") { ?> id="current" <?php }?>><a href="changevac.php">Edit/Del Vac</a></li>
-			<li <?php if($currentFile=="schedule.php") { ?> id="current" <?php }?>><a href="schedule.php">Sched Vac</a></li>
-			<li <?php if($currentFile=="show.php") { ?> id="current" <?php }?>><a href="show.php">Patient info</a></li>
-			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Search Schedule</a></li>
+			<li <?php if($currentFile=="schedule.php") { ?> id="current" <?php }?>><a href="schedule.php">Sched Vac</a></li>2
 			<li <?php if($currentFile=="addvacmake.php") { ?> id="current" <?php }?>><a href="addvacmake.php">Add product</a></li>
 			<li <?php if($currentFile=="changevacmake.php") { ?> id="current" <?php }?>><a href="changevacmake.php">Change product</a></li>
 			<li><a href="index.php?logout=1">Logout</a></li>

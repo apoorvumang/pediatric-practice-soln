@@ -115,7 +115,7 @@ if($_GET['id'])
 				$( <?php echo "\"#vac_given_date".$i."\""; ?> ).datepicker({
 					changeMonth: true,
 					changeYear: true,
-					yearRange: "1985:2022",
+					yearRange: "1985:2032",
 					dateFormat:"d M yy"
 				});
 			});
@@ -123,7 +123,7 @@ if($_GET['id'])
 				$( <?php echo "\"#vac_date".$i."\""; ?> ).datepicker({
 					changeMonth: true,
 					changeYear: true,
-					yearRange: "1985:2022",
+					yearRange: "1985:2032",
 					dateFormat:"d M yy"
 				});
 			});
