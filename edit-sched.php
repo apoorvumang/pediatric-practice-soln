@@ -78,6 +78,12 @@ if($_POST['vac_date'])
 if($_GET['id'])
 {
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
+	if(!$patient)
+	{
+		echo "<h3>No patient with given ID found</h3>";
+		include("footer.php");
+		exit;
+	}
 	$temp_result = mysqli_query($link, "SELECT id FROM vaccines WHERE 1");
 	$temp_nrows = mysqli_num_rows($temp_result);
 ?>
@@ -127,7 +133,7 @@ if($_GET['id'])
 </p>
 
 <p>
-<strong>Birth Weight :</strong> <?php echo $patient['birth_weight']; ?>
+<strong>Birth Weight :</strong> <?php echo $patient['birth_weight']." grams"; ?>
 </p>
 
 <p>

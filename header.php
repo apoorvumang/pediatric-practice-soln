@@ -5,6 +5,20 @@ session_name('tzLogin');
 session_set_cookie_params(2*7*24*60*60);
 session_start();
 error_reporting(0);
+
+function Redirect($Str_Location, $Bln_Replace = 1, $Int_HRC = NULL)
+{
+	//header function does not seem to be working on website (drmahima.com)
+        // if(!headers_sent())
+        // {
+        //     header('location: ' . urldecode($Str_Location), $Bln_Replace, $Int_HRC);
+        //     exit;
+        // }
+
+    exit('<meta http-equiv="refresh" content="0; url=' . urldecode($Str_Location) . '"/>'); # | exit('<script>document.location.href=' . urldecode($Str_Location) . ';</script>');
+    return;
+}
+
 if(isset($_GET['logout']))
 {
 	$_SESSION = array();
@@ -12,18 +26,6 @@ if(isset($_GET['logout']))
 	
 	Redirect("index.php");
 	exit;
-}
-
-function Redirect($Str_Location, $Bln_Replace = 1, $Int_HRC = NULL)
-{
-        if(!headers_sent())
-        {
-            header('location: ' . urldecode($Str_Location), $Bln_Replace, $Int_HRC);
-            exit;
-        }
-
-    exit('<meta http-equiv="refresh" content="0; url=' . urldecode($Str_Location) . '"/>'); # | exit('<script>document.location.href=' . urldecode($Str_Location) . ';</script>');
-    return;
 }
 
 ?>

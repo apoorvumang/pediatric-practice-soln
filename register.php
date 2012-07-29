@@ -9,6 +9,7 @@ if(isset($_POST['submit']))
 	if($retval)
 	{
 		Redirect("edit-sched.php?id={$retval}");
+		exit;
 		// Redirect("edit-sched.php?id={$retval}");
 		// exit();
 	}

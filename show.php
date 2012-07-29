@@ -1,6 +1,17 @@
-<?php include('header.php'); ?>
+<?php include('header.php'); 
+if($_POST['id'])	//id posted and not 0? weird TODO change this maybe?
+{
+	Redirect("edit-sched.php?id={$_POST['id']}");
+	exit;
+}
+?>
 
 <h3>Patient Information</h3>
+<form action="" method="post">
+	<label for="id">Enter ID:</label>
+	<input type="text" name="id" id="id" />
+	<input type="submit" name="submit" value="Go" />
+</form>
 <table>
 	<tbody>
 		<tr>
