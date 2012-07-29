@@ -2,9 +2,11 @@
 if($_POST['vac_date'])
 {
 	$err = array();
+
 	foreach ($_POST['delete_vac'] as $key => $value) {
 		mysqli_query($link, "DELETE FROM vac_schedule WHERE id={$value}");		
 	}
+
 	//Old values are in same format as new values (slight overhead)
 	foreach ($_POST['vac_given_date'] as $key => $value) {
 		if($value!="0000-00-00"&&$value!=""&&$value!='nil')
@@ -91,7 +93,27 @@ if($_GET['id'])
 	$temp_nrows = mysqli_num_rows($temp_result);
 ?>
 <script type="text/javascript">
-	//TODO 51 is total vaccines right now. This should actually be total number of vaccines in table vaccines
+	function checkRed()
+	{
+		var array = document.getElementsByTagName("input");
+
+
+		for(var ii = 0; ii < array.length; ii++)
+		{
+
+		   if(array[ii].type == "checkbox")
+		   {
+		      if(array[ii].className == "focus_red")
+		       {
+		        array[ii].checked = true;
+
+		       }
+
+
+		   }
+		}
+	};
+
 	<?php for ($i=0; $i < $temp_nrows; $i++) { ?>
 
 			$(function() {
@@ -208,9 +230,12 @@ else
 ?>
 
 <h4>Schedule</h4>
-<form action="" method="post" style="width:800px;background:none;border:none">
+<form name="myform" action="" method="post" style="width:800px;background:none;border:none">
+
 	<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
 <input type="submit" name="submit" value="Save Changes" />
+<br />
+<input type="button" name="CHECKRED" value="Check Red" onClick="checkRed()" />
 <table>
 	<tbody>
 		<tr>
@@ -242,13 +267,25 @@ else
 		}
 		echo "<tr ";
 		if ($row['given']=='Y')
+		{
 			echo "id=\"focus_green\"";	//green focus if vaccine has been given
+			$color_id = "focus_green";
+		}
 		else if (strtotime("now") < strtotime($row['date']))
+		{
 			echo "id=\"focus_yellow\"";	//yellow focus if sched date is yet to come
+			$color_id = "focus_yellow";
+		}
 		else if (($vac['upper_limit'] > 36500)||(strtotime("now") < strtotime("+".$vac['upper_limit']." days", strtotime($patient['dob']))))	//strtotime causes error if too large value is given
+		{
 			echo "id=\"focus_orange\"";	//orange focus if sched date has gone but vac can still be given
+			$color_id = "focus_orange";
+		}
 		else
+		{	
 			echo "id=\"focus_red\"";	//red focus if vaccine cant be given now
+			$color_id = "focus_red";
+		}
 		echo " >";
 		echo "<td>";
 		?>
@@ -307,7 +344,7 @@ else
 		</td>
 		<?php
 		echo "<td>";
-		echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_vac[]\">";
+		echo "<input type=\"checkbox\" class=\"{$color_id}\" value=\"".$row['id']."\" name=\"delete_vac[]\">";
 		echo "<input type=\"hidden\" value=\"".$row['id']."\" name=\"vac_sched_id[]\">";
 		echo "<input type=\"hidden\" value=\"".$row['v_id']."\" name=\"v_id[]\">";
 		echo "</td>";

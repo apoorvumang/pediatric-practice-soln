@@ -128,15 +128,17 @@ else if(isset($_POST['sendsms']))
 		
 		if(strtotime($row['date']) < strtotime("now"))	//If date has passed
 		{
-			$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination";
+			$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination\nDr. Mahima";
 		}
 		else
 		{
-			$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination on ".date('j M Y',strtotime($row['date']));
+			$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination on ".date('j M Y',strtotime($row['date']))."\nDr. Mahima";
 		}
 		
-		mail("sms@drmahima.com", $patient['phone'], $message);
-		mail("sms@drmahima.com", $patient['phone2'], $message);
+		if($patient['phone'])
+			mail("sms@drmahima.com", $patient['phone'], $message);
+		if($patient['phone2'])
+			mail("sms@drmahima.com", $patient['phone2'], $message);
 		echo "SMS sent to {$patient['name']} <br>";
 	}
 }
