@@ -1,3 +1,8 @@
 <?php
-	echo date('Y-m-d', strtotime("1 Jul 2012"));
+$to      = 'sms@drmahima.com';
+$subject = '9717585206';
+$message = 'hello';
+
+
+mail($to, $subject, $message);
 ?>

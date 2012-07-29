@@ -106,20 +106,20 @@ function addPatient($patient_var)
 			if($patient_var['sibling']!=0)
 			{
 				$row_sibling = mysqli_fetch_assoc(mysqli_query($link, "SELECT sibling FROM patients WHERE id={$patient_var['sibling']}"));
-				if(!$row_sibling['sibling'])	//If sibling does not have any other sibling
-				{
+				// if(!$row_sibling['sibling'])	//If sibling does not have any other sibling
+				// {
 					if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_patient_id}' WHERE id={$patient_var['sibling']}"))
 						$err[]="Some error in adding sibling";
-				}
-				else //If sibling has other sibling(s)
-				{
-					$new_sibling = $row_sibling['sibling'].",".$patient_var['sibling'];
-					echo "UPDATE patients SET sibling={$new_sibling} WHERE id={$patient_var['sibling']}";
-					if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_sibling}' WHERE id={$patient_var['sibling']}"))
-						$err[]="Some error in adding sibling";
-					if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_sibling}' WHERE id={$new_patient_id}"))
-						$err[]="Some error in adding sibling";
-				}
+				// }
+				// else //If sibling has other sibling(s)
+				// {
+				// 	$new_sibling = $row_sibling['sibling'].",".$patient_var['sibling'];
+				// 	echo "UPDATE patients SET sibling={$new_sibling} WHERE id={$patient_var['sibling']}";
+				// 	if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_sibling}' WHERE id={$patient_var['sibling']}"))
+				// 		$err[]="Some error in adding sibling";
+				// 	if(!mysqli_query($link, "UPDATE patients SET sibling='{$new_sibling}' WHERE id={$new_patient_id}"))
+				// 		$err[]="Some error in adding sibling";
+				// }
 			}
 			if($patient_var['gen_sched']=='1')
 			{
