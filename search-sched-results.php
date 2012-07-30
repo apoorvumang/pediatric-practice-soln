@@ -66,11 +66,31 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 	$count = 0;
 	while($row = mysqli_fetch_assoc($result))
 	{
-		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id,phone FROM patients WHERE id={$row['p_id']}"));
-		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM vaccines WHERE id={$row['v_id']}"));
+		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id, phone, dob FROM patients WHERE id={$row['p_id']}"));
+		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, upper_limit FROM vaccines WHERE id={$row['v_id']}"));
 
 ?>
-	<tr <?php if($row['given']=='Y') echo "id=\"focus_green\"";?>>
+	<tr <?php 
+
+if ($row['given']=='Y')
+		{
+			echo "id=\"focus_green\"";	//green focus if vaccine has been given
+		}
+		else if (strtotime("now") < strtotime($row['date']))
+		{
+			echo "id=\"focus_yellow\"";	//yellow focus if sched date is yet to come
+		}
+		else if (($vaccine['upper_limit'] > 36500)||(strtotime("now") < strtotime("+".$vaccine['upper_limit']." days", strtotime($patient['dob']))))	//strtotime causes error if too large value is given
+		{
+			echo "id=\"focus_orange\"";	//orange focus if sched date has gone but vac can still be given
+		}
+		else
+		{	
+			echo "id=\"focus_red\"";	//red focus if vaccine cant be given now
+		}
+
+	?>
+>
 		<td>
 			<?php echo $row['given'];?>
 		</td>
