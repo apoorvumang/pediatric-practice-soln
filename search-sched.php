@@ -24,6 +24,7 @@ $(function() {
 		dateFormat:"d M yy"
 	});
 });
+
 </script>
 <h3>Search Schedule</h3>
 <form action="search-sched-results.php" method="post" enctype="multipart/form-data" style="width:auto">
