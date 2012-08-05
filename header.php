@@ -168,3 +168,8 @@ function checkAll()
 
    	<!-- main -->
 	   <div id="main">
+	   <?php if((!$_SESSION['name'])&&($currentFile!="index.php")) {
+
+	   	echo "<h2>Access Denied!</h2>";
+	   	exit;
+	   } ?>
