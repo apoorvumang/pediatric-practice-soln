@@ -16,7 +16,10 @@ function schedule($patient, $vaccine)
 		$dep_vac_sched = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id = {$patient['id']} AND v_id = {$vaccine['dependent']}"));
 		$date_vac = date("Y-m-d",strtotime($temp_nofdays, strtotime($dep_vac_sched['date'])));
 	}
-
+	if((date('D', strtotime($date_vac)))=='Sun')
+	{
+		$date_vac = date("Y-m-d", strtotime("+1 days", strtotime($date_vac)));
+	}
 	if(!mysqli_query($link, "INSERT INTO vac_schedule(p_id, v_id, date) VALUES({$patient['id']}, {$vaccine['id']}, '{$date_vac}')"))
 	{
 		return -1;

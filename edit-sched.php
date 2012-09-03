@@ -32,6 +32,10 @@ if($_POST['vac_date'])
 						if($vaccine_schedule['given']=='Y')
 							break;//if vaccine given, exit loop
 						$date_temp = date("Y-m-d", strtotime("+".$vaccine['no_of_days']." days", strtotime($value)));
+						if((date('D', strtotime($date_temp)))=='Sun')
+						{
+							$date_temp = date("Y-m-d", strtotime("+1 days", strtotime($date_temp)));
+						}
 						mysqli_query($link, "UPDATE vac_schedule SET date = '{$date_temp}' WHERE v_id ={$vaccine['id']} AND p_id={$_POST['p_id']}"); //set its date accordingly
 						$value = $date_temp;//$value = $date_temp
 						$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE dependent ={$vaccine['id']}"));//$vaccine = new vaccine with dep as $vaccine['id']

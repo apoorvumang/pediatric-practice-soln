@@ -116,19 +116,19 @@ $(function() {
 	</select>
 --></p>
 	<p>
-	<label class="grey" for="birth_weight">Birth Weight:&nbsp;&nbsp;</label>
-	<input type="text" name="birth_weight" id="birth_weight"/>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<label class="grey" for="born_at">Birth Time:&nbsp;&nbsp;</label>
 	<input type="text" name="born_at" id="born_at"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label class="grey" for="birth_weight">Birth Weight:&nbsp;&nbsp;</label>
+	<input type="text" name="birth_weight" id="birth_weight"/>
 	</p>
 
 	<p>
-	<label class="grey" for="head_circum">Head Circumference:&nbsp;&nbsp;</label>
-	<input type="text" name="head_circum" id="head_circum"/>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<label class="grey" for="length">Length:&nbsp;&nbsp;</label>
 	<input type="text" name="length" id="length"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label class="grey" for="head_circum">Head Circumference:&nbsp;&nbsp;</label>
+	<input type="text" name="head_circum" id="head_circum"/>
 	</p>
 
 	<p>
