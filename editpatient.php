@@ -141,7 +141,7 @@ $(function() {
 	<input type="submit" name="submit" value="Save"/>
 	</p>
 	<p>
-		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&delete=999\"" ?> ><strong><font color="red">Delete patient</font></strong></a>
+		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&delete=999\"" ?> onclick="return confirm('Confirm delete?');"><strong><font color="red">Delete patient</font></strong></a>
 	</p>
 
 </form>
