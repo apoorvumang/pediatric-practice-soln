@@ -161,11 +161,11 @@ if($_GET['id'])
 </p>
 
 <p>
-<strong>Head Circumference :</strong> <?php echo $patient['head_circum']; ?>
+<strong>Head Circumference :</strong> <?php echo $patient['head_circum']; ?> cm
 </p>
 
 <p>
-<strong>Length :</strong> <?php echo $patient['length']; ?>
+<strong>Length :</strong> <?php echo $patient['length']; ?> cm
 </p>
 
 <p>
