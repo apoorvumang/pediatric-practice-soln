@@ -24,8 +24,11 @@ if($_POST['vac_date'])
 				//SOLUTION added loop in beginning(assuming multiple dependence only on vaccine whose date has changed)
 				//TODO: if multiple dependence down the line also, loop will have to be added inside loop
 				$result = mysqli_query($link, "SELECT * FROM vaccines WHERE dependent ={$_POST['v_id'][$key]}");
+				$original_date = $value;
 				while($vaccine = mysqli_fetch_assoc($result))
 				{//loop start
+					//Need to save date(ie $value) at this point of time, as it will get replaced in following loop, but original value is needed
+					$value = $original_date;
 					while($vaccine)
 					{
 						$vaccine_schedule = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vac_schedule WHERE v_id ={$vaccine['id']} AND p_id={$_POST['p_id']}"));
