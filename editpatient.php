@@ -1,5 +1,6 @@
 <?php include('header.php');
 include_once('add-patient-func.php');
+include_once('gen-sched-func.php');
 if($_GET['delete']=='999'&&isset($_GET['id']))
 {
 	//Delete patient from patients, and corresponding records from vac_schedule
@@ -7,6 +8,12 @@ if($_GET['delete']=='999'&&isset($_GET['id']))
 		echo "Deletion successful.";
 	else
 		echo "Some problem in deleting.";
+	exit();
+}
+else if($_GET['reschedule']=='999'&&isset($_GET['id']))
+{
+	generate_patient_schedule($_GET['id']);
+	echo "Rescheduling successful.";
 	exit();
 }
 if(isset($_POST['submit']))
@@ -142,6 +149,9 @@ $(function() {
 	</p>
 	<p>
 		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&delete=999\"" ?> onclick="return confirm('Confirm delete?');"><strong><font color="red">Delete patient</font></strong></a>
+	</p>
+	<p>
+		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&reschedule=999\"" ?> onclick="return confirm('Confirm reschedule?');"><strong><font color="blue">Reschedule patient</font></strong></a>
 	</p>
 
 </form>
