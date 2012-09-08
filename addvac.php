@@ -25,8 +25,10 @@ if(isset($_POST['submit']))
 			{
 				$vac_temp = mysqli_fetch_assoc(mysqli_query($link, "SELECT no_of_days FROM vaccines WHERE id={$_POST['id']}"));
 				$daystoadd = intval($_POST['no_of_days']) - intval($vac_temp['no_of_days']);
-				if(!mysqli_query($link, "UPDATE vac_schedule SET date=date + {$daystoadd} WHERE v_id = {$_POST['id']} AND given='N'"))
+				if(!mysqli_query($link, "UPDATE vac_schedule SET date=DATE_ADD(date, INTERVAL {$daystoadd} DAY) WHERE v_id = {$_POST['id']} AND given='N'"))
 					echo "Error updating in current records";
+				else
+					echo "Successfully updated vaccine!";
 			}
 			mysqli_query($link, "UPDATE vaccines SET name='{$_POST['name']}', 
 				no_of_days={$_POST['no_of_days']}, 
@@ -48,6 +50,7 @@ if(isset($_POST['submit']))
 				$_POST['id'] = mysqli_insert_id($link);
 				generate_vaccine_schedule($_POST);
 			}
+			echo "Added vaccine!";
 		}
 
 	}
@@ -64,11 +67,11 @@ if($_SESSION['msg']['reg-err'])
 	unset($_SESSION['msg']['reg-err']);
 }
 
-if($_SESSION['msg']['reg-success'])
-{
-	echo '<div class="success">'.$_SESSION['msg']['reg-success'].'</div>';
-	unset($_SESSION['msg']['reg-success']);
-}
+// if($_SESSION['msg']['reg-success'])
+// {
+// 	echo '<div class="success">'.$_SESSION['msg']['reg-success'].'</div>';
+// 	unset($_SESSION['msg']['reg-success']);
+// }
 
 ?>
 
