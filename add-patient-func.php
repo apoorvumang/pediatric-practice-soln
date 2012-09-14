@@ -61,11 +61,11 @@ function prePatient(&$patient_var)
 	$patient_var['father_name'] = ucwords($patient_var['father_name']);
 	$patient_var['mother_name'] = ucwords($patient_var['mother_name']);
 	if($patient_var['phone'][0]!='0')
-			$patient_var['phone']="0"+$patient_var['phone'];
+			$patient_var['phone']='0'.$patient_var['phone'];
 	if($patient_var['phone2'])
 	{	
 		if($patient_var['phone2'][0]!='0')
-			$patient_var['phone2']="0"+$patient_var['phone2'];
+			$patient_var['phone2']='0'.$patient_var['phone2'];
 	}
 }
 
