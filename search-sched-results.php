@@ -56,6 +56,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 	<tbody>
 		<tr>
 			<th>Given</th>
+			<th>ID</th>
 			<th>Patient</th>
 			<th>Vaccine</th>
 			<th>Scheduled Date</th>
@@ -93,6 +94,9 @@ if ($row['given']=='Y')
 >
 		<td>
 			<?php echo $row['given'];?>
+		</td>
+		<td>
+			<?php echo $row['p_id'];?>
 		</td>
 		<td>
 			<a href= <?php echo "\"edit-sched.php?id={$patient['id']}\""; ?> ><?php echo $patient['name']; ?></a>
