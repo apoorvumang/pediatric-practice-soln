@@ -26,9 +26,9 @@ dateFormat:"d M yy"
 });
 
 </script>
-<h3>Search Schedule</h3>
+<h3>Search Given Vaccines</h3>
 <form action="search-sched-resultsdg.php" method="post" enctype="multipart/form-data" style="width:auto" name="1">
-<label for="date">Show schedules for : &nbsp;&nbsp;&nbsp;&nbsp;</label>
+<label for="date">Show vaccines given on : &nbsp;&nbsp;&nbsp;&nbsp;</label>
 <input type="text" name="date" id="date" style="margin-right:40px;"/>
 <input type="submit" name="specificdate" value="Go" />
 </form>
