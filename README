@@ -1,1 +1,5 @@
-This is a commit.
+This is a database management website for managing vaccination schedules.A comprehensive solution for paediatricians.
+  Features include:
+  1. Auto vaccination schedule generation
+  2. SMS sending service
+To be used with sample database mummy_software.sql

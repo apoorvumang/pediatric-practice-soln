@@ -88,6 +88,12 @@ switch($currentFile)
 	case "search-sched-results.php":
 	$title="Search schedule - Results";
 	break;
+	case "search-scheddg.php":
+	$title="Search schedule by given date";
+	break;
+	case "search-sched-resultsdg.php":
+	$title="Search schedule by given date - Results";
+	break;
 }
 
 echo $title;
@@ -98,7 +104,7 @@ echo $title;
 </title>
 
 <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
-
+<link rel="stylesheet" href="css/screen.css" type="text/css" media="print" />
 <!-- datepicker things from jqueryui -->
 <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
@@ -147,6 +153,7 @@ function checkAll()
 			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">New patient</a></li>
 			<li <?php if($currentFile=="show.php") { ?> id="current" <?php }?>><a href="show.php">Patient info</a></li>
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
+			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
 			<li <?php if($currentFile=="vaccine.php") { ?> id="current" <?php }?>><a href="vaccine.php">Add Vac</a></li>
 			<li <?php if($currentFile=="changevac.php") { ?> id="current" <?php }?>><a href="changevac.php">Edit/Del Vac</a></li>
 			<li <?php if($currentFile=="schedule.php") { ?> id="current" <?php }?>><a href="schedule.php">Sched Vac</a></li>
