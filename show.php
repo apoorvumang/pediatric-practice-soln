@@ -55,7 +55,7 @@ $(function() {
 			<th>Phone</th>
 			<th>Sex</th>
 		</tr>
-		<?php $result = mysqli_query($link, "SELECT * FROM patients WHERE 1");
+		<?php $result = mysqli_query($link, "SELECT * FROM patients WHERE 1 ORDER BY id");
 		while($row = mysqli_fetch_assoc($result))
 		{
 			
