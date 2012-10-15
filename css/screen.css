@@ -1,9 +1,6 @@
 /* theme screen stylesheets */
 
 /* import stylesheets and hide from IE/Mac \*/
-DIV#header, DIV#newflash, DIV#banner {display: none;}
-body {visibility:hidden;}
-.print {visibility:visible;}
 @import url("reset.css");
 @import url("coolblue.css");
 @import url("enhancements.css"); 

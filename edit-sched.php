@@ -230,11 +230,9 @@ else
 }
 
 ?>
-<div class='print'>
 <h4>Schedule</h4>
 <form name="myform" action="" method="post" style="width:800px;background:none;border:none">
-<input type="button" value=" Print this page " onclick="window.print();return false;" />
-	<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
+<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
 <input type="submit" name="submit" value="Save Changes" />
 <br />
 <input type="button" name="CHECKRED" value="Check vaccines which cannot be given now" onClick="checkRed()" />
@@ -364,7 +362,6 @@ else
 <br />
 <br />
 </form>
-</div>
 <?php
 }
 else

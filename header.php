@@ -104,7 +104,6 @@ echo $title;
 </title>
 
 <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
-<link rel="stylesheet" href="css/screen.css" type="text/css" media="print" />
 <!-- datepicker things from jqueryui -->
 <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>

@@ -104,5 +104,5 @@ if($_SESSION['name']){
 					<input type="submit" name="submit" value="Login" class="bt_login" />
 					</p>
 				
-				</form>
+			</form>
 <?php include('footer.php');?>
