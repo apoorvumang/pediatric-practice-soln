@@ -4,7 +4,7 @@ $(function() {
 	$( "#date" ).datepicker({
 		changeMonth: true,
 		changeYear: true,
-		yearRange: "1985:2032",
+		yearRange: "1970:2032",
 		dateFormat:"d M yy"
 	});
 });
@@ -12,7 +12,7 @@ $(function() {
 	$( "#fromdate" ).datepicker({
 		changeMonth: true,
 		changeYear: true,
-		yearRange: "1985:2032",
+		yearRange: "1970:2032",
 		dateFormat:"d M yy"
 	});
 });
@@ -20,7 +20,7 @@ $(function() {
 	$( "#todate" ).datepicker({
 		changeMonth: true,
 		changeYear: true,
-		yearRange: "1985:2032",
+		yearRange: "1970:2032",
 		dateFormat:"d M yy"
 	});
 });

@@ -42,7 +42,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 				$( <?php echo "\"#vac_date".$i."\""; ?> ).datepicker({
 					changeMonth: true,
 					changeYear: true,
-					yearRange: "1985:2032",
+					yearRange: "1970:2032",
 					dateFormat:"d M yy"
 				});
 			});
