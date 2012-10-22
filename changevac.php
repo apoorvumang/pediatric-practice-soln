@@ -23,7 +23,18 @@ else if($_POST['choice']=="edit")
 	<label for="name">Vaccine:</label><br />
 	<input type="text" name="name" id="name" value=<?php echo "\"{$vaccine['name']}\"";?>/>
 	</p>
-
+	<p>
+		<label>Linked to Vaccine: </label>
+		<?php 
+		if($vaccine['dependent']==0)
+			echo "Birth";
+		else
+		{
+			$depvac = mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM vaccines WHERE id = {$vaccine['dependent']}"));
+			echo $depvac['name'];
+		}
+		?>
+	</p>
 	<p>
 	<label for="no_of_days">Recommended interval to next dose (days):</label>
 	<input type="text" name="no_of_days" id="no_of_days" value=<?php echo "\"{$vaccine['no_of_days']}\"";?>/>

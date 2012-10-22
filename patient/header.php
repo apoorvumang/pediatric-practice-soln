@@ -45,55 +45,55 @@ switch($currentFile)
 	$title = "Home";
 	if($_SESSION['id'])
 	{
-		$title = $title." - ".$_SESSION['username'];
+		$title = $title." - ".$_SESSION['id'];
 	}
 	else
 	{
 		$title = $title." - Login";
 	}
 	break;
-	case "register.php":
-	$title = "Register New Patient";
-	break;
-	case "vaccine.php":
-	$title = "Add New Vaccine";
-	break;
-	case "schedule.php":
-	$title = "Schedule vaccination for patients";
-	break;
+	//case "register.php":
+	//$title = "Register New Patient";
+	//break;
+	//case "vaccine.php":
+	// $title = "Add New Vaccine";
+	// break;
+	// case "schedule.php":
+	// $title = "Schedule vaccination for patients";
+	// break;
 	case "show.php":
 	$title = "Patient Information";
 	break;
-	case "edit-sched.php":
-	$title = "Edit vaccination schedule";
-	break;
-	case "changevac.php":
-	$title = "Edit/Delete Vaccine";
-	break;
-	case "addvac.php":
-	$title = "Add/Edit Vaccine";
-	break;
-	case "addvacmake.php":
-	$title = "Add product";
-	break;
-	case "changevacmake.php":
-	$title = "Change product";
-	break;
+	// case "edit-sched.php":
+	// $title = "Edit vaccination schedule";
+	// break;
+	// case "changevac.php":
+	// $title = "Edit/Delete Vaccine";
+	// break;
+	// case "addvac.php":
+	// $title = "Add/Edit Vaccine";
+	// break;
+	// case "addvacmake.php":
+	// $title = "Add product";
+	// break;
+	// case "changevacmake.php":
+	// $title = "Change product";
+	// break;
 	case "editpatient.php":
 	$title="Edit patient";
 	break;
-	case "search-sched.php":
-	$title="Search schedule";
-	break;
-	case "search-sched-results.php":
-	$title="Search schedule - Results";
-	break;
-	case "search-scheddg.php":
-	$title="Search schedule by given date";
-	break;
-	case "search-sched-resultsdg.php":
-	$title="Search schedule by given date - Results";
-	break;
+	// case "search-sched.php":
+	// $title="Search schedule";
+	// break;
+	// case "search-sched-results.php":
+	// $title="Search schedule - Results";
+	// break;
+	// case "search-scheddg.php":
+	// $title="Search schedule by given date";
+	// break;
+	// case "search-sched-resultsdg.php":
+	// $title="Search schedule by given date - Results";
+	// break;
 }
 
 echo $title;
@@ -151,14 +151,14 @@ function checkAll()
 			<?php if($_SESSION['name']) { ?>
 			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">New patient</a></li>
 			<li <?php if($currentFile=="show.php") { ?> id="current" <?php }?>><a href="show.php">Patient info</a></li>
-			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
+			<!--<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
 			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
 			<li <?php if($currentFile=="vaccine.php") { ?> id="current" <?php }?>><a href="vaccine.php">Add Vac</a></li>
 			<li <?php if($currentFile=="changevac.php") { ?> id="current" <?php }?>><a href="changevac.php">Edit/Del Vac</a></li>
 			<li <?php if($currentFile=="schedule.php") { ?> id="current" <?php }?>><a href="schedule.php">Sched Vac</a></li>
 			<li <?php if($currentFile=="addvacmake.php") { ?> id="current" <?php }?>><a href="addvacmake.php">Add product</a></li>
 			<li <?php if($currentFile=="changevacmake.php") { ?> id="current" <?php }?>><a href="changevacmake.php">Change product</a></li>
-			<li><a href="index.php?logout=1">Logout</a></li>
+			--><li><a href="index.php?logout=1">Logout</a></li>
 			<?php } ?>
 		</ul>
 	</div>

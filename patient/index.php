@@ -9,6 +9,20 @@ include('header.php');
 //session_set_cookie_params(2*7*24*60*60);
 // Making the cookie live for 2 weeks
 
+?>
+<script>
+$(function() {
+	$( "#dob_show" ).datepicker({
+		changeMonth: true,
+		changeYear: true,
+		yearRange: "1970:2032",
+		dateFormat:"d M yy",
+		altField: "#dob",
+		altFormat: "yy-mm-dd"
+	});
+});
+</script>
+<?php
 
 if($_SESSION['id'] && !isset($_COOKIE['tzRemember']) && !$_SESSION['rememberMe'])
 {
@@ -40,23 +54,23 @@ if($_POST['submit'])
 	// Will hold our errors
 	
 	
-	if(!$_POST['username'] || !$_POST['password'])
+	if(!$_POST['id'] || !$_POST['dob'])
 		$err[] = 'All the fields must be filled in!';
 	
 	if(!count($err))
 	{
 		// Escaping all input data
-		$_POST['username'] = mysqli_real_escape_string($link, $_POST['username']);
-		$_POST['password'] = mysqli_real_escape_string($link, $_POST['password']);
+		$_POST['id'] = mysqli_real_escape_string($link, $_POST['id']);
+		$_POST['dob'] = mysqli_real_escape_string($link, $_POST['dob']);
 		$_POST['rememberMe'] = (int)$_POST['rememberMe'];
 		
-		$row = mysqli_fetch_assoc(mysqli_query($link, "SELECT username,name FROM doctors WHERE username='{$_POST['username']}' AND password='".md5($_POST['password'])."'"));
+		$row = mysqli_fetch_assoc(mysqli_query($link, "SELECT id,dob FROM patients WHERE id='{$_POST['id']}' AND dob='{$_POST['dob']}'"));
 
-		if($row['username'])
+		if($row['id'])
 		{
 			// If everything is OK login
 			
-			$_SESSION['username'] = $row['username'];
+			$_SESSION['id'] = $row['id'];
 			$_SESSION['name'] = $row['name'];
 			$_SESSION['rememberMe'] = $_POST['rememberMe'];
 			
@@ -77,7 +91,7 @@ if($_POST['submit'])
 
 if($_SESSION['name']){ 
 
-	echo "<h3>Welcome Dr. {$_SESSION['name']}!</h3><br />";
+	echo "<h3>Welcome parents of {$_SESSION['name']}!</h3><br />";
 	?>
 <p><strong>Use the above links to navigate.</strong></p>
 <?php
@@ -87,20 +101,21 @@ if($_SESSION['name']){
 
 ?>
 			<form class="clearfix" action="" method="post">
-					<h3>Doctor Login</h3>
+					<h3>Patient Login</h3>
 					<p>
-					<label class="grey" for="username">Username:</label><br />
-					<input class="field" type="text" name="username" id="username" value="" size="23" />
+					<label class="grey" for="id">Child ID:</label><br />
+					<input class="field" type="text" name="id" id="id" value="" size="23" />
 					</p>
 					<p>
-					<label class="grey" for="password">Password:</label><br />
-					<input class="field" type="password" name="password" id="password" size="23" />
+					<label class="grey" for="dob">Date of Birth:</label><br />
+					<input type="text" name="dob_show" id="dob_show" size="23" />
+					<input type="hidden" name="dob" id="dob" size="23" />
 					</p>
 					<p>
 					
-	            			<label><input name="rememberMe" id="rememberMe" type="checkbox" checked="checked" value="1" /> &nbsp;Remember me</label>
-			            	</p>
-			            	<p>
+        			<label><input name="rememberMe" id="rememberMe" type="checkbox" checked="checked" value="0" /> &nbsp;Remember me</label>
+	            	</p>
+	            	<p>
 					<input type="submit" name="submit" value="Login" class="bt_login" />
 					</p>
 				
