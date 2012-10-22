@@ -30,10 +30,14 @@ if(isset($_POST['submit']))
 				else
 					echo "Successfully updated vaccine!";
 			}
-			mysqli_query($link, "UPDATE vaccines SET name='{$_POST['name']}', 
+			if(!mysqli_query($link, "UPDATE vaccines SET name='{$_POST['name']}', 
 				no_of_days={$_POST['no_of_days']}, 
 				lower_limit={$_POST['lower_limit']}, 
-				upper_limit={$_POST['upper_limit']} WHERE id={$_POST['id']}");
+				upper_limit={$_POST['upper_limit']} WHERE id={$_POST['id']}"))
+				echo "Error updating vaccine";
+			else
+				echo "Successfully updated vaccine!";
+
 		}
 		else 	//If adding new vac
 		{
