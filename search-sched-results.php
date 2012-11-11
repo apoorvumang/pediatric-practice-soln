@@ -67,7 +67,9 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 	$count = 0;
 	while($row = mysqli_fetch_assoc($result))
 	{
-		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id, phone, dob FROM patients WHERE id={$row['p_id']}"));
+		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id, phone, dob, active FROM patients WHERE id={$row['p_id']}"));
+		if($patient['active']==0)
+			continue;
 		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, upper_limit FROM vaccines WHERE id={$row['v_id']}"));
 
 ?>

@@ -199,7 +199,7 @@ if($_GET['id'])
 <strong>Address :</strong> <?php echo $patient['address']; ?>
 </p>
 <p>
-<strong>Active :</strong> <?php if($patient['active']==1) echo "Yes"; else echo "No"; ?>
+<strong>Active :</strong> <?php if($patient['active']==1) echo "<font color=green><strong>Yes</strong></font>"; else echo "<font color=red><strong>No</strong></font>"; ?>
 </p>
 <p>
 <strong>Obstetrician :</strong> <?php echo $patient['obstetrician']; ?>
