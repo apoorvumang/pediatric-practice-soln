@@ -47,6 +47,16 @@ $(function() {
 		altFormat: "yy-mm-dd"
 	});
 });
+$(function() {
+	$( "#doregistration_show" ).datepicker({
+		changeMonth: true,
+		changeYear: true,
+		yearRange: "1970:2032",
+		dateFormat:"dd/mm/yy",
+		altField: "#date_of_registration",
+		altFormat: "yy-mm-dd"
+	});
+});
 </script>
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
@@ -143,6 +153,22 @@ $(function() {
 	</select>
 	</p>
 
+	<p>
+		<label for="doregistration_show">Date of Registration:&nbsp;&nbsp;</label>
+		<input type="hidden" name="date_of_registration" id="date_of_registration" <?php echo "value=\"".$patient['date_of_registration']."\""; ?> />
+		<input type="text" name="doregistration_show" id="doregistration_show" <?php echo "value=\"".date('d/m/Y',strtotime($patient['date_of_registration']))."\""; ?> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+		<input type="checkbox" name="active" id="active" value="1" <?php if($patient['active']) echo "checked=\"true\""; ?>/> 
+		<label for="active">Active</label>
+	</p>
+
+	<p>
+		<label for="place_of_birth">Place of Birth:&nbsp;&nbsp;</label>
+		<input type="text" name="place_of_birth" id="place_of_birth" <?php echo "value=\"{$patient['place_of_birth']}\""; ?>/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<label for="obstetrician">Obstetrician:&nbsp;&nbsp;</label>
+		<input type="text" name="obstetrician" id="obstetrician" <?php echo "value=\"{$patient['obstetrician']}\""; ?> />
+	</p>
 
 	<p>
 	<input type="submit" name="submit" value="Save"/>

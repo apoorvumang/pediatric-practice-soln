@@ -198,7 +198,18 @@ if($_GET['id'])
 <p>
 <strong>Address :</strong> <?php echo $patient['address']; ?>
 </p>
-
+<p>
+<strong>Active :</strong> <?php if($patient['active']==1) echo "Yes"; else echo "No"; ?>
+</p>
+<p>
+<strong>Obstetrician :</strong> <?php echo $patient['obstetrician']; ?>
+</p>
+<p>
+<strong>Place of Birth :</strong> <?php echo $patient['place_of_birth']; ?>
+</p>
+<p>
+<strong>Date of Registration :</strong> <?php echo  date('d-F-Y', strtotime($patient['date_of_registration'])); ?>
+</p>
 <?php 
 if($patient['sibling']==0)
 	echo "<p><strong>Sibling: None</strong></p>";

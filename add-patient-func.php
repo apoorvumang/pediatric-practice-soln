@@ -60,6 +60,16 @@ function prePatient(&$patient_var)
 	$patient_var['name'] = $patient_var['first_name']." ".$patient_var['last_name'];
 	$patient_var['father_name'] = ucwords($patient_var['father_name']);
 	$patient_var['mother_name'] = ucwords($patient_var['mother_name']);
+	$patient_var['obstetrician'] = ucwords($patient_var['obstetrician']);
+	$patient_var['place_of_birth'] = ucwords($patient_var['place_of_birth']);
+	if(!$patient_var['active'])
+	{
+		$patient_var['active'] = '0';
+	}
+	if((!$patient_var['doregistration'])||($patient_var['doregistration']=='0000-00-00'))
+	{
+		$patient_var['doregistration'] = $patient_var['dob'];
+	}
 	if($patient_var['phone'][0]!='0')
 			$patient_var['phone']='0'.$patient_var['phone'];
 	if($patient_var['phone2'])
@@ -85,7 +95,7 @@ function addPatient($patient_var)
 		
 		// Escape the input data
 		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,dob,phone,phone2,sex,father_name,father_occ,mother_name,mother_occ,address,
-			birth_weight,born_at,head_circum,length,mode_of_delivery,gestation,sibling)
+			birth_weight,born_at,head_circum,length,mode_of_delivery,gestation,sibling,active,date_of_registration,obstetrician,place_of_birth)
 					VALUES(
 					'".$patient_var['name']."', '".$patient_var['first_name']."', '".$patient_var['last_name']."',
 					'".$patient_var['email']."',
@@ -104,12 +114,17 @@ function addPatient($patient_var)
 					'".$patient_var['length']."',
 					'".$patient_var['mode_of_delivery']."',
 					'".$patient_var['gestation']."',
-					'".$patient_var['sibling']."')"))
+					'".$patient_var['sibling']."',
+					".$patient_var['active'].",
+					'".$patient_var['doregistration']."',
+					'".$patient_var['obstetrician']."',
+					'".$patient_var['place_of_birth']."')"))
 		{	
 			$new_patient_id = mysqli_insert_id($link);
 			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
-			//The previous code for sibling was COMPLETELY WRONG
-			//Implementing timestamp based method
+			//This code for sibling is only valid if there is only 1 sibling at most
+			//Need to implement a method with equivalence classes
+			//Hashed code was probably an incorrect implementation
 			if($patient_var['sibling']!=0)
 			{
 				$row_sibling = mysqli_fetch_assoc(mysqli_query($link, "SELECT sibling FROM patients WHERE id={$patient_var['sibling']}"));
@@ -182,6 +197,10 @@ function editPatient($patient_var)
 			length = '".$patient_var['length']."',
 			mode_of_delivery = '".$patient_var['mode_of_delivery']."',
 			gestation = '".$patient_var['gestation']."',
+			active = '".$patient_var['active']."',
+			date_of_registration = '".$patient_var['date_of_registration']."',
+			obstetrician = '".$patient_var['obstetrician']."',
+			place_of_birth = '".$patient_var['place_of_birth']."',
 			address = '".$patient_var['address']."' WHERE id = {$patient_var['id']}"))
 		{	
 			
