@@ -24,18 +24,6 @@ $(function() {
 </script>
 <?php
 
-if($_SESSION['id'] && !isset($_COOKIE['tzRemember']) && !$_SESSION['rememberMe'])
-{
-	// If you are logged in, but you don't have the tzRemember cookie (browser restart)
-	// and you have not checked the rememberMe checkbox:
-
-	$_SESSION = array();
-	session_destroy();
-	
-	// Destroy the session
-}
-
-
 
 if(isset($_GET['logout']))
 {
@@ -53,7 +41,6 @@ if($_POST['submit'])
 	$err = array();
 	// Will hold our errors
 	
-	
 	if(!$_POST['id'] || !$_POST['dob'])
 		$err[] = 'All the fields must be filled in!';
 	
@@ -62,9 +49,8 @@ if($_POST['submit'])
 		// Escaping all input data
 		$_POST['id'] = mysqli_real_escape_string($link, $_POST['id']);
 		$_POST['dob'] = mysqli_real_escape_string($link, $_POST['dob']);
-		$_POST['rememberMe'] = (int)$_POST['rememberMe'];
 		
-		$row = mysqli_fetch_assoc(mysqli_query($link, "SELECT id,dob FROM patients WHERE id='{$_POST['id']}' AND dob='{$_POST['dob']}'"));
+		$row = mysqli_fetch_assoc(mysqli_query($link, "SELECT id,dob,name FROM patients WHERE id='{$_POST['id']}' AND dob='{$_POST['dob']}'"));
 
 		if($row['id'])
 		{
@@ -72,11 +58,9 @@ if($_POST['submit'])
 			
 			$_SESSION['id'] = $row['id'];
 			$_SESSION['name'] = $row['name'];
-			$_SESSION['rememberMe'] = $_POST['rememberMe'];
 			
 			// Store some data in the session
 			
-			setcookie('tzRemember',$_POST['rememberMe']);
 			Redirect("index.php");
 			exit;
 		}
@@ -111,10 +95,6 @@ if($_SESSION['name']){
 					<input type="text" name="dob_show" id="dob_show" size="23" />
 					<input type="hidden" name="dob" id="dob" size="23" />
 					</p>
-					<p>
-					
-        			<label><input name="rememberMe" id="rememberMe" type="checkbox" checked="checked" value="0" /> &nbsp;Remember me</label>
-	            	</p>
 	            	<p>
 					<input type="submit" name="submit" value="Login" class="bt_login" />
 					</p>

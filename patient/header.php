@@ -1,8 +1,7 @@
 <?php
 define('INCLUDE_CHECK',true);
-require './connect.php';
+require '../connect.php';
 session_name('tzLogin');
-session_set_cookie_params(2*7*24*60*60);
 session_start();
 error_reporting(0);
 
@@ -24,7 +23,7 @@ if(isset($_GET['logout']))
 	$_SESSION = array();
 	session_destroy();
 	
-	Redirect("./index.php");
+	Redirect("index.php");
 	exit;
 }
 
@@ -45,55 +44,17 @@ switch($currentFile)
 	$title = "Home";
 	if($_SESSION['id'])
 	{
-		$title = $title." - ".$_SESSION['id'];
+		$title = $title." - ".$_SESSION['name'];
 	}
 	else
 	{
 		$title = $title." - Login";
 	}
 	break;
-	//case "register.php":
-	//$title = "Register New Patient";
-	//break;
-	//case "vaccine.php":
-	// $title = "Add New Vaccine";
-	// break;
-	// case "schedule.php":
-	// $title = "Schedule vaccination for patients";
-	// break;
-	case "show.php":
-	$title = "Patient Information";
+
+	case "myinfo.php":
+	$title = "My Info - ".$_SESSION['name'];
 	break;
-	// case "edit-sched.php":
-	// $title = "Edit vaccination schedule";
-	// break;
-	// case "changevac.php":
-	// $title = "Edit/Delete Vaccine";
-	// break;
-	// case "addvac.php":
-	// $title = "Add/Edit Vaccine";
-	// break;
-	// case "addvacmake.php":
-	// $title = "Add product";
-	// break;
-	// case "changevacmake.php":
-	// $title = "Change product";
-	// break;
-	case "editpatient.php":
-	$title="Edit patient";
-	break;
-	// case "search-sched.php":
-	// $title="Search schedule";
-	// break;
-	// case "search-sched-results.php":
-	// $title="Search schedule - Results";
-	// break;
-	// case "search-scheddg.php":
-	// $title="Search schedule by given date";
-	// break;
-	// case "search-sched-resultsdg.php":
-	// $title="Search schedule by given date - Results";
-	// break;
 }
 
 echo $title;
@@ -103,11 +64,11 @@ echo $title;
 ?>
 </title>
 
-<link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="../css/screen.css" />
 <!-- datepicker things from jqueryui -->
-<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+<link type="text/css" href="../css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui-1.8.21.custom.min.js"></script>
 <script type="text/javascript">
 
 function uncheckAll()
@@ -149,16 +110,8 @@ function checkAll()
 		<ul>
 			<li <?php if($currentFile=="index.php") { ?> id="current" <?php }?>><a href="index.php">Home</a></li>
 			<?php if($_SESSION['name']) { ?>
-			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">New patient</a></li>
-			<li <?php if($currentFile=="show.php") { ?> id="current" <?php }?>><a href="show.php">Patient info</a></li>
-			<!--<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
-			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
-			<li <?php if($currentFile=="vaccine.php") { ?> id="current" <?php }?>><a href="vaccine.php">Add Vac</a></li>
-			<li <?php if($currentFile=="changevac.php") { ?> id="current" <?php }?>><a href="changevac.php">Edit/Del Vac</a></li>
-			<li <?php if($currentFile=="schedule.php") { ?> id="current" <?php }?>><a href="schedule.php">Sched Vac</a></li>
-			<li <?php if($currentFile=="addvacmake.php") { ?> id="current" <?php }?>><a href="addvacmake.php">Add product</a></li>
-			<li <?php if($currentFile=="changevacmake.php") { ?> id="current" <?php }?>><a href="changevacmake.php">Change product</a></li>
-			--><li><a href="index.php?logout=1">Logout</a></li>
+			<li <?php if($currentFile=="myinfo.php") { ?> id="current" <?php }?>><a href="myinfo.php">My Info</a></li>
+			<li><a href="index.php?logout=1">Logout</a></li>
 			<?php } ?>
 		</ul>
 	</div>
