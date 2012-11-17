@@ -1,17 +1,9 @@
-Search using:
-1. born before some year
-2. born in some year
-3. appointments at a particular day
-
-1. Growth chart
-2. BMI calculator
-
-Printing:
-1. vaccine schedule for a certain patient
-2. growth chart for a patient
-
-~1. Editable schedule of patients
-~2. Edit/delete vaccine - slight error, if i click edit and save without making changes, it shows error
-
-1. ADD PROPER DATE THING IN REGISTER AND EDIT PATIENT. ALSO SIBLING IN EDIT PATIENT
-2. USE PREPARED STATEMENT IN EDIT-SCHED
+Not arranged in priority, but top 2 things are quite urgent
+1. Patient interface
+2. Siblings
+3. Growth chart
+4. BMI calculator
+5. Printing:
+   - vaccine schedule for a certain patient
+   - growth chart for a patient
+6. Using prepared statement to speed up things

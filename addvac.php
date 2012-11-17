@@ -28,15 +28,15 @@ if(isset($_POST['submit']))
 				if(!mysqli_query($link, "UPDATE vac_schedule SET date=DATE_ADD(date, INTERVAL {$daystoadd} DAY) WHERE v_id = {$_POST['id']} AND given='N'"))
 					echo "Error updating in current records";
 				else
-					echo "Successfully updated vaccine!";
+					echo "Successfully updated vaccine schedule in current records!";
 			}
 			if(!mysqli_query($link, "UPDATE vaccines SET name='{$_POST['name']}', 
 				no_of_days={$_POST['no_of_days']}, 
 				lower_limit={$_POST['lower_limit']}, 
 				upper_limit={$_POST['upper_limit']} WHERE id={$_POST['id']}"))
-				echo "Error updating vaccine";
+				echo "Error updating vaccine in vaccine table";
 			else
-				echo "Successfully updated vaccine!";
+				echo "Successfully updated vaccine in vaccine table!";
 
 		}
 		else 	//If adding new vac
