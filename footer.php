@@ -21,7 +21,7 @@
 
 	<p class="bottom-right">
 		<a href="index.php">Home</a> |
-		<a href="mailto:apoorvumang@gmail.com?subject=Feedback">Feedback</a> |
+		<a href="mailto:apoorvumang@gmail.com?subject=Feedback for drmahima.com">Feedback</a> |
       <strong><a href="#top">Back to Top</a></strong>
    </p>
 <?php mysqli_close($link); //Closing connection. hopefully error on website will be removed??>
