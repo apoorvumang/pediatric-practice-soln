@@ -1,6 +1,9 @@
 <?php
 require('../fpdf/fpdf.php');
 require('../connect.php');
+session_name('tzLogin');
+session_start();
+error_reporting(0);
 
 class PDF extends FPDF
 {
@@ -162,13 +165,13 @@ function Footer()
 }
 }
 
-
-if(!isset($_GET['id']))
+if((!isset($_GET['id']))||(!(isset($_SESSION['id'])||isset($_SESSION['username']))))
 {
 	echo '<h2>Access Denied</h2>';
 	exit;
 }
-
+if(isset($_SESSION['id']))
+	$_GET['id'] = $_SESSION['id'];
 $vac_sched = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id='{$_GET['id']}' AND given='Y'");
 $patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob FROM patients WHERE id='{$_GET['id']}'"));
 $pdf = new PDF();
