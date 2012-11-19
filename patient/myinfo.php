@@ -139,7 +139,6 @@ $patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE 
 	<p>
 	<input type="submit" name="submit" value="Save"/>
 	</p>
-
 </form>
 <?php
 include('footer.php'); ?>
