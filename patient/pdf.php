@@ -20,7 +20,7 @@ private function printVacDates($dateArray, $idArray, $fill, $w)
 	{
 		if(!isset($dateArray[$id]))
 		{
-			$this->Cell($w,8,'-','LRB',0,'C',$fill);
+			$this->Cell($w,8,'','LRB',0,'C',$fill);
 			continue;
 		}
 		if($dateArray[$id]!='0000-00-00')
