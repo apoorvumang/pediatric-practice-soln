@@ -55,7 +55,7 @@ function FancyTable($header)
 	// Color and font restoration
 	$this->SetFillColor(225,225,225);
 	$this->SetTextColor(0);
-	$this->SetFont('', '', 12);
+	$this->SetFont('', '', 11);
 	// Data
 	$fill = false;
 	$dateArray = array();
@@ -68,7 +68,9 @@ function FancyTable($header)
 	//ie if you have 4 doses, then put the id of first does first and last dose last
 	for ($i=0; $i < 16; $i++)
 	{
+		$this->SetFont('', 'B', 12);
 		$this->Cell($w[0],8,$vacList[$i],'LRB',0,'C',$fill);
+		$this->SetFont('', '', 11);
 		switch ($i) {
 			case 0:	//BCG
 				$tempArr = array(1);
