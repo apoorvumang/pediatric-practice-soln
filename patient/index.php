@@ -84,6 +84,9 @@ if($_SESSION['name']){
 }
 
 ?>
+<p>
+<a href="../index.php">Click here for doctor login</a>
+</p>
 			<form class="clearfix" action="" method="post">
 					<h3>Patient Login</h3>
 					<p>

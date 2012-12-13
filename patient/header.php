@@ -18,7 +18,7 @@ function Redirect($Str_Location, $Bln_Replace = 1, $Int_HRC = NULL)
     return;
 }
 
-if(isset($_GET['logout']))
+if(isset($_GET['logout'])||isset($_SESSION['username']))	//username means doctor logged in
 {
 	$_SESSION = array();
 	session_destroy();
@@ -112,6 +112,7 @@ function checkAll()
 			<li <?php if($currentFile=="index.php") { ?> id="current" <?php }?>><a href="index.php">Home</a></li>
 			<?php if($_SESSION['name']) { ?>
 			<li <?php if($currentFile=="myinfo.php") { ?> id="current" <?php }?>><a href="myinfo.php">My Info</a></li>
+			<li><a href=<?php echo "\""."pdf.php?id=".$_SESSION['id']."\"" ?>>View Vaccine Schedule</a></li>
 			<li><a href="index.php?logout=1">Logout</a></li>
 			<?php } ?>
 		</ul>
@@ -128,7 +129,8 @@ function checkAll()
 
    	<!-- main -->
 	   <div id="main">
-	   <?php if((!$_SESSION['name'])&&($currentFile!="index.php")) {
+	   <?php
+	   if((!$_SESSION['name'])&&($currentFile!="index.php")) {
 
 	   	echo "<h2>Access Denied!</h2>";
 	   	exit;

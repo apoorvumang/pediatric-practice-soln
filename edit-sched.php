@@ -145,6 +145,9 @@ if($_GET['id'])
 <h4>Patient Information</h4>
 <div style="float:right"> <a href= <?php echo "editpatient.php?id={$patient['id']}" ?> ><strong> Edit patient </strong> </a></div>
 <p>
+	<strong><a href=<?php echo "\""."patient/pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
+</p>
+<p>
 	<strong>Patient ID: <?php echo $patient['id'] ?> </strong>
 </p>
 <p>
