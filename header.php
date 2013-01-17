@@ -156,7 +156,6 @@ function checkAll()
 			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
 			<li <?php if($currentFile=="vaccine.php") { ?> id="current" <?php }?>><a href="vaccine.php">Add Vac</a></li>
 			<li <?php if($currentFile=="changevac.php") { ?> id="current" <?php }?>><a href="changevac.php">Edit/Del Vac</a></li>
-			<li <?php if($currentFile=="schedule.php") { ?> id="current" <?php }?>><a href="schedule.php">Sched Vac</a></li>
 			<li <?php if($currentFile=="addvacmake.php") { ?> id="current" <?php }?>><a href="addvacmake.php">Add product</a></li>
 			<li <?php if($currentFile=="changevacmake.php") { ?> id="current" <?php }?>><a href="changevacmake.php">Change product</a></li>
 			<li><a href="index.php?logout=1">Logout</a></li>
