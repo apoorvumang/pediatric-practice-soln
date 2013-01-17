@@ -380,7 +380,7 @@ else
 }
 else
 {
-	Redirect("show.php");
+	Redirect("search-patient.php");
 	exit;
 }
 include('footer.php'); ?>

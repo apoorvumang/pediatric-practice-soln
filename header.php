@@ -62,7 +62,7 @@ switch($currentFile)
 	case "schedule.php":
 	$title = "Schedule vaccination for patients";
 	break;
-	case "show.php":
+	case "search-patient.php":
 	$title = "Patient Information";
 	break;
 	case "edit-sched.php":
@@ -151,7 +151,7 @@ function checkAll()
 			<li <?php if($currentFile=="index.php") { ?> id="current" <?php }?>><a href="index.php">Home</a></li>
 			<?php if($_SESSION['name']) { ?>
 			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">New patient</a></li>
-			<li <?php if($currentFile=="show.php") { ?> id="current" <?php }?>><a href="show.php">Patient info</a></li>
+			<li <?php if($currentFile=="search-patient.php") { ?> id="current" <?php }?>><a href="search-patient.php">Patient info</a></li>
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
 			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
 			<li <?php if($currentFile=="vaccine.php") { ?> id="current" <?php }?>><a href="vaccine.php">Add Vac</a></li>

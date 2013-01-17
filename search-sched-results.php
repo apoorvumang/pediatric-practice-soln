@@ -136,7 +136,6 @@ else if(isset($_POST['save']))
 {
 	$err = 0;
 	foreach ($_POST['vac_date'] as $key => $value) {
-		# code...
 		$value = date('Y-m-d', strtotime($value));
 		if(!mysqli_query($link, "UPDATE vac_schedule SET date='{$value}' WHERE id={$_POST['vac_id'][$key]}"))
 		{
