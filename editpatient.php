@@ -14,7 +14,7 @@ else if($_GET['reschedule']=='999'&&isset($_GET['id']))
 {
 	generate_patient_schedule($_GET['id']);
 	echo "Rescheduling successful.";
-	exit();
+	Redirect("edit-sched.php?id={$_GET['id']}");
 }
 if(isset($_POST['submit']))
 {
