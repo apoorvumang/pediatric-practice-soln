@@ -92,7 +92,6 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
 			$message = $_POST['customsms'];
 		}
-		echo $message;
 		if($patient['phone'])
 			mail("sms@drmahima.com", $patient['phone'], $message);
 		if($patient['phone2'])
