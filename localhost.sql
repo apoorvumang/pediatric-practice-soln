@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS `doctors` (
 --
 
 INSERT INTO `doctors` (`username`, `name`, `password`) VALUES
-('mahima', 'Mahima Anurag', '227dd828170f456f4fb2ac146846470b');
+('mahima', 'Mahima Anurag', '227dd828170f456f4fb2ac146846470b'),
+('demo', 'Demo User', '5f4dcc3b5aa765d61d8327deb882cf99');
 
 -- --------------------------------------------------------
 
