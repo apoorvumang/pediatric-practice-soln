@@ -3,7 +3,7 @@
 <h3>Search Results</h3>
 <?php
 
-if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||$_POST['specificid'])	//If some submit button clicked
+if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||$_POST['specificid']||$_POST['id_range'])	//If some submit button clicked
 {
 	if($_POST['specificdob'])
 	{
@@ -28,6 +28,13 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 	else if($_POST['specificid'])
 	{
 		Redirect("edit-sched.php?id={$_POST['id']}");
+	}
+	else if($_POST['id_range'])
+	{
+		$_POST['id_from'] = mysqli_real_escape_string($link, $_POST['id_from']);
+		$_POST['id_to'] = mysqli_real_escape_string($link, $_POST['id_to']);
+		$result = mysqli_query($link, "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE id >= {$_POST['id_from']} AND id <= {$_POST['id_to']} ORDER BY name");
+		$nrows = mysqli_num_rows($result);
 	}
 ?>
 

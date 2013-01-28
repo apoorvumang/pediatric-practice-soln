@@ -23,6 +23,12 @@ $(function() {
 	<input type="text" name="id" id="id" style="margin-right:40px;"/>
 	<input type="submit" name="specificid" value="Go" />
 </form>
+<form action="search-patient-results.php" method="post" enctype="multipart/form-data" style="width:auto" name="5">
+	<label for="id">ID Range: &nbsp;&nbsp;&nbsp;&nbsp;</label>
+	<input type="text" name="id_from" id="id_from" style="margin-right:40px;"/>
+	<input type="text" name="id_to" id="id_to" style="margin-right:40px;"/>
+	<input type="submit" name="id_range" value="Go" />
+</form>
 <form action="search-patient-results.php" method="post" enctype="multipart/form-data" style="width:auto" name="1">
 	<label for="dob">DOB: &nbsp;&nbsp;&nbsp;&nbsp;</label>
 	<input type="text" name="dob" id="dob" style="margin-right:40px;"/>
