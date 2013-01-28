@@ -33,7 +33,7 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 	{
 		$_POST['id_from'] = mysqli_real_escape_string($link, $_POST['id_from']);
 		$_POST['id_to'] = mysqli_real_escape_string($link, $_POST['id_to']);
-		$result = mysqli_query($link, "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE id >= {$_POST['id_from']} AND id <= {$_POST['id_to']} ORDER BY name");
+		$result = mysqli_query($link, "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE id >= {$_POST['id_from']} AND id <= {$_POST['id_to']} ORDER BY id");
 		$nrows = mysqli_num_rows($result);
 	}
 ?>
