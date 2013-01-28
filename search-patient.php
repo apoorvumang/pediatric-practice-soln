@@ -24,8 +24,11 @@ $(function() {
 	<input type="submit" name="specificid" value="Go" />
 </form>
 <form action="search-patient-results.php" method="post" enctype="multipart/form-data" style="width:auto" name="5">
-	<label for="id">ID Range: &nbsp;&nbsp;&nbsp;&nbsp;</label>
+	<!-- <label for="id_from">ID Range</label>
+	<br /> -->
+	<label for="id_from">ID From: &nbsp;&nbsp;&nbsp;&nbsp;</label>
 	<input type="text" name="id_from" id="id_from" style="margin-right:40px;"/>
+	<label for="id_to">To: &nbsp;&nbsp;&nbsp;&nbsp;</label>
 	<input type="text" name="id_to" id="id_to" style="margin-right:40px;"/>
 	<input type="submit" name="id_range" value="Go" />
 </form>
