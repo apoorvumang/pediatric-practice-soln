@@ -62,9 +62,6 @@ switch($currentFile)
 	case "schedule.php":
 	$title = "Schedule vaccination for patients";
 	break;
-	case "search-patient.php":
-	$title = "Patient Information";
-	break;
 	case "edit-sched.php":
 	$title = "Edit vaccination schedule";
 	break;
@@ -94,6 +91,12 @@ switch($currentFile)
 	break;
 	case "search-sched-resultsdg.php":
 	$title="Search schedule by given date - Results";
+	break;
+	case "search-patient.php":
+	$title="Search patients";
+	break;
+	case "search-patient-results.php":
+	$title="Search patients - Results";
 	break;
 }
 
