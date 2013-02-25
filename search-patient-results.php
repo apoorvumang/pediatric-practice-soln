@@ -93,7 +93,7 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT phone, phone2, first_name FROM patients WHERE id={$value}"));
 		if(isset($_POST['sendautosms']))
 		{
-			$message = "Dear parent\nWishing your child {$patient['first_name']} a very Happy Birthday.\nDr. Mahima";
+			$message = "Dear parent\nWishing your child {$patient['first_name']} a very Happy Birthday.\nDr. Mahima\n9811129950";
 		}
 		else
 		{
