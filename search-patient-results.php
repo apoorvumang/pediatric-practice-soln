@@ -82,11 +82,12 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 <input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" style="float:right;margin-right:20px" />
 <input type="submit" name="sendautosms" value="Send Birthday SMS" style="float:right;margin-right:20px"/>
 <input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px"/>
+<input type="submit" name="sendemail" value="Send Email" style="float:right;margin-right:20px"/>
 <textarea rows="3" cols="80" name="customsms"></textarea>
 </form>
 <?php
 }
-else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
+else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_POST['sendemail']))
 {
 	foreach ($_POST['send_sms_id'] as $key => $value) 
 	{
@@ -95,9 +96,13 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
 			$message = "Dear parent\nWishing your child {$patient['first_name']} a very Happy Birthday.\nDr. Mahima\n9811129950";
 		}
-		else
+		else if(isset($_POST['sendcustomsms']))
 		{
 			$message = $_POST['customsms'];
+		}
+		else if(isset($_POST['sendemail']))
+		{
+			
 		}
 		if($patient['phone'])
 			mail("sms@drmahima.com", $patient['phone'], $message);

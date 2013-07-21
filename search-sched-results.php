@@ -128,6 +128,7 @@ if ($row['given']=='Y')
 <input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" style="float:right;margin-right:20px" />
 <input type="submit" name="sendautosms" value="Send Auto SMS" style="float:right;margin-right:20px"/>
 <input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px"/>
+<input type="submit" name="sendemail" value="Send Email" style="float:right;margin-right:20px"/>
 <textarea rows="3" cols="80" name="customsms"></textarea>
 </form>
 <?php
@@ -151,15 +152,15 @@ else if(isset($_POST['save']))
 		echo "Error in updating schedule.";
 	}
 }
-else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
+else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_POST['sendemail']))
 {
 	foreach ($_POST['send_sms_id'] as $key => $value) 
 	{
 		$row = mysqli_fetch_assoc(mysqli_query($link, "SELECT v_id, p_id, date FROM vac_schedule WHERE id={$value}"));
-		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT phone, phone2, first_name FROM patients WHERE id={$row['p_id']}"));
+		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT phone, phone2, first_name, email FROM patients WHERE id={$row['p_id']}"));
 		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name FROM vaccines WHERE id={$row['v_id']}"));
 		
-		if(isset($_POST['sendautosms']))
+		if(isset($_POST['sendautosms'])||isset($_POST['sendemail']))
 		{
 			if(strtotime($row['date']) < strtotime("now"))	//If date has passed
 			{
@@ -175,11 +176,27 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 			$message = $_POST['customsms'];
 		}
 		
-		if($patient['phone'])
-			mail("sms@drmahima.com", $patient['phone'], $message);
-		if($patient['phone2'])
-			mail("sms@drmahima.com", $patient['phone2'], $message);
-		echo "SMS sent to {$patient['first_name']} <br>";
+		if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
+		{
+			if($patient['phone'])
+				mail("sms@drmahima.com", $patient['phone'], $message);
+			if($patient['phone2'])
+				mail("sms@drmahima.com", $patient['phone2'], $message);
+			echo "SMS sent to {$patient['first_name']} <br>";
+		}
+
+		if(isset($_POST['sendemail']))
+		{
+			if($patient['email'])
+			{
+				mail($patient['email'], 'Vaccination Schedule - Dr. Mahima', $message);
+				echo "Email sent to {$patient['first_name']} <br>";
+			}
+			else
+			{
+				echo "Unable to send email - no email address present. Patient name: {$patient['first_name']} <br>";
+			}
+		}
 	}
 }
 else
