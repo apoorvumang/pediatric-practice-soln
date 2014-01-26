@@ -40,6 +40,11 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
 <table>
+<input type="button" name="check" value="Check All" onClick="checkAll()" style="float:right;margin-right:20px" />
+<input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" style="float:right;margin-right:20px" />
+<input type="submit" name="sendautosms" value="Send Birthday SMS" style="float:right;margin-right:20px"/>
+<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px"/>
+<textarea rows="3" cols="80" name="customsms"></textarea>
 	<tbody>
 		<tr>
 			<th>ID</th>
