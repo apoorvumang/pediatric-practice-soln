@@ -70,7 +70,7 @@ else {
 	<label class="grey" for="vac_id">Choose Vaccine :&nbsp;&nbsp;</label>
 	<select name="vac_id" style="margin-right:60px;">
 	<?php
-	$result = mysqli_query($link, "SELECT name, id FROM vaccines WHERE 1");
+	$result = mysqli_query($link, "SELECT name, id FROM vaccines WHERE 1 ORDER BY name");
 	while($vac = mysqli_fetch_assoc($result))
 	{
 		echo "<option value=".$vac['id'].">".$vac['name']."</option>\n";
