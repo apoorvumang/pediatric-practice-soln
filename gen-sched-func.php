@@ -14,7 +14,12 @@ function schedule($patient, $vaccine)
 	{
 		//Need to get scheduled date of dependent vaccine. vac_schedule is searched with patient and dep vac id
 		$dep_vac_sched = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id = {$patient['id']} AND v_id = {$vaccine['dependent']}"));
-		$date_vac = date("Y-m-d",strtotime($temp_nofdays, strtotime($dep_vac_sched['date'])));
+		//If dependent vaccine has already been given, scheduled date is given date + no. of days
+		//otherwise it is scheduled date + no. of days
+		if($dep_vac_sched['given'] == 'Y')
+			$date_vac = date("Y-m-d",strtotime($temp_nofdays, strtotime($dep_vac_sched['date_given'])));
+		else
+			$date_vac = date("Y-m-d",strtotime($temp_nofdays, strtotime($dep_vac_sched['date'])));
 	}
 	if((date('D', strtotime($date_vac)))=='Sun')
 	{
