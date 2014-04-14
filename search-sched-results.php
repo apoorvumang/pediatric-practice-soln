@@ -55,9 +55,9 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 <input type="submit" name="save" value="Save Changes" />
 <input type="button" name="check" value="Check All" onClick="checkAll()" style="float:right;margin-right:20px" />
 <input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" style="float:right;margin-right:20px" />
-<input type="submit" name="sendautosms" value="Send Auto SMS" style="float:right;margin-right:20px"/>
-<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px"/>
-<input type="submit" name="sendemail" value="Send Email" style="float:right;margin-right:20px"/>
+<input type="submit" name="sendautosms" value="Send Auto SMS" style="float:right;margin-right:20px" onclick="countMessages(event)"/>
+<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px" onclick="countMessages(event)"/>
+<input type="submit" name="sendemail" value="Send Email" style="float:right;margin-right:20px" />
 <textarea rows="3" cols="80" name="customsms"></textarea>
 <table>
 	<tbody>
@@ -74,7 +74,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 	$count = 0;
 	while($row = mysqli_fetch_assoc($result))
 	{
-		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id, phone, dob, active FROM patients WHERE id={$row['p_id']}"));
+		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE id={$row['p_id']}"));
 		if($patient['active']==0)
 			continue;
 		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, upper_limit FROM vaccines WHERE id={$row['v_id']}"));
@@ -119,9 +119,10 @@ if ($row['given']=='Y')
 		</td>
 		<td>
 			<?php echo $patient['phone']; ?>
+			<?php if($patient['phone2']) echo "<br />" + $patient['phone2']; ?>
 		</td>
 		<td>
-			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> />
+			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> phoneCount= <?php if($patient['phone2']) echo "2"; else echo "1"; ?> />
 		</td>
 	</tr>
 <?php 
@@ -133,8 +134,8 @@ if ($row['given']=='Y')
 <input type="submit" name="save" value="Save Changes" />
 <input type="button" name="check" value="Check All" onClick="checkAll()" style="float:right;margin-right:20px" />
 <input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" style="float:right;margin-right:20px" />
-<input type="submit" name="sendautosms" value="Send Auto SMS" style="float:right;margin-right:20px"/>
-<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px"/>
+<input type="submit" name="sendautosms" value="Send Auto SMS" style="float:right;margin-right:20px" onclick="countMessages(event)" />
+<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px" onclick="countMessages(event)"/>
 <input type="submit" name="sendemail" value="Send Email" style="float:right;margin-right:20px"/>
 <textarea rows="3" cols="80" name="customsms"></textarea>
 </form>

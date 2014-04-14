@@ -42,8 +42,8 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 <table>
 <input type="button" name="check" value="Check All" onClick="checkAll()" style="float:right;margin-right:20px" />
 <input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" style="float:right;margin-right:20px" />
-<input type="submit" name="sendautosms" value="Send Birthday SMS" style="float:right;margin-right:20px"/>
-<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px"/>
+<input type="submit" name="sendautosms" value="Send Birthday SMS" style="float:right;margin-right:20px" onclick="countMessages(event)"/>
+<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px" onclick="countMessages(event)"/>
 <textarea rows="3" cols="80" name="customsms"></textarea>
 	<tbody>
 		<tr>
@@ -73,9 +73,10 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 		</td>
 		<td>
 			<?php echo $row['phone']; ?>
+			<?php if($row['phone2']) echo "<br />" + $row['phone2']; ?>
 		</td>
 		<td>
-			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> />
+			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> phoneCount= <?php if($row['phone2']) echo "2"; else echo "1"; ?> />
 		</td>
 	</tr>
 <?php 
@@ -85,8 +86,8 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 </table>
 <input type="button" name="check" value="Check All" onClick="checkAll()" style="float:right;margin-right:20px" />
 <input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" style="float:right;margin-right:20px" />
-<input type="submit" name="sendautosms" value="Send Birthday SMS" style="float:right;margin-right:20px"/>
-<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px"/>
+<input type="submit" name="sendautosms" value="Send Birthday SMS" style="float:right;margin-right:20px" onclick="countMessages(event)"/>
+<input type="submit" name="sendcustomsms" value="Send Custom SMS" style="float:right;margin-right:20px" onclick="countMessages(event)"/>
 <textarea rows="3" cols="80" name="customsms"></textarea>
 </form>
 <?php

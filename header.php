@@ -138,6 +138,25 @@ function checkAll()
 	}
 };
 
+//Note: This just counts the number of checkboxes on that are ticked
+//on the page and gets attribute phoneCount. Don't know what will happen
+//if phoneCount attribute is not present. Maybe an error? Need to test it.
+function countMessages(e)
+{
+	var i, len, inputs = document.getElementsByTagName("input");
+	var checked_num = 0;
+    for (i = 0, len = inputs.length; i < len; i++) {
+        if (inputs[i].type === "checkbox" && inputs[i].checked)
+        {
+        	if(inputs[i].getAttribute("phoneCount") == 2)
+        		checked_num += 2;
+        	else if(inputs[i].getAttribute("phoneCount") == 1)
+        		checked_num += 1;
+        }
+    }
+   if(!confirm('Send ' + checked_num + ' messages?'))e.preventDefault();
+};
+
 </script>
 </head>
 <body>
