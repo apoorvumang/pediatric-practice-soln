@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /www/test/mummy-software
+cd /www/
 git pull
 # 'echo $PWD',
 # 		'whoami',
