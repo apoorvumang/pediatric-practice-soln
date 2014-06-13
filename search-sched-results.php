@@ -197,7 +197,7 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 		{
 			if($patient['email'])
 			{
-				mail($patient['email'], 'Vaccination Schedule - Dr. Mahima', $message);
+				mail($patient['email'], 'Vaccination Schedule - Dr. Mahima', $message, "From: mahima@drmahima.com\n");
 				echo "Email sent to {$patient['first_name']} <br>";
 			}
 			else
