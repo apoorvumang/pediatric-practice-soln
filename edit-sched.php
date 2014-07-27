@@ -148,6 +148,9 @@ if($_GET['id'])
 	<strong><a href=<?php echo "\""."patient/pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
 </p>
 <p>
+	<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send email</a> </strong>
+</p>
+<p>
 	<strong>Patient ID: <?php echo $patient['id'] ?> </strong>
 </p>
 <p>

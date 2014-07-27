@@ -98,6 +98,9 @@ switch($currentFile)
 	case "search-patient-results.php":
 	$title="Search patients - Results";
 	break;
+	case "email.php":
+	$title="Patient - Send E-Mail";
+	break;
 }
 
 echo $title;

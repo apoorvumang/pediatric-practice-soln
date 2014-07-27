@@ -15,7 +15,6 @@
 <div id="footer-bottom">
 
 	<p class="bottom-left">
-		&copy; 2010 <strong>Copyright Info</strong>&nbsp; &nbsp; &nbsp;
 		Design by <a href="http://www.styleshout.com/">styleshout</a>
 	</p>
 
