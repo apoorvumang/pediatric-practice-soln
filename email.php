@@ -12,7 +12,7 @@ if($_GET['id'])
 
 	$subject = "Vaccination schedule for ".$patient['name'];
 	$message = "Dear Parent<br><br>Please find below the vaccination schedule for your child ".$patient['name'];
-	$message .= "<br>";
+	$message .= "<br><br><br>";
 	$message .= "<table><tr><th>Date</th><th>Vaccine</th></tr>";
 	
 	while($row = mysqli_fetch_assoc($result))
