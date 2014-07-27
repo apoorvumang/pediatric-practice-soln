@@ -18,12 +18,15 @@ if($_GET['id'])
 </tr>
 <?php
 	$message = "<table><tr><th>Date</th><th>Vaccine</th></tr>";
+	$headers = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
+	$headers .= "From: Dr. Mahima <mahima@drmahima.com>\r\n";
 	while($row = mysqli_fetch_assoc($result))
 	{
 		$message =  $message."<tr><td>1</td><td>2</td></tr>";
 	}
 	$message = $message."</table>";
-	mail($patient['email'], 'Vaccination Schedule - Dr. Mahima', $message, "From: mahima@drmahima.com\n");
+	mail($patient['email'], 'Vaccination Schedule - Dr. Mahima', $message, $headers);
 ?>
 </table>
 <?php
