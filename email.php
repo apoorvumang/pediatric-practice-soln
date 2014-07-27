@@ -9,26 +9,29 @@ if($_GET['id'])
 		exit;
 	}
 	$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date, v_id");
-	$count = 0;
-?>
-<table>
-<tr>
-	<th>Date</th>
-	<th>Vaccine</th>
-</tr>
-<?php
-	$message = "<table><tr><th>Date</th><th>Vaccine</th></tr>";
+
+	$subject = "Vaccination schedule for ".$patient['name'];
+	$message = "Dear Parent<br><br>Please find below the vaccination schedule for your child ".$patient['name'];
+	$message .= "<br>";
+	$message .= "<table><tr><th>Date</th><th>Vaccine</th></tr>";
+	
+	while($row = mysqli_fetch_assoc($result))
+	{
+		$vac = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE id = {$row['v_id']}"));
+		if($row['given'] == 'N' && (strtotime("now") < strtotime($row['date'])))
+			$message =  $message."<tr><td>".date('j M Y',strtotime($row['date']))."</td><td>".$vac['name']."</td></tr>";
+	}
+	$message = $message."</table><br>";
+	$message .= "Regards<br>Dr. Mahima";
+
 	$headers = 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
 	$headers .= "From: Dr. Mahima <mahima@drmahima.com>\r\n";
-	while($row = mysqli_fetch_assoc($result))
-	{
-		$message =  $message."<tr><td>1</td><td>2</td></tr>";
-	}
-	$message = $message."</table>";
-	mail($patient['email'], 'Vaccination Schedule - Dr. Mahima', $message, $headers);
+	mail($patient['email'], $subject, $message, $headers);
 ?>
-</table>
+Sent mail!
+Mail content: <br><br>
+<?php echo $message; ?>
 <?php
 }
 else
