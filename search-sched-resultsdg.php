@@ -22,7 +22,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 		$_POST['fromdate'] = date('Y-m-d', strtotime($_POST['fromdate']));
 		$_POST['fromdate'] = mysqli_real_escape_string($link, $_POST['fromdate']);
 
-		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date_given >='{$_POST['fromdate']}' AND date_given <='{$_POST['todate']}' AND given='Y' ORDER BY date_given");
+		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date_given >='{$_POST['fromdate']}' AND date_given <='{$_POST['todate']}' AND given='Y' ORDER BY date_given, p_id");
 		$nrows = mysqli_num_rows($result);
 	}
 	else if($_POST['patientsearch'])
