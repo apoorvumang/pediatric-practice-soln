@@ -61,7 +61,7 @@ $(function() {
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
 	<a href= <?php echo "\"edit-sched.php?id={$patient['id']}\""?> >Back to patient schedule</a>
-	<h3>Add patient</h3>
+	<h3>Edit patient</h3>
 	<input type="hidden" name="id" value=<?php echo "\"".$patient['id']."\""; ?> />
 	<p>
 	<label for="name">First Name:&nbsp;&nbsp;</label>
