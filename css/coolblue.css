@@ -917,3 +917,31 @@ ul.archive li .post-details a:visited {
 	height:0;
 	content: " ";
 }  
+
+
+.input_container {
+}
+.input_container input {
+	height: 20px;
+	width: 200px;
+	padding: 3px;
+	border: 1px solid #cccccc;
+	border-radius: 0;
+}
+.input_container ul {
+	width: 206px;
+	border: 1px solid #eaeaea;
+	position: absolute;
+	z-index: 9;
+	background: #f3f3f3;
+	list-style: none;
+}
+.input_container ul li {
+	padding: 2px;
+}
+.input_container ul li:hover {
+	background: #eaeaea;
+}
+#sibling_autocomplet_list {
+	display: none;
+}

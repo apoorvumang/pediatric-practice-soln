@@ -57,6 +57,32 @@ $(function() {
 		altFormat: "yy-mm-dd"
 	});
 });
+
+function autocomplet() {
+	var min_length = 2; // min caracters to display the autocomplete
+	var keyword = $('#sibling_id').val();
+	if (keyword.length >= min_length) {
+		$.ajax({
+			url: 'ajax_refresh.php',
+			type: 'POST',
+			data: {keyword:keyword},
+			success:function(data){
+				$('#sibling_autocomplet_list').show();
+				$('#sibling_autocomplet_list').html(data);
+			}
+		});
+	} else {
+		$('#sibling_autocomplet_list').hide();
+	}
+}
+ 
+// set_item : this function will be executed when we select an item
+function set_item(item) {
+	// change input value
+	$('#sibling_id').val(item);
+	// hide proposition list
+	$('#sibling_autocomplet_list').hide();
+}
 </script>
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
@@ -169,10 +195,16 @@ $(function() {
 		<label for="obstetrician">Obstetrician:&nbsp;&nbsp;</label>
 		<input type="text" name="obstetrician" id="obstetrician" <?php echo "value=\"{$patient['obstetrician']}\""; ?> />
 	</p>
-
+	
 	<p>
-	<input type="submit" name="submit" value="Save"/>
+	<div class="input_container">
+		<label for="sibling">Add sibling:&nbsp;&nbsp;</label>
+		<input type="text" id="sibling_id" onkeyup="autocomplet()" />
+		<ul id="sibling_autocomplet_list"></ul>
+			</div>
 	</p>
+
+	<input type="submit" name="submit" value="Save"/>
 	<p>
 		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&delete=999\"" ?> onclick="return confirm('Confirm delete?');"><strong><font color="red">Delete patient</font></strong></a>
 	</p>
