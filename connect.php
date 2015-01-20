@@ -7,7 +7,7 @@
 
 $db_host		= 'localhost';//'mysql.iakshay.net'
 $db_user		= 'root';//'apoorv';
-$db_pass		= '';//'patient';
+$db_pass		= 'root';//'patient';
 $db_database	= 'drmahima_com';//'apoorv_heroku';
 
 /* End config */

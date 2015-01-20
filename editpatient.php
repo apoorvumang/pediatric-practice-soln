@@ -59,13 +59,13 @@ $(function() {
 });
 
 function autocomplet() {
-	var min_length = 2; // min caracters to display the autocomplete
+	var min_length = 2; // min characters to display the autocomplete
 	var keyword = $('#sibling_id').val();
 	if (keyword.length >= min_length) {
 		$.ajax({
 			url: 'ajax_refresh.php',
 			type: 'POST',
-			data: {keyword:keyword},
+			data: {"keyword":keyword},
 			success:function(data){
 				$('#sibling_autocomplet_list').show();
 				$('#sibling_autocomplet_list').html(data);
