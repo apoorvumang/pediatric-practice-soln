@@ -90,6 +90,7 @@ if($_POST['vac_date'])
 if($_GET['id'])
 {
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
+	$siblings_result = mysqli_query($link, "SELECT * FROM siblings WHERE p_id = {$_GET['id']}");
 	if(!$patient)
 	{
 		echo "<h3>No patient with given ID found</h3>";
@@ -214,25 +215,23 @@ if($_GET['id'])
 <strong>Place of Birth :</strong> <?php echo $patient['place_of_birth']; ?>
 </p>
 <p>
-<strong>Date of Registration :</strong> <?php echo  date('d-F-Y', strtotime($patient['date_of_registration'])); ?>
+<strong>Date of Registration :</strong> <?php echo date('d-F-Y', strtotime($patient['date_of_registration'])); ?>
 </p>
-<?php 
-if($patient['sibling']==0)
+<?php
+if(!$siblings_result)
 	echo "<p><strong>Sibling: None</strong></p>";
 else
 {
-	$siblist = explode(",", $patient['sibling']);
-	foreach ($siblist as $key => $value) 
+	while($row = mysqli_fetch_assoc($siblings_result))
 	{
 		?>
 		<p>
-		<strong>Sibling :</strong> 
+		<strong>Sibling :</strong>
 		<?php
-		echo "<a href=edit-sched.php?id=".$value.">";
+		echo "<a href=edit-sched.php?id=".$row['s_id'].">";
 
-		$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$value}"));
+		$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$row['s_id']}"));
 		echo $sibling_row['name'];
-		
 		echo "</a>";
 		?>
 		</p>

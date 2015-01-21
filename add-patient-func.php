@@ -175,7 +175,7 @@ function editPatient($patient_var)
 		$patient_var['name'] = mysqli_real_escape_string($link, $patient_var['name']);
 		$patient_var['phone'] = mysqli_real_escape_string($link, $patient_var['phone']);
 		$patient_var['dob'] = mysqli_real_escape_string($link, $patient_var['dob']);
-		
+		$patient_var['add_sibling'] = mysqli_real_escape_string($link, $patient_var['add_sibling']);
 		// Escape the input data
 
 		if(mysqli_query($link, "UPDATE patients SET 
@@ -202,17 +202,26 @@ function editPatient($patient_var)
 			obstetrician = '".$patient_var['obstetrician']."',
 			place_of_birth = '".$patient_var['place_of_birth']."',
 			address = '".$patient_var['address']."' WHERE id = {$patient_var['id']}"))
-		{	
-			
+		{
 			$_SESSION['msg']['reg-success']="Patient successfully edited!";
-			
 		}
-		else $err[]='An unknown error has occured.';
+		else
+			$err[]='An unknown error has occured.';
+		if($patient_var['add_sibling'] > 0)
+		{
+			if(mysqli_query($link, "INSERT INTO siblings(p_id, s_id) VALUES ({$patient_var['id']}, {$patient_var['add_sibling']}),
+				({$patient_var['add_sibling']}, {$patient_var['id']})"))
+			{
+				$_SESSION['msg']['reg-success'] = $_SESSION['msg']['reg-success']."<br>Sibling added!";
+			}
+			else
+				$err[] = 'Error adding sibling';
+		}
 	}
-	
+
 	if(count($err))
 	{
 		$_SESSION['msg']['reg-err'] = implode('<br />',$err);
-	}	
+	}
 }
 ?>

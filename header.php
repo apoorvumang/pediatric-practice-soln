@@ -23,7 +23,6 @@ if(isset($_GET['logout']))
 {
 	$_SESSION = array();
 	session_destroy();
-	
 	Redirect("index.php");
 	exit;
 }

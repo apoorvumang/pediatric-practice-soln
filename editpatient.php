@@ -34,6 +34,7 @@ if(isset($_POST['submit']))
 if(isset($_GET['id']))
 {
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id={$_GET['id']}"));
+	$siblings_result = mysqli_query($link, "SELECT name, s_id FROM patients, siblings WHERE p_id = {$_GET['id']} AND patients.id = siblings.s_id");
 ?>
 
 <script>
@@ -59,13 +60,14 @@ $(function() {
 });
 
 function autocomplet() {
-	var min_length = 2; // min characters to display the autocomplete
+	var min_length = 3; // min characters to display the autocomplete
 	var keyword = $('#sibling_id').val();
+	var myId = <?php echo $_GET['id']; ?>;
 	if (keyword.length >= min_length) {
 		$.ajax({
 			url: 'ajax_refresh.php',
 			type: 'POST',
-			data: {"keyword":keyword},
+			data: {"keyword":keyword, "myid": myId},
 			success:function(data){
 				$('#sibling_autocomplet_list').show();
 				$('#sibling_autocomplet_list').html(data);
@@ -75,7 +77,7 @@ function autocomplet() {
 		$('#sibling_autocomplet_list').hide();
 	}
 }
- 
+
 // set_item : this function will be executed when we select an item
 function set_item(item) {
 	// change input value
@@ -195,16 +197,31 @@ function set_item(item) {
 		<label for="obstetrician">Obstetrician:&nbsp;&nbsp;</label>
 		<input type="text" name="obstetrician" id="obstetrician" <?php echo "value=\"{$patient['obstetrician']}\""; ?> />
 	</p>
-	
 	<p>
-	<div class="input_container">
-		<label for="sibling">Add sibling:&nbsp;&nbsp;</label>
-		<input type="text" id="sibling_id" onkeyup="autocomplet()" />
-		<ul id="sibling_autocomplet_list"></ul>
-			</div>
+		<label for="delete_siblings">Delete siblings:&nbsp;&nbsp;</label>
+		<ul style=" list-style-type: none;">
+		<?php
+			while($sibling = mysqli_fetch_assoc($siblings_result))
+			{
+			?>
+				<li>
+				<label><input type="checkbox" name="delete_siblings" <?php echo "value=\"{$sibling['s_id']}\""; ?>  >
+				<?php echo "{$sibling['name']}"; ?></label>
+				</li>
+			<?php
+			} ?>
+		</ul>
 	</p>
-
-	<input type="submit" name="submit" value="Save"/>
+	<!-- <p> -->
+	<div class="clear input_container">
+		<label for="add_sibling">Add sibling:&nbsp;&nbsp;</label>
+		<input type="text" id="add_sibling" name ="add_sibling" onkeyup="autocomplet()" />
+		<ul id="sibling_autocomplet_list"></ul>
+	</div>
+	<!-- </p> -->
+	<p>
+		<input type="submit" name="submit" value="Save"/>
+	</p>
 	<p>
 		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&delete=999\"" ?> onclick="return confirm('Confirm delete?');"><strong><font color="red">Delete patient</font></strong></a>
 	</p>
@@ -215,8 +232,8 @@ function set_item(item) {
 </form>
 <?php
 }
-else 
+else
 {
 	echo "<h3>You cannot access this page directly!</h3>";
-} 
+}
 include('footer.php'); ?>
