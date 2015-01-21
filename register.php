@@ -14,7 +14,6 @@ if(isset($_POST['submit']))
 		// exit();
 	}
 }
-						
 if($_SESSION['msg']['reg-err'])
 {
 	echo '<div class="err">'.$_SESSION['msg']['reg-err'].'</div>';
@@ -50,11 +49,38 @@ $(function() {
 		altFormat: "yy-mm-dd"
 	});
 });
+
+function autocomplet() {
+	var min_length = 3; // min characters to display the autocomplete
+	var keyword = $('#sibling_id').val();
+	var myId = 0;
+	if (keyword.length >= min_length) {
+		$.ajax({
+			url: 'ajax_refresh.php',
+			type: 'POST',
+			data: {"keyword":keyword, "myid": myId},
+			success:function(data){
+				$('#sibling_autocomplet_list').show();
+				$('#sibling_autocomplet_list').html(data);
+			}
+		});
+	} else {
+		$('#sibling_autocomplet_list').hide();
+	}
+}
+
+// set_item : this function will be executed when we select an item
+function set_item(item) {
+	// change input value
+	$('#sibling_id').val(item);
+	// hide proposition list
+	$('#sibling_autocomplet_list').hide();
+}
 </script>
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
 	<h3>Add patient</h3>
-	
+
 	<p>
 	<label for="first_name">First Name:&nbsp;&nbsp;</label>
 	<input type="text" name="first_name" id="first_name" style="width:477px" />
@@ -112,9 +138,15 @@ $(function() {
 	<input type="text" name="mother_occ" id="mother_occ"  />
 	</p>
 
-	<p>
-	<label class="grey" for="sibling">Sibling ID:&nbsp;&nbsp;</label>
-	<input type="text" name="sibling" value="0" style="width:20px" id="sibling"/>
+	<!-- <p> -->
+	<!-- <label class="grey" for="sibling">Sibling ID:&nbsp;&nbsp;</label>
+	<input type="text" name="sibling" value="0" style="width:20px" id="sibling"/> -->
+
+	<div class="clear input_container">
+		<label for="add_sibling">Add sibling:&nbsp;&nbsp;</label>
+		<input type="text" id = "sibling_id" name ="add_sibling" onkeyup="autocomplet()" />
+		<ul id="sibling_autocomplet_list"></ul>
+	</div>
 <!--	<select name="sibling" style="margin-right:60px;">
 	<option value=0>None</option>
 	<?php
@@ -125,7 +157,8 @@ $(function() {
 	// }
 	?>
 	</select>
---></p>
+-->
+<!-- </p> -->
 	<p>
 	<label class="grey" for="born_at">Birth Time:&nbsp;&nbsp;</label>
 	<input type="text" name="born_at" id="born_at"/>
@@ -162,8 +195,7 @@ $(function() {
 		<label for="doregistration_show">Date of Registration:&nbsp;&nbsp;</label>
 		<input type="hidden" name="doregistration" id="doregistration" />
 		<input type="text" name="doregistration_show" id="doregistration_show" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-		<input type="checkbox" name="active" id="active" value="1" checked="true"/> 
+		<input type="checkbox" name="active" id="active" value="1" checked="true"/>
 		<label for="active">Active</label>
 	</p>
 
