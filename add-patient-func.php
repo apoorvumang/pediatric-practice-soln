@@ -207,10 +207,32 @@ function editPatient($patient_var)
 		}
 		else
 			$err[]='An unknown error has occured.';
+		if($patient_var['delete_siblings'])
+		{
+			$total_string = "(";
+			foreach ($patient_var['delete_siblings'] as $key => $value) {
+				$total_string = $total_string.$value.",";
+			}
+			$total_string = $total_string.$patient_var['id'].")";
+			if(mysqli_query($link, "DELETE FROM siblings WHERE (s_id IN {$total_string}) AND (p_id IN {$total_string})"))
+			{
+				$_SESSION['msg']['reg-success'] = $_SESSION['msg']['reg-success']."<br>Sibling(s) deleted!";
+			}
+			else
+				$err[] = 'Error deleting sibling(s)';
+		}
 		if($patient_var['add_sibling'] > 0)
 		{
-			if(mysqli_query($link, "INSERT INTO siblings(p_id, s_id) VALUES ({$patient_var['id']}, {$patient_var['add_sibling']}),
-				({$patient_var['add_sibling']}, {$patient_var['id']})"))
+			$siblings_result = mysqli_query($link, "SELECT * FROM siblings WHERE p_id = {$patient_var['id']}");
+			$total_string = " ";
+			while($row = mysqli_fetch_assoc($siblings_result))
+			{
+				$total_string = $total_string."(".$row['s_id'].",".$patient_var['add_sibling']."),";
+				$total_string = $total_string."(".$patient_var['add_sibling'].",".$row['s_id']."),";
+			}
+			$total_string = $total_string."(".$patient_var['id'].",".$patient_var['add_sibling']."),";
+			$total_string = $total_string."(".$patient_var['add_sibling'].",".$patient_var['id'].")";
+			if(mysqli_query($link, "INSERT INTO siblings(p_id, s_id) VALUES ".$total_string))
 			{
 				$_SESSION['msg']['reg-success'] = $_SESSION['msg']['reg-success']."<br>Sibling added!";
 			}

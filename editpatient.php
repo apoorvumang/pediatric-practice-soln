@@ -205,7 +205,7 @@ function set_item(item) {
 			{
 			?>
 				<li>
-				<label><input type="checkbox" name="delete_siblings" <?php echo "value=\"{$sibling['s_id']}\""; ?>  >
+				<label><input type="checkbox" name="delete_siblings[]" <?php echo "value=\"{$sibling['s_id']}\""; ?>  >
 				<?php echo "{$sibling['name']}"; ?></label>
 				</li>
 			<?php
@@ -215,7 +215,7 @@ function set_item(item) {
 	<!-- <p> -->
 	<div class="clear input_container">
 		<label for="add_sibling">Add sibling:&nbsp;&nbsp;</label>
-		<input type="text" id="add_sibling" name ="add_sibling" onkeyup="autocomplet()" />
+		<input type="text" id = "sibling_id" name ="add_sibling" onkeyup="autocomplet()" />
 		<ul id="sibling_autocomplet_list"></ul>
 	</div>
 	<!-- </p> -->
