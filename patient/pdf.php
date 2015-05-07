@@ -1,6 +1,4 @@
 <?php
-require('../fpdf/fpdf.php');
-require('../connect.php');
 require('pdf-functions.php');
 session_name('tzLogin');
 session_start();
