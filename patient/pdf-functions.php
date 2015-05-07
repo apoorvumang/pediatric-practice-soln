@@ -164,8 +164,8 @@ function Footer()
 }
 
 function createPrintSchedulePDF($id) {
-	$vac_sched = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id='{$id}' AND given='Y'");
-	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob FROM patients WHERE id='{$id}'"));
+	$vac_sched = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id='$id' AND given='Y'");
+	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob FROM patients WHERE id='$id'"));
 	$pdf = new PDF();
 	$pdf->setVars($patient, $vac_sched);
 	// Column headings
