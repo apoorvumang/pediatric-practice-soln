@@ -61,7 +61,7 @@ $message = "Hello World";
     $header .= "Content-Type: application/octet-stream; name=\"".$name."\"\r\n"; // use different content types here
     $header .= "Content-Transfer-Encoding: base64\r\n";
     $header .= "Content-Disposition: attachment; filename=\"".$name."\"\r\n\r\n";
-    $header .= $atachment."\r\n\r\n";
+    $header .= $attachment."\r\n\r\n";
     $header .= "--".$random_hash."--";
     if (mail($to, $subject, "", $header)) {
         echo "mail send ... OK"; // or use booleans here
