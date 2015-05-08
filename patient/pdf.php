@@ -11,6 +11,6 @@ if((!isset($_GET['id']))||(!(isset($_SESSION['id'])||isset($_SESSION['username']
 }
 if(isset($_SESSION['id']))
 	$_GET['id'] = $_SESSION['id'];
-$pdf = createPrintSchedulePDF($_GET['id']);
+$pdf = createPrintSchedulePDF($_GET['id'], $link);
 $pdf->Output();
 ?>
