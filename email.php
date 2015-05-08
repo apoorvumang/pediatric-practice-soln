@@ -51,8 +51,8 @@ if($_GET['id'])
 		$attachment = chunk_split(base64_encode($pdf->Output('', 'S')));
 		//define the body of the message.
 		//
-		$message = "Dear parent<br>Please find attached the vaccination history of your child ".$patient['name'];
-		$message .= "<br>Regards<br>Dr. Mahima";
+		$message = "Dear parent<br><br>Please find attached the vaccination history of your child ".$patient['name'];
+		$message .= "<br><br>Regards<br>Dr. Mahima";
 		    $name = "vac_hist_".$patient['name'].".pdf";
 		    $header = "From: "."Dr. Mahima <mahima@drmahima.com>"."\r\n";
 		    $header .= "MIME-Version: 1.0\r\n";
