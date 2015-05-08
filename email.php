@@ -47,7 +47,7 @@ $random_hash = md5(date('r', time()));
 //encode it with MIME base64,
 //and split it into smaller chunks
 $pdf = createPrintSchedulePDF('69', $link);
-$attachment = $pdf->Output('', 'S');
+$attachment = chunk_split(base64_encode(file_get_contents($pdf->Output('', 'S'))));
 //define the body of the message.
 //
 $message = "Hello World";
