@@ -153,7 +153,7 @@ if($_GET['id'])
 </p>
 <p>
 	<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send vaccination history email (print format)</a> </strong>
-</p
+</p>
 <p>
 	<strong>Patient ID: <?php echo $patient['id'] ?> </strong>
 </p>

@@ -53,13 +53,13 @@ if($_GET['id'])
 		//
 		$message = "Dear parent<br>Please find attached the vaccination history of your child ".$patient['name'];
 		$message .= "<br>Regards<br>Dr. Mahima";
-		    $name = "vac_hist_".$patient['first_name'].'_'.$patient['last_name'].".pdf";
+		    $name = "vac_hist_".$patient['name'].".pdf";
 		    $header = "From: "."Dr. Mahima <mahima@drmahima.com>"."\r\n";
 		    $header .= "MIME-Version: 1.0\r\n";
 		    $header .= "Content-Type: multipart/mixed; boundary=\"".$random_hash."\"\r\n\r\n";
 		    $header .= "This is a multi-part message in MIME format.\r\n";
 		    $header .= "--".$random_hash."\r\n";
-		    $header .= "Content-type:text/plain; charset=iso-8859-1\r\n";
+		    $header .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 		    $header .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
 		    $header .= $message."\r\n\r\n";
 		    $header .= "--".$random_hash."\r\n";
