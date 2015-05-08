@@ -1,4 +1,5 @@
 <?php include('header.php');
+include_once('fpdf/fpdf.php');
 include_once('patient/pdf-functions.php');
 if($_GET['id'])
 {
@@ -45,7 +46,8 @@ $random_hash = md5(date('r', time()));
 //read the atachment file contents into a string,
 //encode it with MIME base64,
 //and split it into smaller chunks
-$attachment = createPrintSchedulePDF('69', $link)->Output('', 'S');
+$pdf = createPrintSchedulePDF('69', $link);
+$attachment = $pdf->Output('', 'S');
 //define the body of the message.
 //
 $message = "Hello World";
