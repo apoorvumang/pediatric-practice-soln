@@ -1,7 +1,7 @@
 <?php
 
-require('../fpdf/fpdf.php');
-require('../connect.php');
+include_once('../fpdf/fpdf.php');
+include_once('../connect.php');
 error_reporting(0);
 
 

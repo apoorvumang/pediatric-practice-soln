@@ -1,4 +1,5 @@
 <?php include('header.php');
+include_once('patient/pdf-functions.php');
 if($_GET['id'])
 {
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
@@ -44,7 +45,7 @@ $random_hash = md5(date('r', time()));
 //read the atachment file contents into a string,
 //encode it with MIME base64,
 //and split it into smaller chunks
-$attachment = chunk_split(base64_encode(file_get_contents("http://www.drmahima.com/patient/pdf.php?id=69")));
+$attachment = createPrintSchedulePDF('69', $link)->Output('', 'S');
 //define the body of the message.
 //
 $message = "Hello World";
