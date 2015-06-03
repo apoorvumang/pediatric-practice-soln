@@ -170,6 +170,10 @@ if($_GET['id'])
 </p>
 
 <p>
+<strong><em>Email :</em></strong> <?php echo $patient['email']; ?>
+</p>
+
+<p>
 <strong>Birth Weight :</strong> <?php echo $patient['birth_weight']." grams"; ?>
 </p>
 
