@@ -95,7 +95,7 @@ class PDF extends FPDF
 					$tempArr = array(33);
 					break;
 				case 8: //Influenza
-					$tempArr = array(22,23,24,25,26,27,65,66);
+					$tempArr = array(22,23,24,25,26,27,65,66,68,69);
 					break;
 				case 9: //Hepatitis-A
 					$tempArr = array(13,14,53);
@@ -113,7 +113,7 @@ class PDF extends FPDF
 					$tempArr = array(59,60);
 					break;
 				case 14:	//Meningitis
-					$tempArr = array(34,35,36);
+					$tempArr = array(34,35,36,70);
 					break;
 				case 15:	//HPV
 					$tempArr = array(3,4,5);
