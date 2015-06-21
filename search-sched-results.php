@@ -172,11 +172,11 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 		{
 			if(strtotime($row['date']) < strtotime("now"))	//If date has passed
 			{
-				$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination\nDr. Mahima\n9811129950";
+				$message = "Dear {$patient['first_name']}\nYou are due for {$vaccine['name']} vaccination\nDr. Mahima\n9811129950";
 			}
 			else
 			{
-				$message = "Dear parent\nYour child {$patient['first_name']} is due for {$vaccine['name']} vaccination on ".date('j M Y',strtotime($row['date']))."\nDr. Mahima\n9811129950";
+				$message = "Dear {$patient['first_name']}\nYou are due for {$vaccine['name']} vaccination on ".date('j M Y',strtotime($row['date']))."\nDr. Mahima\n9811129950";
 			}
 		}
 		else

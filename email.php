@@ -15,7 +15,7 @@ if($_GET['id'])
 	{
 		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date, v_id");
 		$subject = "Vaccination schedule for ".$patient['name'];
-		$message = "Dear Parent<br><br>Please find below the vaccination schedule for your child ".$patient['name'];
+		$message = "Dear ".$patient['name']."<br><br>Please find below your vaccination schedule";
 		$message .= "<br><br><br>";
 		$message .= "<table><tr><th>Date</th><th>Vaccine</th></tr>";
 
@@ -51,7 +51,7 @@ if($_GET['id'])
 		$attachment = chunk_split(base64_encode($pdf->Output('', 'S')));
 		//define the body of the message.
 		//
-		$message = "Dear parent<br><br>Please find attached the vaccination history of your child ".$patient['name'];
+		$message = "Dear ".$patient['name']."<br><br>Please find attached your vaccination history";
 		$message .= "<br><br>Regards<br>Dr. Mahima";
 		    $name = "vac_hist_".$patient['name'].".pdf";
 		    $header = "From: "."Dr. Mahima <mahima@drmahima.com>"."\r\n";
