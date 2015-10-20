@@ -16,6 +16,22 @@ $(function() {
 		dateFormat:"d M yy"
 	});
 });
+$(function() {
+	$( "#dob_from" ).datepicker({
+		changeMonth: true,
+		changeYear: true,
+		yearRange: "1970:2032",
+		dateFormat:"d M yy"
+	});
+});
+$(function() {
+	$( "#dob_to" ).datepicker({
+		changeMonth: true,
+		changeYear: true,
+		yearRange: "1970:2032",
+		dateFormat:"d M yy"
+	});
+});
 </script>
 <h3>Search Patients</h3>
 <form action="search-patient-results.php" method="post" enctype="multipart/form-data" style="width:auto" name="4">
