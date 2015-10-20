@@ -36,6 +36,13 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 		$result = mysqli_query($link, "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE id >= {$_POST['id_from']} AND id <= {$_POST['id_to']} ORDER BY id");
 		$nrows = mysqli_num_rows($result);
 	}
+	else if($_POST['dobrange']) 
+	{
+		$_POST['dob_from'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['dob_from'])););
+		$_POST['dob_to'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['dob_to'])););
+		$result = mysqli_query($link, "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE dob >= {$_POST['dob_from']} AND dob <= {$_POST['dob_to']} ORDER BY id");
+		$nrows = mysqli_num_rows($result);
+	}
 ?>
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">

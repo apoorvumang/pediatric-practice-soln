@@ -37,6 +37,13 @@ $(function() {
 	<input type="text" name="dob" id="dob" style="margin-right:40px;"/>
 	<input type="submit" name="specificdob" value="Go" />
 </form>
+<form action="search-patient-results.php" method="post" enctype="multipart/form-data" style="width:auto" name="6">
+	<label for="dob_from">DOB From: &nbsp;&nbsp;&nbsp;&nbsp;</label>
+	<input type="text" name="dob_from" id="dob_from" style="margin-right:40px;"/>
+	<label for="dob_to">To: &nbsp;&nbsp;&nbsp;&nbsp;</label>
+	<input type="text" name="dob_to" id="dob_to" style="margin-right:40px;"/>
+	<input type="submit" name="dobrange" value="Go" />
+</form>
 <form action="search-patient-results.php" method="post" enctype="multipart/form-data" style="width:auto" name="2">
 	<label for="dob_noyear">DOB (Year not needed): &nbsp;&nbsp;&nbsp;&nbsp;</label>
 	<input type="text" name="dob_noyear" id="dob_noyear" style="margin-right:40px;"/>
