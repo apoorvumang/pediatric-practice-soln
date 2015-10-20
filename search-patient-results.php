@@ -3,7 +3,7 @@
 <h3>Search Results</h3>
 <?php
 
-if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||$_POST['specificid']||$_POST['id_range'])	//If some submit button clicked
+if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||$_POST['specificid']||$_POST['id_range']||$_POST['dobrange'])	//If some submit button clicked
 {
 	if($_POST['specificdob'])
 	{
