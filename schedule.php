@@ -49,6 +49,11 @@ if(isset($_GET['id']))
 	</p>
 
 	<p>
+	<label for="email2">Email 2:&nbsp;&nbsp;</label>
+	<input type="text" name="email2" id="email2" <?php echo "value=\"{$patient['email2']}\""; ?> />
+	</p>
+
+	<p>
 	<label for="phone">Phone number 1:&nbsp;&nbsp;</label>
 	<input type="text" name="phone" id="phone" <?php echo "value=\"{$patient['phone']}\""; ?> />
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

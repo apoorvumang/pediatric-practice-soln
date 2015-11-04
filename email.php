@@ -32,11 +32,14 @@ if($_GET['id'])
 		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
 		$headers .= "From: Dr. Mahima <mahima@drmahima.com>\r\n";
 		mail($patient['email'], $subject, $message, $headers);	
+		if($patient['email2'])
+			mail($patient['email2'], $subject, $message, $headers);	
 	}
 	else
 	{
 			//define the receiver of the email
 		$to = $patient['email'];
+		$to2 = $patient['email2'];
 		//define the subject of the email
 		$subject = 'Vaccination history (PDF attachment)';
 		//create a boundary string. It must be unique
@@ -72,6 +75,15 @@ if($_GET['id'])
 		        echo "mail send ... OK"; // or use booleans here
 		    } else {
 		        echo "mail send ... ERROR!";
+		    }
+
+		    if($patient['email2']) {
+		    	if (mail($to2, $subject, "", $header)) {
+			        echo "mail 2 send ... OK"; // or use booleans here
+			    } else {
+			        echo "mail 2 send ... ERROR!";
+		    }
+
 		    }
 
 	}

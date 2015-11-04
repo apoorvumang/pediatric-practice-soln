@@ -21,6 +21,14 @@ function validatePatient($patient_var)
 		}
 	}
 
+	if(($patient_var['email2']))
+	{
+		if(!checkEmail($patient_var['email2']))
+		{
+			$err[]='Your email 2 is not valid!';
+		}
+	}
+
 	if(($patient_var['phone']))
 	{
 		if( !preg_match("/^[0-9]{1,}$/", $patient_var['phone']) )
@@ -89,16 +97,18 @@ function addPatient($patient_var)
 	if(!count($err))
 	{
 		$patient_var['email'] = mysqli_real_escape_string($link, $patient_var['email']);
+		$patient_var['email2'] = mysqli_real_escape_string($link, $patient_var['email2']);
 		$patient_var['name'] = mysqli_real_escape_string($link, $patient_var['name']);
 		$patient_var['phone'] = mysqli_real_escape_string($link, $patient_var['phone']);
 		$patient_var['dob'] = mysqli_real_escape_string($link, $patient_var['dob']);
 
 		// Escape the input data
-		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,dob,phone,phone2,sex,father_name,father_occ,mother_name,mother_occ,address,
+		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,email2,dob,phone,phone2,sex,father_name,father_occ,mother_name,mother_occ,address,
 			birth_weight,born_at,head_circum,length,mode_of_delivery,gestation,sibling,active,date_of_registration,obstetrician,place_of_birth)
 					VALUES(
 					'".$patient_var['name']."', '".$patient_var['first_name']."', '".$patient_var['last_name']."',
 					'".$patient_var['email']."',
+					'".$patient_var['email2']."',
 					'".$patient_var['dob']."',
 					'".$patient_var['phone']."',
 					'".$patient_var['phone2']."',
@@ -169,6 +179,7 @@ function editPatient($patient_var)
 	if(!count($err))
 	{
 		$patient_var['email'] = mysqli_real_escape_string($link, $patient_var['email']);
+		$patient_var['email2'] = mysqli_real_escape_string($link, $patient_var['email2']);
 		$patient_var['name'] = mysqli_real_escape_string($link, $patient_var['name']);
 		$patient_var['phone'] = mysqli_real_escape_string($link, $patient_var['phone']);
 		$patient_var['dob'] = mysqli_real_escape_string($link, $patient_var['dob']);
@@ -180,6 +191,7 @@ function editPatient($patient_var)
 			first_name = '".$patient_var['first_name']."',
 			last_name =  '".$patient_var['last_name']."',
 			email = '".$patient_var['email']."',
+			email2 = '".$patient_var['email2']."',
 			dob = '".$patient_var['dob']."',
 			phone = '".$patient_var['phone']."',
 			phone2 = '".$patient_var['phone2']."',

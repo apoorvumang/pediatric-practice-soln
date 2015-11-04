@@ -174,6 +174,10 @@ if($_GET['id'])
 </p>
 
 <p>
+<strong><em>Email 2:</em></strong> <?php echo $patient['email2']; ?>
+</p>
+
+<p>
 <strong>Birth Weight :</strong> <?php echo $patient['birth_weight']." grams"; ?>
 </p>
 
