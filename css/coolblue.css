@@ -176,7 +176,7 @@ input:focus, select:focus, textarea:focus {
 	color: #19465D;
 	background: #EEF8FB;
 }
-#name, #email, #message, #website {
+#name, #email, #email2, #message, #website {
 	width: 460px;
 }
 input.button {
