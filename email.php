@@ -1,6 +1,7 @@
 <?php include('header.php');
 include_once('fpdf/fpdf.php');
 include_once('patient/pdf-functions.php');
+require 'PHPMailer/PHPMailerAutoload.php';
 if($_GET['id'])
 {
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
@@ -31,60 +32,31 @@ if($_GET['id'])
 		$headers = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
 		$headers .= "From: Dr. Mahima <mahima@drmahima.com>\r\n";
-		mail($patient['email'], $subject, $message, $headers);	
+		if(mail($patient['email'], $subject, $message, $headers)) {
+			echo 'success';
+		}
 		if($patient['email2'])
 			mail($patient['email2'], $subject, $message, $headers);	
 	}
 	else
 	{
-			//define the receiver of the email
-		$to = $patient['email'];
-		$to2 = $patient['email2'];
-		//define the subject of the email
-		$subject = 'Vaccination history (PDF attachment)';
-		//create a boundary string. It must be unique
-		//so we use the MD5 algorithm to generate a random hash
-		$random_hash = md5(date('r', time()));
-		//define the headers we want passed. Note that they are separated with \r\n
-		//add boundary string and mime type specification
-		//read the atachment file contents into a string,
-		//encode it with MIME base64,
-		//and split it into smaller chunks
 		$pdf = createPrintSchedulePDF($patient['id'], $link);
-		$attachment = chunk_split(base64_encode($pdf->Output('', 'S')));
-		//define the body of the message.
-		//
-		$message = "Dear ".$patient['name']."<br><br>Please find attached your vaccination history";
-		$message .= "<br><br>Regards<br>Dr. Mahima";
-		    $name = "vac_hist_".$patient['name'].".pdf";
-		    $header = "From: "."Dr. Mahima <mahima@drmahima.com>"."\r\n";
-		    $header .= "MIME-Version: 1.0\r\n";
-		    $header .= "Content-Type: multipart/mixed; boundary=\"".$random_hash."\"\r\n\r\n";
-		    $header .= "This is a multi-part message in MIME format.\r\n";
-		    $header .= "--".$random_hash."\r\n";
-		    $header .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-		    $header .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-		    $header .= $message."\r\n\r\n";
-		    $header .= "--".$random_hash."\r\n";
-		    $header .= "Content-Type: application/octet-stream; name=\"".$name."\"\r\n"; // use different content types here
-		    $header .= "Content-Transfer-Encoding: base64\r\n";
-		    $header .= "Content-Disposition: attachment; filename=\"".$name."\"\r\n\r\n";
-		    $header .= $attachment."\r\n\r\n";
-		    $header .= "--".$random_hash."--";
-		    if (mail($to, $subject, "", $header)) {
-		        echo "mail send ... OK"; // or use booleans here
-		    } else {
-		        echo "mail send ... ERROR!";
-		    }
 
-		    if($patient['email2']) {
-		    	if (mail($to2, $subject, "", $header)) {
-			        echo "mail 2 send ... OK"; // or use booleans here
-			    } else {
-			        echo "mail 2 send ... ERROR!";
-		    }
+	    $email = new PHPMailer();
+		$email->From      = 'mahima@drmahima.com';
+		$email->FromName  = 'Dr. Mahima';
+		$email->Subject   = 'Test';
+		$email->Body      = 'Hello';
+		$email->AddAddress( $patient['email'] );
 
-		    }
+		$email->AddStringAttachment($pdf->Output('', 'S'), 'message.pdf', "base64", 'application/pdf');
+
+		if($email->Send()) {
+			echo 'Email sent successfully';
+		}
+		else {
+			echo 'Error in sending email';
+		}
 
 	}
 
