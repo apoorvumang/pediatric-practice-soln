@@ -45,11 +45,14 @@ if($_GET['id'])
 	    $email = new PHPMailer();
 		$email->From      = 'mahima@drmahima.com';
 		$email->FromName  = 'Dr. Mahima';
-		$email->Subject   = 'Test';
-		$email->Body      = 'Hello';
+		$email->Subject   = 'Vaccination history';
+		$email->Body      = "Dear ".$patient['name']."\n\nPlease find attached your vaccination history\n\nRegards\nDr.Mahima";
+		$message = $email->Body;
 		$email->AddAddress( $patient['email'] );
+		if($patient['email2'])
+			$email->AddAddress($patient['email2']);
 
-		$email->AddStringAttachment($pdf->Output('', 'S'), 'message.pdf', "base64", 'application/pdf');
+		$email->AddStringAttachment($pdf->Output('', 'S'), 'history.pdf', "base64", 'application/pdf');
 
 		if($email->Send()) {
 			echo 'Email sent successfully';
