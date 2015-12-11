@@ -86,6 +86,36 @@ if($_POST['vac_date'])
 		implode($err_total, $err);
 		echo $err_total;
 	}
+} else if ($_POST['payment_date']) {
+	$value = date('Y-m-d', strtotime($_POST['payment_date']));
+	
+	if(!mysqli_query($link, 
+		"INSERT INTO payment_due (p_id, date, amount, comment)VALUES ({$_GET['id']}, '{$value}', {$_POST['payment_amount']}, '{$_POST['payment_comment']}');"))
+		$err[] = "Unknown error";
+	if(!$err)
+	{
+		echo "Changes saved successfully!";
+	}
+	else
+	{
+		implode($err_total, $err);
+		echo $err_total;
+	}
+} else if ($_POST['delete_due']) {
+	foreach ($_POST['delete_due'] as $key => $value) {
+		if(!mysqli_query($link, 
+		"DELETE FROM payment_due WHERE id = {$value};"))
+		$err[] = "Unknown error";
+	}
+	if(!$err)
+	{
+		echo "Deleted due payments successfully!";
+	}
+	else
+	{
+		implode($err_total, $err);
+		echo $err_total;
+	}
 }
 if($_GET['id'])
 {
@@ -140,7 +170,14 @@ if($_GET['id'])
 	unset($temp_result);
 	unset($temp_nrows); 
 	?>
-	
+	$(function() {
+				$("#payment_date").datepicker({
+					changeMonth: true,
+					changeYear: true,
+					yearRange: "1970:2032",
+					dateFormat:"d M yy"
+				});
+			});
 </script>
 
 <h4>Patient Information</h4>
@@ -257,6 +294,56 @@ else
 }
 
 ?>
+<h4> Due Payment </h4>
+<form role="form" action="" method="post">
+  <div class="form-group">
+    <label for="payment_amount">Amount:</label>
+    <input type="number" class="form-control" id="payment_amount" name="payment_amount">
+  </div>
+  <div class="form-group">
+    <label for="payment_date">Date:</label>
+    <!-- <input type="text" class="form-control" id="due_date" name="due_date"> -->
+		<input type="text" name="payment_date" style="width:80px" id="payment_date" value=<?php echo "\"".date('j M Y')."\"";?>/>
+  </div>
+  <div class="form-group">
+    <label for="payment_comment">Comment:</label>
+    <input type="textbox" id="payment_comment" name="payment_comment"> </label>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+<form role="form" action="" method="post">
+<table border="1">
+<tr>
+	<th>S.No.</th>
+	<th>Amount</th>
+	<th>Date</th>
+	<th>Comment</th>
+	<th>Delete</th>
+</tr>
+<?php
+	$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} ORDER BY date;");
+	$i=1;
+	$total = 0;
+	while($row = mysqli_fetch_assoc($result)) {
+		$total += $row['amount'];
+		?>
+		<tr>
+			<td><?php echo "{$i}"; $i += 1; ?>  </td>
+			<td><?php echo "{$row['amount']}";?> </td>
+			<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
+			<td><?php echo $row['comment']?> </td>
+			<td><?php echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_due[]\">";?>
+			</td>
+		</tr>
+	<?php } ?>
+	
+</table>
+<p>
+	<?php echo "Total = Rs. {$total}"; ?>
+</p>
+<button type="submit" class="btn btn-default">Delete checked</button>
+</form>
+
 <h4>Schedule</h4>
 <form name="myform" action="" method="post" style="width:800px;background:none;border:none">
 <input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
@@ -382,7 +469,7 @@ else
 	?>
 	</tbody>
 </table>
-<input type="submit" name="submit" value="Save Changes" />
+<input type="submit" name="sub'mit" value="Save Changes" />
 <br />
 <br />
 <br />
