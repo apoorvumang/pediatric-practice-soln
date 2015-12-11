@@ -130,6 +130,22 @@ if($_GET['id'])
 	$temp_result = mysqli_query($link, "SELECT id FROM vaccines WHERE 1");
 	$temp_nrows = mysqli_num_rows($temp_result);
 ?>
+<?php 
+	$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} ORDER BY date;");
+	$total = 0;
+	while ($row = mysqli_fetch_assoc($result)) {
+		$total += $row['amount'];
+	}
+	if ($total > 0) {
+	echo <<<END
+	<marquee id="flash_text" >
+<h3><font color="red"><strong>Due amount: Rs. {$total}!</strong></font></h3>
+</marquee>
+END;
+		
+	}
+	
+?>
 <script type="text/javascript">
 	function checkRed()
 	{
