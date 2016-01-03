@@ -16,6 +16,12 @@ else if($_GET['reschedule']=='999'&&isset($_GET['id']))
 	echo "Rescheduling successful.";
 	Redirect("edit-sched.php?id={$_GET['id']}");
 }
+else if($_GET['reschedule_tuesday']=='999'&&isset($_GET['id']))
+{
+	regen_patient_schedule_tuesday($_GET['id']);
+	echo "Tuesday rescheduling successful.";
+	Redirect("edit-sched.php?id={$_GET['id']}");
+}
 if(isset($_POST['submit']))
 {
 	editPatient($_POST);
@@ -232,6 +238,9 @@ function set_item(item) {
 	</p>
 	<p>
 		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&reschedule=999\"" ?> onclick="return confirm('Confirm reschedule?');"><strong><font color="blue">Reschedule patient</font></strong></a>
+	</p>
+	<p>
+		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&reschedule_tuesday=999\"" ?> onclick="return confirm('Confirm reschedule for tuesdays?');"><strong><font color="green">Reschedule only tuesdays</font></strong></a>
 	</p>
 
 </form>
