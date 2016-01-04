@@ -100,6 +100,9 @@ switch($currentFile)
 	case "email.php":
 	$title="Patient - Send E-Mail";
 	break;
+	case "payment_due.php":
+	$title="Payments Due";
+	break;
 }
 
 echo $title;
@@ -182,6 +185,7 @@ function countMessages(e)
 			<li <?php if($currentFile=="changevac.php") { ?> id="current" <?php }?>><a href="changevac.php">Edit/Del Vac</a></li>
 			<li <?php if($currentFile=="addvacmake.php") { ?> id="current" <?php }?>><a href="addvacmake.php">Add product</a></li>
 			<li <?php if($currentFile=="changevacmake.php") { ?> id="current" <?php }?>><a href="changevacmake.php">Change product</a></li>
+			<li <?php if($currentFile=="payment_due.php") { ?> id="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
 			<li><a href="index.php?logout=1">Logout</a></li>
 			<?php } ?>
 		</ul>
