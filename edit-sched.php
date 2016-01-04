@@ -485,7 +485,7 @@ else
 	?>
 	</tbody>
 </table>
-<input type="submit" name="sub'mit" value="Save Changes" />
+<input type="submit" name="submit" value="Save Changes" />
 <br />
 <br />
 <br />
