@@ -1,6 +1,28 @@
 <?php include('header.php');
 
-$result = mysqli_query($link, "SELECT pd.id as pd_id, p.name as name, p.phone as phone, p.phone2 as phone2, pd.p_id as id, pd.date as date, pd.amount as amount, pd.comment as comment FROM patients p, payment_due pd WHERE p.id = pd.p_id");
+if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
+{
+	foreach ($_POST['send_sms_id'] as $key => $value) 
+	{
+		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT p.name, p.phone, p.phone2, pd.date, pd.amount, pd.comment from patients p, payment_due pd where p.id = pd.p_id and p.id = {$value};"));
+		if(isset($_POST['sendautosms']))
+		{
+			$message = "Dear {$patient['name']} \nYou have Rs.{$patient['amount']} payment due for {$patient['comment']} done on ".date('d M Y', strtotime($patient['date']))."\nDr. Mahima\n9811129950";
+		}
+		else if(isset($_POST['sendcustomsms']))
+		{
+			$message = $_POST['customsms'];
+		}
+	
+		if($patient['phone'])
+			mail("sms@drmahima.com", $patient['phone'], $message);
+		if($patient['phone2'])
+			mail("sms@drmahima.com", $patient['phone2'], $message);
+		echo "SMS sent to {$patient['name']} <br>";
+	}
+}
+
+$result = mysqli_query($link, "SELECT pd.id as pd_id, p.name as name, p.phone as phone, p.phone2 as phone2, pd.p_id as id, pd.date as date, pd.amount as amount, pd.comment as comment FROM patients p, payment_due pd WHERE p.id = pd.p_id ORDER BY id");
 ?>
 <h3>Payments Due</h3>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" role="form">
