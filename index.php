@@ -77,7 +77,7 @@ if($_POST['submit'])
 
 if($_SESSION['name']){ 
 
-	echo "<h3>Welcome Dr. {$_SESSION['name']}!</h3><br />";
+	echo "<h3>Welcome {$_SESSION['name']}!</h3><br />";
 	?>
 <p><strong>Use the above links to navigate.</strong></p>
 <?php
