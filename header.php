@@ -103,6 +103,9 @@ switch($currentFile)
 	case "payment_due.php":
 	$title="Payments Due";
 	break;
+	case "visits.php":
+	$title = "Add patient visit";
+	break;
 }
 
 echo $title;
@@ -179,6 +182,9 @@ function countMessages(e)
 			<?php if($_SESSION['name']) { ?>
 			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">New patient</a></li>
 			<li <?php if($currentFile=="search-patient.php") { ?> id="current" <?php }?>><a href="search-patient.php">Patient info</a></li>
+			<?php } ?>
+			<?php if($_SESSION['username']=='suresh') { ?>
+			<li <?php if($currentFile=="visits.php") { ?> id="current" <?php }?>><a href="visits.php">Add Patient Visit</a></li>
 			<?php } ?>
 			<?php if($_SESSION['username']=='mahima') { ?>
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
