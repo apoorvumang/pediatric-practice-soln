@@ -194,6 +194,8 @@ function countMessages(e)
 			<li <?php if($currentFile=="addvacmake.php") { ?> id="current" <?php }?>><a href="addvacmake.php">Add product</a></li>
 			<li <?php if($currentFile=="changevacmake.php") { ?> id="current" <?php }?>><a href="changevacmake.php">Change product</a></li>
 			<li <?php if($currentFile=="payment_due.php") { ?> id="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
+			<?php } ?>
+			<?php if($_SESSION['name']) { ?>
 			<li><a href="index.php?logout=1">Logout</a></li>
 			<?php } ?>
 		</ul>
