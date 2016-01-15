@@ -43,9 +43,9 @@ switch($currentFile)
 {
 	case "index.php": 
 	$title = "Home";
-	if($_SESSION['id'])
+	if($_SESSION['name'])
 	{
-		$title = $title." - ".$_SESSION['username'];
+		$title = $title." - ".$_SESSION['name'];
 	}
 	else
 	{
@@ -179,6 +179,8 @@ function countMessages(e)
 			<?php if($_SESSION['name']) { ?>
 			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">New patient</a></li>
 			<li <?php if($currentFile=="search-patient.php") { ?> id="current" <?php }?>><a href="search-patient.php">Patient info</a></li>
+			<?php } ?>
+			<?php if($_SESSION['username']=='mahima') { ?>
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
 			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
 			<li <?php if($currentFile=="vaccine.php") { ?> id="current" <?php }?>><a href="vaccine.php">Add Vac</a></li>
