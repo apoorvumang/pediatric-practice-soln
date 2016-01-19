@@ -15,7 +15,8 @@ $(function() {
 </script>
 <?php 
 	if(isset($_POST['p_id'])) {
-		if(mysqli_query($link, "INSERT INTO visits(p_id, date) VALUES({$_POST['p_id']}, '{$_POST['date']}');")) {
+		$date = date('Y-m-d');
+		if(mysqli_query($link, "INSERT INTO visits(p_id, date) VALUES({$_POST['p_id']}, '{$date}');")) {
 			echo "Visit added successfully!";
 		}
 		else {
@@ -32,12 +33,6 @@ $(function() {
 	<input type="text" name="p_id" id="p_id" />
 	</p>
 
-
-	<p>
-	<label for="date_show">Date:&nbsp;&nbsp;</label>
-	<input type="hidden" name="date" id="date" />
-	<input type="text" name="date_show" id="date_show" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	</p>
 	<p>
 	<input type="submit" />
 	</p>
