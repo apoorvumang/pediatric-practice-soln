@@ -54,6 +54,7 @@ dateFormat:"d M yy"
 <th>ID</th>
 <th>Patient</th>
 <th>Vaccine</th>
+<th>Vaccine make</th>
 <th>Given Date</th>
 <th>Phone</th>
 </tr>
@@ -62,7 +63,7 @@ $count = 0;
 while($row = mysqli_fetch_assoc($result))
 {
 $patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id, phone, dob FROM patients WHERE id={$row['p_id']}"));
-$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, upper_limit FROM vaccines WHERE id={$row['v_id']}"));
+$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT v.name, v.upper_limit FROM vaccines v, vac_make vm WHERE v.id={$row['v_id']} AND vm.id = v.id"));
 
 ?>
 <tr>
@@ -71,6 +72,9 @@ $vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, upper_limit FROM
 </td>
 <td>
 <a href= <?php echo "\"edit-sched.php?id={$patient['id']}\""; ?> ><?php echo $patient['name']; ?></a>
+</td>
+<td>
+<?php echo $vaccine['name']; ?>
 </td>
 <td>
 <?php echo $vaccine['name']; ?>
