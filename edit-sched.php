@@ -459,9 +459,9 @@ else
 		?>
 		<td>
 			<select name="make[]">
-				<option value=0 <?php if($row['make']==0) echo "selected"; ?> >None</option>
 				<?php
-				$result_make = mysqli_query($link, "SELECT * FROM vac_make WHERE 1 ORDER BY name ASC");
+				$result_make = mysqli_query($link, "SELECT vm.id as id, vm.name as name FROM vac_make vm, vac_to_make vtm WHERE vm.id = vtm.vm_id AND vtm.v_id = {$vac['id']} ORDER BY vm.id ASC");
+								echo $query;
 				while($vac_make = mysqli_fetch_assoc($result_make))
 				{
 					echo "<option value=".$vac_make['id'];
