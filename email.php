@@ -19,7 +19,6 @@ if($_GET['id'])
 		$body             = "HELLO";
 
 		$mail->IsSMTP(); // telling the class to use SMTP
-		$mail->Host       = "mail.drmahima.com"; // SMTP server
 		$mail->SMTPDebug  = 2;                     // enables SMTP debug information (for testing)
 		                                           // 1 = errors and messages
 		                                           // 2 = messages only
