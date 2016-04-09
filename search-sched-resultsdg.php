@@ -12,7 +12,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 	{
 		$_POST['date'] = date('Y-m-d', strtotime($_POST['date']));
 		$_POST['date'] = mysqli_real_escape_string($link, $_POST['date']);
-		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date_given ='{$_POST['date']}' AND given='Y'");
+		$result = mysqli_query($link, "SELECT p.id as pid, p.name as pname, v.name as vname, vm.name as vmname, vs.date_given, p.phone, p.phone2 FROM patients p, vaccines v, vac_make vm, vac_schedule vs WHERE vs.date_given ='{$_POST['date']}' AND vs.given='Y' AND p.id = vs.p_id AND v.id = vs.v_id AND vm.id = vs.make");
 		$nrows = mysqli_num_rows($result);
 	}
 	else if($_POST['tofromdate'])
@@ -62,28 +62,26 @@ dateFormat:"d M yy"
 $count = 0;
 while($row = mysqli_fetch_assoc($result))
 {
-$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id, phone, dob FROM patients WHERE id={$row['p_id']}"));
-$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT v.name, v.upper_limit FROM vaccines v, vac_make vm WHERE v.id={$row['v_id']} AND vm.id = v.id"));
 
 ?>
 <tr>
 <td>
-<?php echo $row['p_id'];?>
+<?php echo $row['pid'];?>
 </td>
 <td>
-<a href= <?php echo "\"edit-sched.php?id={$patient['id']}\""; ?> ><?php echo $patient['name']; ?></a>
+<a href= <?php echo "\"edit-sched.php?id={$row['pid']}\""; ?> ><?php echo $row['pname']; ?></a>
 </td>
 <td>
-<?php echo $vaccine['name']; ?>
+<?php echo $row['vname']; ?>
 </td>
 <td>
-<?php echo $vaccine['name']; ?>
+<?php echo $row['vmname']; ?>
 </td>
 <td>
 <?php echo date('j M Y',strtotime($row['date_given'])); ?>
 </td>
 <td>
-<?php echo $patient['phone']; ?>
+<?php echo $row['phone']; ?>
 </td>
 </tr>
 <?php
