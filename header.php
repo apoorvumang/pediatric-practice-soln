@@ -106,6 +106,9 @@ switch($currentFile)
 	case "visits.php":
 	$title = "Add patient visit";
 	break;
+	case "settings.php":
+	$title = "Settings";
+	break;
 }
 
 echo $title;
@@ -189,11 +192,8 @@ function countMessages(e)
 			<?php if($_SESSION['type']=='doctor') { ?>
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
 			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
-			<li <?php if($currentFile=="vaccine.php") { ?> id="current" <?php }?>><a href="vaccine.php">Add Vac</a></li>
-			<li <?php if($currentFile=="changevac.php") { ?> id="current" <?php }?>><a href="changevac.php">Edit/Del Vac</a></li>
-			<li <?php if($currentFile=="addvacmake.php") { ?> id="current" <?php }?>><a href="addvacmake.php">Add product</a></li>
-			<li <?php if($currentFile=="changevacmake.php") { ?> id="current" <?php }?>><a href="changevacmake.php">Change product</a></li>
 			<li <?php if($currentFile=="payment_due.php") { ?> id="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
+			<li <?php if($currentFile=="settings.php") { ?> id="current" <?php }?>><a href="settings.php">Settings</a></li>
 			<?php } ?>
 			<?php if($_SESSION['name']) { ?>
 			<li><a href="index.php?logout=1">Logout</a></li>
