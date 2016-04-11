@@ -262,9 +262,11 @@ END;
 </p>
 <p>
 <strong>Father's name :</strong> <?php echo $patient['father_name']; ?>
+<br> <strong>Occupation :</strong> <?php echo $patient['father_occ']; ?>
 </p>
 <p>
 <strong>Mother's name :</strong> <?php echo $patient['mother_name']; ?>
+<br> <strong>Occupation :</strong> <?php echo $patient['mother_occ']; ?>
 </p>
 <p>
 <strong>Address :</strong> <?php echo $patient['address']; ?>
