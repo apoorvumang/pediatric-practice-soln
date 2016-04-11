@@ -50,7 +50,7 @@ if($_POST['submit'])
 		$_POST['password'] = mysqli_real_escape_string($link, $_POST['password']);
 		$_POST['rememberMe'] = (int)$_POST['rememberMe'];
 		
-		$row = mysqli_fetch_assoc(mysqli_query($link, "SELECT username,name FROM doctors WHERE username='{$_POST['username']}' AND password='".md5($_POST['password'])."'"));
+		$row = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM doctors WHERE username='{$_POST['username']}' AND password='".md5($_POST['password'])."'"));
 
 		if($row['username'])
 		{
@@ -58,6 +58,7 @@ if($_POST['submit'])
 			
 			$_SESSION['username'] = $row['username'];
 			$_SESSION['name'] = $row['name'];
+			$_SESSION['type'] = $row['type'];
 			$_SESSION['rememberMe'] = $_POST['rememberMe'];
 			
 			// Store some data in the session
