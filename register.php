@@ -80,10 +80,13 @@ function set_item(item) {
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
 	<h3>Add patient</h3>
-
+	<p>
+	* = Required
+	</p>
 	<p>
 	<label for="first_name">First Name:&nbsp;&nbsp;</label>
 	<input type="text" name="first_name" id="first_name" style="width:477px" />
+	*
 	</p>
 
 	<p>
@@ -94,7 +97,7 @@ function set_item(item) {
 	<p>
 	<label for="dob_show">Date of Birth:&nbsp;&nbsp;</label>
 	<input type="hidden" name="dob" id="dob" />
-	<input type="text" name="dob_show" id="dob_show" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="text" name="dob_show" id="dob_show" />*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 	<label class="grey" for="sex">Sex:&nbsp;&nbsp;</label>
 	<select name="sex" style="margin-right:60px;">

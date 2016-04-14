@@ -162,6 +162,16 @@ END;
 		}
 	};
 
+	$(document).ready(function(){
+		$("#advanced-info").hide();
+	    $("#hide").click(function(){
+	        $("#advanced-info").hide();
+	    });
+	    $("#show").click(function(){
+	        $("#advanced-info").show();
+	    });
+	});
+
 
 	<?php for ($i=0; $i < $temp_nrows; $i++) { ?>
 
@@ -207,20 +217,75 @@ END;
 <p>
 	<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send vaccination history email (print format)</a> </strong>
 </p>
-<p>
-	<strong>Patient ID: <?php echo $patient['id'] ?> </strong>
-</p>
+<h4>
+	<strong>ID: <?php echo $patient['id'] ?> </strong>
+</h4>
+
+<table style="margin: 0px 0px 0px 0px;border:none;">
+<tr>
+<td>
 <p>
 <strong>Name :</strong> <?php echo $patient['name']; ?>
 </p>
-
 <p>
 <strong>Date of Birth :</strong> <?php echo  date('d-F-Y', strtotime($patient['dob'])); ?>
 </p>
-
 <p>
 <strong>Sex :</strong> <?php echo $patient['sex']; ?>
 </p>
+<p>
+<strong>Phone:</strong> <?php echo $patient['phone']; ?>
+</p>
+</td>
+<td>
+<p>
+<strong>Father's name :</strong> <?php echo $patient['father_name'].", ".$patient['father_occ']; ?>
+</p>
+<p>
+<strong>Mother's name :</strong> <?php echo $patient['mother_name'].", ".$patient['mother_occ'];?>
+</p>
+
+<p>
+<strong>Active :</strong> <?php if($patient['active']==1) echo "<font color=green><strong>Yes</strong></font>"; else echo "<font color=red><strong>No</strong></font>"; ?>
+</p>
+</td>
+</tr>
+</table>
+
+<?php
+if(!$siblings_result)
+	echo "<p><strong>Sibling: None</strong></p>";
+else
+{
+	while($row = mysqli_fetch_assoc($siblings_result))
+	{
+		?>
+		<p>
+		<strong>Sibling :</strong>
+		<?php
+		echo "<a href=edit-sched.php?id=".$row['s_id'].">";
+
+		$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$row['s_id']}"));
+		echo $sibling_row['name'];
+		echo "</a>";
+		?>
+		</p>
+		<p>
+			<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
+		</p>
+		<p>
+			<strong>Sibling sex:</strong> <?php echo $sibling_row['sex']; ?>
+		</p>
+		<?php
+	}
+}
+
+?>
+<p>
+<button id="show">Show Advanced</button>
+<button id="hide">Hide Advanced</button>
+</p>
+<div id="advanced-info">
 
 <p>
 <strong><em>Email :</em></strong> <?php echo $patient['email']; ?>
@@ -253,27 +318,14 @@ END;
 <p>
 <strong>Gestation :</strong> <?php echo $patient['gestation']; ?>
 </p>
-
-<p>
-<strong>Phone 1:</strong> <?php echo $patient['phone']; ?>
-</p>
-<p>
-<strong>Phone 2:</strong> <?php echo $patient['phone2']; ?>
-</p>
-<p>
-<strong>Father's name :</strong> <?php echo $patient['father_name']; ?>
-<br> <strong>Occupation :</strong> <?php echo $patient['father_occ']; ?>
-</p>
-<p>
-<strong>Mother's name :</strong> <?php echo $patient['mother_name']; ?>
-<br> <strong>Occupation :</strong> <?php echo $patient['mother_occ']; ?>
-</p>
 <p>
 <strong>Address :</strong> <?php echo $patient['address']; ?>
 </p>
+
 <p>
-<strong>Active :</strong> <?php if($patient['active']==1) echo "<font color=green><strong>Yes</strong></font>"; else echo "<font color=red><strong>No</strong></font>"; ?>
+<strong>Phone 2:</strong> <?php echo $patient['phone2']; ?>
 </p>
+
 <p>
 <strong>Obstetrician :</strong> <?php echo $patient['obstetrician']; ?>
 </p>
@@ -283,35 +335,9 @@ END;
 <p>
 <strong>Date of Registration :</strong> <?php echo date('d-F-Y', strtotime($patient['date_of_registration'])); ?>
 </p>
-<?php
-if(!$siblings_result)
-	echo "<p><strong>Sibling: None</strong></p>";
-else
-{
-	while($row = mysqli_fetch_assoc($siblings_result))
-	{
-		?>
-		<p>
-		<strong>Sibling :</strong>
-		<?php
-		echo "<a href=edit-sched.php?id=".$row['s_id'].">";
 
-		$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$row['s_id']}"));
-		echo $sibling_row['name'];
-		echo "</a>";
-		?>
-		</p>
-		<p>
-			<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
-		</p>
-		<p>
-			<strong>Sibling sex:</strong> <?php echo $sibling_row['sex']; ?>
-		</p>
-		<?php
-	}
-}
+</div>
 
-?>
 <h4> Due Payment </h4>
 <form role="form" action="" method="post">
   <div class="form-group">
