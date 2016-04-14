@@ -27,6 +27,17 @@ if(isset($_GET['logout']))
 	exit;
 }
 
+if(isset($_SESSION['username'])) {
+	//$db_host already set
+	$row = mysqli_fetch_assoc(mysqli_query($link_root, "SELECT db, db_user, db_pass FROM doctors WHERE username = '".$_SESSION['username']."'"));
+	$db_user = $row['db_user'];
+	$db_pass = $row['db_pass'];
+	$db_database = $row['db'];
+	$link = mysqli_connect($db_host, $db_user, $db_pass, $db_database) or die('Unable to establish DB connection');
+
+	mysqli_query($link_root, "SET names UTF8");
+}
+
 ?>
 <!DOCTYPE html>
 <link rel="shortcut icon" href="http://www.drmahima.com/favicon.ico" />
