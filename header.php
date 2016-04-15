@@ -69,9 +69,6 @@ switch($currentFile)
 	case "vaccine.php":
 	$title = "Add New Vaccine";
 	break;
-	case "schedule.php":
-	$title = "Schedule vaccination for patients";
-	break;
 	case "edit-sched.php":
 	$title = "Edit vaccination schedule";
 	break;
