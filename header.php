@@ -167,9 +167,14 @@ function countMessages(e)
 {
 	var i, len, inputs = document.getElementsByTagName("input");
 	var checked_num = 0;
+	var patientIDList = [];
     for (i = 0, len = inputs.length; i < len; i++) {
         if (inputs[i].type === "checkbox" && inputs[i].checked)
         {
+        	if($.inArray(inputs[i].getAttribute("patientID"), patientIDList) == -1)
+        		patientIDList.push(inputs[i].getAttribute("patientID"));
+        	else
+        		continue;
         	if(inputs[i].getAttribute("phoneCount") == 2)
         		checked_num += 2;
         	else if(inputs[i].getAttribute("phoneCount") == 1)

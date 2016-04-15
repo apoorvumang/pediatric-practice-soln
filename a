@@ -1,0 +1,25 @@
+Path f(Graph g, Node a, Node b) {
+	
+}
+
+f returns the shortest path between a and b in graph g
+
+int length(Path p)
+
+
+
+
+void f(Point p, Colour c) {
+	p.setColour(c);
+	for(int i = -1; i <= 1; ++i) {
+		for(int j = -1; j <= 1; ++j) {
+			Point a = p;
+			a.x += i;
+			a.y += j;
+			if(isValid(a) && a.getColour()!=c)
+				f(a, c);
+		}
+	}
+	return;
+}
+
