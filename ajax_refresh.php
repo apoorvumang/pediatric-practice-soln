@@ -7,7 +7,7 @@ $result =  mysqli_query($link, "SELECT name, id FROM patients WHERE name LIKE \"
 while($row = mysqli_fetch_assoc($result))
 {
 	if($_POST['myid'] != $row['id'])
-		echo "<li onclick=\"set_item('".$row['id']."');\">".$row['name']."</li>";
+		echo "<li onclick=\"set_item('".$row['id']."');\">".$row['id']." ".$row['name']."</li>";
 }
 // echo $var;
 // echo "SELECT name, id FROM patients WHERE name LIKE \"%".$_POST["keyword"]."%\"";
