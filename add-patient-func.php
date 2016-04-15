@@ -90,8 +90,13 @@ function prePatient(&$patient_var)
 
 
 function populateSibling($oldPatientID, $newPatientID) {
+	global $link;
 	$query = "UPDATE patients p1, patients p2 SET p1.phone = p2.phone, p1.phone2 = p2.phone2, p1.father_name = p2.father_name, p1.father_occ = p2.father_occ, p1.mother_name = p2.mother_name, p1.mother_occ = p2.mother_occ, p1.address = p2.address, p1.email = p2.email, p1.email2 = p2.email2 WHERE p1.id = {$newPatientID} AND p2.id = {$oldPatientID};";
-	return mysqli_query($link, $query);
+	$result = mysqli_query($link, $query);
+	if($result)
+		return true;
+	else
+		return false;
 }
 
 
@@ -262,7 +267,10 @@ function editPatient($patient_var)
 					$newPatientID = $patient_var['add_sibling'];
 					$oldPatientID = $patient_var['id'];
 				}
-				if(!populateSibling($oldPatientID, $newPatientID)) {
+				if(populateSibling($oldPatientID, $newPatientID)) {
+					$_SESSION['msg']['reg-success'] = $_SESSION['msg']['reg-success']."<br>Sibling populated!";
+				}
+				else {
 					$err[] = 'Error populating sibling';
 				}
 			}
