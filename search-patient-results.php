@@ -83,7 +83,7 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 			<?php if($row['phone2']) echo "<br />" + $row['phone2']; ?>
 		</td>
 		<td>
-			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> phoneCount= <?php if($row['phone2']) echo "2"; else echo "1"; ?> />
+			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> phoneCount= <?php if($row['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $row['id'];?>/>
 		</td>
 	</tr>
 <?php 
