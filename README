@@ -1,7 +1,0 @@
-This is a database management website for managing vaccination schedules.
-  Features include:
-  1. Auto vaccination schedule generation
-  2. SMS sending service
-To be used with sample database mummy_software.sql
-Update: sample database updated.
-Username is demo, password is password.
