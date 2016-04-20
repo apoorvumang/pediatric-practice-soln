@@ -21,8 +21,8 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 		$_POST['todate'] = mysqli_real_escape_string($link, $_POST['todate']);
 		$_POST['fromdate'] = date('Y-m-d', strtotime($_POST['fromdate']));
 		$_POST['fromdate'] = mysqli_real_escape_string($link, $_POST['fromdate']);
-
-		$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE date_given >='{$_POST['fromdate']}' AND date_given <='{$_POST['todate']}' AND given='Y' ORDER BY date_given, p_id");
+		$result = mysqli_query($link, "SELECT p.id as pid, p.name as pname, v.name as vname, vm.name as vmname, vs.date_given, p.phone, p.phone2 FROM patients p, vaccines v, vac_make vm, vac_schedule vs WHERE vs.date_given <='{$_POST['todate']}' AND vs.date_given >= '{$_POST['fromdate']}' AND vs.given='Y' AND p.id = vs.p_id AND v.id = vs.v_id AND vm.id = vs.make");
+		
 		$nrows = mysqli_num_rows($result);
 	}
 	else if($_POST['patientsearch'])
