@@ -231,12 +231,7 @@ function editPatient($patient_var)
 			$err[]='An unknown error has occured.';
 		if($patient_var['delete_siblings'])
 		{
-			$total_string = "(";
-			foreach ($patient_var['delete_siblings'] as $key => $value) {
-				$total_string = $total_string.$value.",";
-			}
-			$total_string = $total_string.$patient_var['id'].")";
-			if(mysqli_query($link, "DELETE FROM siblings WHERE (s_id IN {$total_string}) AND (p_id IN {$total_string})"))
+			if(mysqli_query($link, "DELETE FROM siblings WHERE p_id = {$patient_var['id']} OR s_id = {$patient_var['id']}"))
 			{
 				$_SESSION['msg']['reg-success'] = $_SESSION['msg']['reg-success']."<br>Sibling(s) deleted!";
 			}
@@ -245,16 +240,32 @@ function editPatient($patient_var)
 		}
 		if($patient_var['add_sibling'] > 0)
 		{
-			$siblings_result = mysqli_query($link, "SELECT * FROM siblings WHERE p_id = {$patient_var['id']}");
+			// get sibling lists for both patients
+			// add patients to those lists also
+			// cross multiply and insert if not exists
+			$result1 = mysqli_query($link, "SELECT * FROM siblings WHERE p_id = {$patient_var['id']}");
+			$result2 = mysqli_query($link, "SELECT * FROM siblings WHERE p_id = {$patient_var['add_sibling']}");
 			$total_string = " ";
-			while($row = mysqli_fetch_assoc($siblings_result))
+			$arr1 = [];
+			$arr2 = [];
+			while($row = mysqli_fetch_assoc($result1))
 			{
-				$total_string = $total_string."(".$row['s_id'].",".$patient_var['add_sibling']."),";
-				$total_string = $total_string."(".$patient_var['add_sibling'].",".$row['s_id']."),";
+				$arr1[] = $row['s_id'];
 			}
-			$total_string = $total_string."(".$patient_var['id'].",".$patient_var['add_sibling']."),";
-			$total_string = $total_string."(".$patient_var['add_sibling'].",".$patient_var['id'].")";
-			if(mysqli_query($link, "INSERT INTO siblings(p_id, s_id) VALUES ".$total_string))
+			while($row = mysqli_fetch_assoc($result2))
+			{
+				$arr2[] = $row['s_id'];
+			}
+			$arr1[] = $patient_var['id'];
+			$arr2[] = $patient_var['add_sibling'];
+			foreach ($arr1 as $key1 => $value1) {
+				foreach ($arr2 as $key2 => $value2) {
+					$total_string = $total_string."(".$value1.",".$value2."),";
+					$total_string = $total_string."(".$value2.",".$value1."),";
+				}
+			}
+			$total_string = rtrim($total_string, ",");
+			if(mysqli_query($link, "INSERT IGNORE INTO siblings(p_id, s_id) VALUES ".$total_string))
 			{
 				$_SESSION['msg']['reg-success'] = $_SESSION['msg']['reg-success']."<br>Sibling added!";
 				$oldPatientID = 0;

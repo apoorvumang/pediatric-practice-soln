@@ -209,19 +209,21 @@ function set_item(item) {
 		<input type="text" name="obstetrician" id="obstetrician" <?php echo "value=\"{$patient['obstetrician']}\""; ?> />
 	</p>
 	<p>
-		<label for="delete_siblings">Delete siblings:&nbsp;&nbsp;</label>
+		<label>Current siblings:&nbsp;&nbsp;</label>
+		
 		<ul style=" list-style-type: none;">
 		<?php
 			while($sibling = mysqli_fetch_assoc($siblings_result))
 			{
 			?>
 				<li>
-				<label><input type="checkbox" name="delete_siblings[]" <?php echo "value=\"{$sibling['s_id']}\""; ?>  >
-				<?php echo "{$sibling['name']}"; ?></label>
+				<?php echo "{$sibling['name']}"; ?>
 				</li>
 			<?php
 			} ?>
 		</ul>
+		<input type="checkbox" name="delete_siblings" id="delete_siblings"/>
+		<label for="delete_siblings">Delete all siblings? </label>
 	</p>
 	<!-- <p> -->
 	<div class="clear input_container">
