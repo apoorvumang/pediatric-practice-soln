@@ -103,9 +103,11 @@ if($_POST['vac_date'])
 	}
 } else if ($_POST['delete_due']) {
 	foreach ($_POST['delete_due'] as $key => $value) {
-		if(!mysqli_query($link, 
-		"DELETE FROM payment_due WHERE id = {$value};"))
-		$err[] = "Unknown error";
+		date('j M Y');
+		$query = "UPDATE payment_due SET paid = 'Y', date_paid = '".date('Y-m-d')."' WHERE id = {$value};";
+		echo $query;
+		if(!mysqli_query($link, $query))
+			$err[] = "Unknown error";
 	}
 	if(!$err)
 	{
@@ -131,7 +133,7 @@ if($_GET['id'])
 	$temp_nrows = mysqli_num_rows($temp_result);
 ?>
 <?php 
-	$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} ORDER BY date;");
+	$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} AND paid = 'N' ORDER BY date;");
 	$total = 0;
 	while ($row = mysqli_fetch_assoc($result)) {
 		$total += $row['amount'];
@@ -365,7 +367,7 @@ else
 	<th>Delete</th>
 </tr>
 <?php
-	$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} ORDER BY date;");
+	$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} AND paid = 'N' ORDER BY date;");
 	$i=1;
 	$total = 0;
 	while($row = mysqli_fetch_assoc($result)) {

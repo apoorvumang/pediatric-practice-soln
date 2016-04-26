@@ -22,7 +22,7 @@ if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 	}
 }
 
-$result = mysqli_query($link, "SELECT pd.id as pd_id, p.name as name, p.phone as phone, p.phone2 as phone2, pd.p_id as id, pd.date as date, pd.amount as amount, pd.comment as comment FROM patients p, payment_due pd WHERE p.id = pd.p_id ORDER BY pd.date");
+$result = mysqli_query($link, "SELECT pd.id as pd_id, p.name as name, p.phone as phone, p.phone2 as phone2, pd.p_id as id, pd.date as date, pd.amount as amount, pd.comment as comment FROM patients p, payment_due pd WHERE p.id = pd.p_id AND pd.paid = 'N' ORDER BY pd.date");
 ?>
 <h3>Payments Due</h3>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" role="form">
