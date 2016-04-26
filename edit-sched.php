@@ -105,7 +105,6 @@ if($_POST['vac_date'])
 	foreach ($_POST['delete_due'] as $key => $value) {
 		date('j M Y');
 		$query = "UPDATE payment_due SET paid = 'Y', date_paid = '".date('Y-m-d')."' WHERE id = {$value};";
-		echo $query;
 		if(!mysqli_query($link, $query))
 			$err[] = "Unknown error";
 	}
