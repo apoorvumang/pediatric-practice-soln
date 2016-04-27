@@ -1,6 +1,6 @@
 <?php include('header.php');
 include_once('fpdf/fpdf.php');
-include_once('patient/pdf-functions.php');
+include_once('pdf-functions.php');
 require 'PHPMailer/PHPMailerAutoload.php';
 if($_GET['id'])
 {
