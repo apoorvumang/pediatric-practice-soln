@@ -7,5 +7,5 @@ the doctor to enter vaccination dates which is just not feasible.
 
 Demo
 ====
-1. Go to www.drmahima.com
+1. Go to www.pedsoft-demo.com
 2. Login with username ```demo``` password ```demo```
