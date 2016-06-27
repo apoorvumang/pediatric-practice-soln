@@ -15,7 +15,7 @@ if(isset($_SESSION['username'])) {
 	$dr_phone = $row['phone'];
 	$dr_email_sms = $row['email_sms'];
 	$link = mysqli_connect($db_host, $db_user, $db_pass, $db_database) or die('Unable to establish DB connection');
-
+	
 	mysqli_query($link_root, "SET names UTF8");
 }
 ?>

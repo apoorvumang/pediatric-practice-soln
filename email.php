@@ -27,11 +27,11 @@ if($_GET['id'])
 				$message =  $message."<tr><td>".date('j M Y',strtotime($row['date']))."</td><td>".$vac['name']."</td></tr>";
 		}
 		$message = $message."</table><br>";
-		$message .= "Regards<br>" + $dr_name;
+		$message .= "Regards<br>".$dr_name;
 
 		$headers = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
-		$headers .= "From: " + $dr_name +" <" + $dr_email + ">\r\n";
+		$headers .= "From: ".$dr_name." <".$dr_email.">\r\n";
 		if(mail($patient['email'], $subject, $message, $headers)) {
 			echo 'success';
 		}
@@ -46,7 +46,7 @@ if($_GET['id'])
 		$email->From      = $dr_email;
 		$email->FromName  = $dr_name;
 		$email->Subject   = 'Vaccination history';
-		$email->Body      = "Dear ".$patient['name']."\n\nPlease find attached your vaccination history\n\nRegards\n" + $dr_name;
+		$email->Body      = "Dear ".$patient['name']."\n\nPlease find attached your vaccination history\n\nRegards\n".$dr_name;
 		$message = $email->Body;
 		$email->AddAddress( $patient['email'] );
 		if($patient['email2'])

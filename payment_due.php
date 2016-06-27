@@ -7,7 +7,7 @@ if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT p.name, p.phone, p.phone2, pd.date, pd.amount, pd.comment from patients p, payment_due pd where p.id = pd.p_id and p.id = {$value};"));
 		if(isset($_POST['sendautosms']))
 		{
-			$message = "Dear {$patient['name']} \nYou have Rs.{$patient['amount']} payment due for {$patient['comment']} done on ".date('d M Y', strtotime($patient['date']))."\n" + $dr_name + "\n" + $dr_phone;
+			$message = "Dear {$patient['name']} \nYou have Rs.{$patient['amount']} payment due for {$patient['comment']} done on ".date('d M Y', strtotime($patient['date']))."\n" .$dr_name."\n".$dr_phone;
 		}
 		else if(isset($_POST['sendcustomsms']))
 		{
