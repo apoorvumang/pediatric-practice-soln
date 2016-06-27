@@ -178,11 +178,11 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 		{
 			if(strtotime($row['date']) < strtotime("now"))	//If date has passed
 			{
-				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination\nDr. Mahima\n9811129950";
+				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination\n" + $dr_name + "\n" + $dr_phone;
 			}
 			else
 			{
-				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination on ".date('j M Y',strtotime($row['date']))."\nDr. Mahima\n9811129950";
+				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination on ".date('j M Y',strtotime($row['date'])) + $dr_name + "\n" + $dr_phone
 			}
 		}
 		else
@@ -193,9 +193,9 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 		if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
 			if($row['phone'])
-				mail("sms@drmahima.com", $row['phone'], $message);
+				mail($dr_email_sms, $row['phone'], $message);
 			if($row['phone2'])
-				mail("sms@drmahima.com", $row['phone2'], $message);
+				mail($dr_email_sms, $row['phone2'], $message);
 			echo "SMS sent to {$row['pname']} <br>";
 		}
 
@@ -203,7 +203,7 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 		{
 			if($row['email'])
 			{
-				mail($row['email'], 'Vaccination Due - Dr. Mahima', $message, "From: mahima@drmahima.com\n");
+				mail($row['email'], 'Vaccination Due - ' + $dr_name, $message, "From: " + $dr_email + "\n");
 				echo "Email sent to {$row['pname']} <br>";
 			}
 			else
