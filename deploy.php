@@ -30,6 +30,7 @@
 
 	// Make it pretty for manual user access (and why not?)
 ?>
+
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
