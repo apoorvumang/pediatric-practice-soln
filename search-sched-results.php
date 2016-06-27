@@ -182,7 +182,7 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 			}
 			else
 			{
-				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination on ".date('j M Y',strtotime($row['date'])) .$dr_name."\n".$dr_phone
+				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination on ".date('j M Y',strtotime($row['date'])) .$dr_name."\n".$dr_phone;
 			}
 		}
 		else
