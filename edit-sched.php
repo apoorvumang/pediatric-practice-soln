@@ -240,10 +240,20 @@ END;
 </td>
 <td>
 <p>
-<strong>Father's name :</strong> <?php echo $patient['father_name'].", ".$patient['father_occ']; ?>
+<strong>Father's name :</strong> 
+<?php echo $patient['father_name'];
+	  if($patient['father_occ']) {
+	  	echo ", ".$patient['father_occ'];
+	  }
+?>
 </p>
 <p>
-<strong>Mother's name :</strong> <?php echo $patient['mother_name'].", ".$patient['mother_occ'];?>
+<strong>Mother's name :</strong>
+<?php echo $patient['mother_name'];
+	  if($patient['mother_occ']) {
+	  	echo ", ".$patient['mother_occ'];
+	  }
+?>
 </p>
 
 <p>
