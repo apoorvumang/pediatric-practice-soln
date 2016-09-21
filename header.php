@@ -115,9 +115,9 @@ echo $title;
 
 <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
 <!-- datepicker things from jqueryui -->
-<link type="text/css" href="jquery-ui-1.11.2/jquery-ui.min.css" rel="stylesheet" />
-<script type="text/javascript" src="jquery-ui-1.11.2/external/jquery/jquery.js"></script>
-<script type="text/javascript" src="jquery-ui-1.11.2/jquery-ui.min.js"></script>
+<link type="text/css" href="jquery-ui-1.12.1.custom/jquery-ui.min.css" rel="stylesheet" />
+<script type="text/javascript" src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+<script type="text/javascript" src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript">
 
 function uncheckAll()
