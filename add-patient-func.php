@@ -113,6 +113,7 @@ function addPatient($patient_var)
 		$patient_var['name'] = mysqli_real_escape_string($link, $patient_var['name']);
 		$patient_var['phone'] = mysqli_real_escape_string($link, $patient_var['phone']);
 		$patient_var['dob'] = mysqli_real_escape_string($link, $patient_var['dob']);
+		$patient_var['note'] = mysqli_real_escape_string($link, $patient_var['note']);
 
 		// Escape the input data
 		if(mysqli_query($link, "INSERT INTO patients(name,first_name,last_name,email,email2,dob,phone,phone2,sex,father_name,father_occ,mother_name,mother_occ,address,
@@ -144,6 +145,20 @@ function addPatient($patient_var)
 		{
 			$new_patient_id = mysqli_insert_id($link);
 			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
+			// add not for patient if it exists
+			if($patient_var['note']) {
+				$q =  "INSERT into notes(p_id, date, note)
+						VALUES(
+						{$new_patient_id},
+						'".date("Y-m-d")."',
+						'{$patient_var['note']}')";
+				if(mysqli_query($link, $q)) {
+					$_SESSION['msg']['reg-success']="Note successfully added!";
+				} else {
+					
+					$err[] = "Error in adding note. Query: ".$q;
+				}
+			}
 			if($patient_var['add_sibling']!=0)
 			{
 				$siblings_result = mysqli_query($link, "SELECT * FROM siblings WHERE p_id = {$patient_var['add_sibling']}");

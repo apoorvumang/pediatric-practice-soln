@@ -76,7 +76,8 @@ function set_item(item) {
 
 $( function() {
 	$( "#accordion" ).accordion({
-		heightStyle: "content"
+		heightStyle: "content",
+		collapsible: true
 	});
 } );
 
@@ -119,6 +120,11 @@ $( function() {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<label for="phone2">Phone number 2:&nbsp;&nbsp;</label>
 				<input type="text" name="phone2" id="phone2"  />
+			</p>
+
+			<p>
+				<label for="note">Notes: &nbsp;&nbsp;</label>
+				<textarea name="note" id="note" rows=3 cols=90></textarea>
 			</p>
 
 		</div>

@@ -49,395 +49,482 @@ if($_POST['vac_date'])
 		else
 		{
 			if($value!=$_POST['vac_given_date_hidden'][$key])	//if value changed
-				if(!mysqli_query($link, "UPDATE vac_schedule SET date_given='', given='N' WHERE id={$_POST['vac_sched_id'][$key]}"))
+			if(!mysqli_query($link, "UPDATE vac_schedule SET date_given='', given='N' WHERE id={$_POST['vac_sched_id'][$key]}"))
 					$err[] = "Unknown error";	//set given date to null, set given to N
+			}
 		}
-	}
-	foreach ($_POST['vac_date'] as $key => $value) {
+		foreach ($_POST['vac_date'] as $key => $value) {
 		//if changed
-		if($value!=$_POST['vac_date_hidden'][$key])
-		{
-			$value =date('Y-m-d', strtotime($value));
-			if(!mysqli_query($link, "UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_sched_id'][$key]}"))
-				$err[] = "Unknown error";
+			if($value!=$_POST['vac_date_hidden'][$key])
+			{
+				$value =date('Y-m-d', strtotime($value));
+				if(!mysqli_query($link, "UPDATE vac_schedule SET date='{$value}', make={$_POST['make'][$key]} WHERE id={$_POST['vac_sched_id'][$key]}"))
+					$err[] = "Unknown error";
+			}
 		}
-	}
-	foreach ($_POST['make'] as $key => $value) {
+		foreach ($_POST['make'] as $key => $value) {
 		//if changed
-		if($value!=$_POST['make_hidden'][$key])
-		{
-			if(!mysqli_query($link, "UPDATE vac_schedule SET make={$value} WHERE id={$_POST['vac_sched_id'][$key]}"))
-				$err[] = "Unknown error";
+			if($value!=$_POST['make_hidden'][$key])
+			{
+				if(!mysqli_query($link, "UPDATE vac_schedule SET make={$value} WHERE id={$_POST['vac_sched_id'][$key]}"))
+					$err[] = "Unknown error";
+			}
 		}
-	}
-	foreach ($_POST['given'] as $key => $value) {
-		if($value=='Y')
-		{
-			if(!mysqli_query($link, "UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_sched_id'][$key]}"))
-				$err[] = "Unknown error";
+		foreach ($_POST['given'] as $key => $value) {
+			if($value=='Y')
+			{
+				if(!mysqli_query($link, "UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_sched_id'][$key]}"))
+					$err[] = "Unknown error";
+			}
 		}
-	}
-	if(!$err)
-	{
-		echo "Changes saved successfully!";
-	}
-	else
-	{
-		implode($err_total, $err);
-		echo $err_total;
-	}
-} else if ($_POST['payment_date']) {
-	$value = date('Y-m-d', strtotime($_POST['payment_date']));
-	
-	if(!mysqli_query($link, 
-		"INSERT INTO payment_due (p_id, date, amount, comment)VALUES ({$_GET['id']}, '{$value}', {$_POST['payment_amount']}, '{$_POST['payment_comment']}');"))
-		$err[] = "Unknown error";
-	if(!$err)
-	{
-		echo "Changes saved successfully!";
-	}
-	else
-	{
-		implode($err_total, $err);
-		echo $err_total;
-	}
-} else if ($_POST['delete_due']) {
-	foreach ($_POST['delete_due'] as $key => $value) {
-		date('j M Y');
-		$query = "UPDATE payment_due SET paid = 'Y', date_paid = '".date('Y-m-d')."' WHERE id = {$value};";
-		if(!mysqli_query($link, $query))
-			$err[] = "Unknown error";
-	}
-	if(!$err)
-	{
-		echo "Deleted due payments successfully!";
-	}
-	else
-	{
-		implode($err_total, $err);
-		echo $err_total;
-	}
-}
-if($_GET['id'])
-{
-	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
-	$siblings_result = mysqli_query($link, "SELECT * FROM siblings WHERE p_id = {$_GET['id']}");
-	if(!$patient)
-	{
-		echo "<h3>No patient with given ID found</h3>";
-		include("footer.php");
-		exit;
-	}
-	$temp_result = mysqli_query($link, "SELECT id FROM vaccines WHERE 1");
-	$temp_nrows = mysqli_num_rows($temp_result);
-?>
-<?php 
-	$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} AND paid = 'N' ORDER BY date;");
-	$total = 0;
-	while ($row = mysqli_fetch_assoc($result)) {
-		$total += $row['amount'];
-	}
-	if ($total > 0) {
-	echo <<<END
-	<marquee id="flash_text" >
-<h3><font color="red"><strong>Due amount: Rs. {$total}!</strong></font></h3>
-</marquee>
-END;
-		
-	}
-	
-?>
-<script type="text/javascript">
-	function checkRed()
-	{
-		var array = document.getElementsByTagName("input");
-		for(var ii = 0; ii < array.length; ii++)
+		if(!$err)
 		{
-		   if(array[ii].type == "checkbox")
-		   {
-		      if(array[ii].className == "focus_red")
-		       {
-		        array[ii].checked = true;
-		       }
-		   }
+			echo "Changes saved successfully!";
 		}
-	};
-
-	$(document).ready(function(){
-		$("#advanced-info").hide();
-	    $("#hide").click(function(){
-	        $("#advanced-info").hide();
-	    });
-	    $("#show").click(function(){
-	        $("#advanced-info").show();
-	    });
-	});
-
-
-	<?php for ($i=0; $i < $temp_nrows; $i++) { ?>
-
-			$(function() {
-				$( <?php echo "\"#vac_given_date".$i."\""; ?> ).datepicker({
-					changeMonth: true,
-					changeYear: true,
-					yearRange: "1970:2032",
-					dateFormat:"d M yy"
-				});
-			});
-			$(function() {
-				$( <?php echo "\"#vac_date".$i."\""; ?> ).datepicker({
-					changeMonth: true,
-					changeYear: true,
-					yearRange: "1970:2032",
-					dateFormat:"d M yy"
-				});
-			});
-			
-	<?php } 
-	unset($temp_result);
-	unset($temp_nrows); 
-	?>
-	$(function() {
-				$("#payment_date").datepicker({
-					changeMonth: true,
-					changeYear: true,
-					yearRange: "1970:2032",
-					dateFormat:"d M yy"
-				});
-			});
-</script>
-
-<h4>Patient Information</h4>
-<div style="float:right"> <a href= <?php echo "editpatient.php?id={$patient['id']}" ?> ><strong> Edit patient </strong> </a></div>
-<p>
-	<strong><a href=<?php echo "\""."pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
-</p>
-<p>
-	<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."&normal=1\"" ?>>Send upcoming vaccination email</a> </strong>
-</p>
-<p>
-	<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send vaccination history email (print format)</a> </strong>
-</p>
-<h4>
-	<strong>ID: <?php echo $patient['id'] ?> </strong>
-</h4>
-
-<table style="margin: 0px 0px 0px 0px;border:none;">
-<tr>
-<td>
-<p>
-<strong>Name :</strong> <?php echo $patient['name']; ?>
-</p>
-<p>
-<strong>Date of Birth :</strong> <?php echo  date('d-F-Y', strtotime($patient['dob'])); ?>
-</p>
-<p>
-<strong>Sex :</strong> <?php echo $patient['sex']; ?>
-</p>
-<p>
-<strong>Phone:</strong> <?php echo $patient['phone']; ?>
-</p>
-</td>
-<td>
-<p>
-<strong>Father's name :</strong> 
-<?php echo $patient['father_name'];
-	  if($patient['father_occ']) {
-	  	echo ", ".$patient['father_occ'];
-	  }
-?>
-</p>
-<p>
-<strong>Mother's name :</strong>
-<?php echo $patient['mother_name'];
-	  if($patient['mother_occ']) {
-	  	echo ", ".$patient['mother_occ'];
-	  }
-?>
-</p>
-
-<p>
-<strong>Active :</strong> <?php if($patient['active']==1) echo "<font color=green><strong>Yes</strong></font>"; else echo "<font color=red><strong>No</strong></font>"; ?>
-</p>
-</td>
-</tr>
-</table>
-
-<?php
-if(!$siblings_result)
-	echo "<p><strong>Sibling: None</strong></p>";
-else
-{
-	while($row = mysqli_fetch_assoc($siblings_result))
-	{
-		?>
-		<p>
-		<strong>Sibling :</strong>
-		<?php
-		echo "<a href=edit-sched.php?id=".$row['s_id'].">";
-
-		$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$row['s_id']}"));
-		echo $sibling_row['name'];
-		echo "</a>";
-		?>
-		</p>
-		<p>
-			<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
-		</p>
-		<p>
-			<strong>Sibling sex:</strong> <?php echo $sibling_row['sex']; ?>
-		</p>
-		<?php
-	}
-}
-
-?>
-<p>
-<button id="show">Show Advanced</button>
-<button id="hide">Hide Advanced</button>
-</p>
-<div id="advanced-info">
-
-<p>
-<strong><em>Email :</em></strong> <?php echo $patient['email']; ?>
-</p>
-
-<p>
-<strong><em>Email 2:</em></strong> <?php echo $patient['email2']; ?>
-</p>
-
-<p>
-<strong>Birth Weight :</strong> <?php echo $patient['birth_weight']." grams"; ?>
-</p>
-
-<p>
-<strong>Birth Time :</strong> <?php echo $patient['born_at']; ?>
-</p>
-
-<p>
-<strong>Head Circumference :</strong> <?php echo $patient['head_circum']; ?> cm
-</p>
-
-<p>
-<strong>Length :</strong> <?php echo $patient['length']; ?> cm
-</p>
-
-<p>
-<strong>Mode of Delivery :</strong> <?php echo $patient['mode_of_delivery']; ?>
-</p>
-
-<p>
-<strong>Gestation :</strong> <?php echo $patient['gestation']; ?>
-</p>
-<p>
-<strong>Address :</strong> <?php echo $patient['address']; ?>
-</p>
-
-<p>
-<strong>Phone 2:</strong> <?php echo $patient['phone2']; ?>
-</p>
-
-<p>
-<strong>Obstetrician :</strong> <?php echo $patient['obstetrician']; ?>
-</p>
-<p>
-<strong>Place of Birth :</strong> <?php echo $patient['place_of_birth']; ?>
-</p>
-<p>
-<strong>Date of Registration :</strong> <?php echo date('d-F-Y', strtotime($patient['date_of_registration'])); ?>
-</p>
-
-</div>
-
-<h4> Due Payment </h4>
-<form role="form" action="" method="post">
-  <div class="form-group">
-    <label for="payment_amount">Amount:</label>
-    <input type="number" class="form-control" id="payment_amount" name="payment_amount">
-  </div>
-  <div class="form-group">
-    <label for="payment_date">Date:</label>
-    <!-- <input type="text" class="form-control" id="due_date" name="due_date"> -->
-		<input type="text" name="payment_date" style="width:80px" id="payment_date" value=<?php echo "\"".date('j M Y')."\"";?>/>
-  </div>
-  <div class="form-group">
-    <label for="payment_comment">Comment:</label>
-    <input type="textbox" id="payment_comment" name="payment_comment"> </label>
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
-<form role="form" action="" method="post">
-<table border="1">
-<tr>
-	<th>S.No.</th>
-	<th>Amount</th>
-	<th>Date</th>
-	<th>Comment</th>
-	<th>Delete</th>
-</tr>
-<?php
-	$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} AND paid = 'N' ORDER BY date;");
-	$i=1;
-	$total = 0;
-	while($row = mysqli_fetch_assoc($result)) {
-		$total += $row['amount'];
-		?>
-		<tr>
-			<td><?php echo "{$i}"; $i += 1; ?>  </td>
-			<td><?php echo "{$row['amount']}";?> </td>
-			<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
-			<td><?php echo $row['comment']?> </td>
-			<td><?php echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_due[]\">";?>
-			</td>
-		</tr>
-	<?php } ?>
-	
-</table>
-<p>
-	<?php echo "Total = Rs. {$total}"; ?>
-</p>
-<button type="submit" class="btn btn-default">Delete checked</button>
-</form>
-
-<h4>Schedule</h4>
-<form name="myform" action="" method="post" style="width:800px;background:none;border:none">
-<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
-<input type="submit" name="submit" value="Save Changes" />
-<br />
-<input type="button" name="CHECKRED" value="Check vaccines which cannot be given now" onClick="checkRed()" />
-<input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" />
-<table>
-	<tbody>
-		<tr>
-			<th>Given</th>
-			<th>Vaccine</th>
-			<th>Sched Date</th>
-			<th>Given Date</th>
-			<th>Lower Limit</th>
-			<th>Upper Limit</th>
-			<th>Product Name</th>
-			<th>Remove</th>
-		</tr>
-
-	<?php
-	$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date, v_id");
-	//To show lower and upper limit, we add them to birth date 
-	$count = 0;
-	while($row = mysqli_fetch_assoc($result))
-	{
-		$vac = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE id = {$row['v_id']}"));
-		$temp_nofdays = "+".$vac['lower_limit']." days";
-		$lower_limit = date('d-F-Y', strtotime($temp_nofdays, strtotime($patient['dob'])));
-		if($vac['upper_limit'] > 36500)
-			$upper_limit = "None";
 		else
 		{
-			$temp_nofdays = "+".$vac['upper_limit']." days";
-			$upper_limit = date('d-F-Y', strtotime($temp_nofdays, strtotime($patient['dob'])));
+			implode($err_total, $err);
+			echo $err_total;
 		}
-		echo "<tr ";
-		if ($row['given']=='Y')
+	} else if ($_POST['payment_date']) {
+		$value = date('Y-m-d', strtotime($_POST['payment_date']));
+
+		if(!mysqli_query($link, 
+			"INSERT INTO payment_due (p_id, date, amount, comment)VALUES ({$_GET['id']}, '{$value}', {$_POST['payment_amount']}, '{$_POST['payment_comment']}');"))
+			$err[] = "Unknown error";
+		if(!$err)
 		{
+			echo "Changes saved successfully!";
+		}
+		else
+		{
+			implode($err_total, $err);
+			echo $err_total;
+		}
+	} else if ($_POST['delete_due']) {
+		foreach ($_POST['delete_due'] as $key => $value) {
+			date('j M Y');
+			$query = "UPDATE payment_due SET paid = 'Y', date_paid = '".date('Y-m-d')."' WHERE id = {$value};";
+			if(!mysqli_query($link, $query))
+				$err[] = "Unknown error";
+		}
+		if(!$err)
+		{
+			echo "Deleted due payments successfully!";
+		}
+		else
+		{
+			implode($err_total, $err);
+			echo $err_total;
+		}
+	} else if ($_POST['visit_date']) {
+		$value = date('Y-m-d', strtotime($_POST['visit_date']));
+		$q = "INSERT INTO notes (p_id, date, note) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}');";
+		echo $q;
+		if(!mysqli_query($link, $q))
+			$err[] = "Error adding visit";
+		if(!$err)
+		{
+			echo "Note added  successfully!";
+		}
+		else
+		{
+			implode($err_total, $err);
+			echo $err_total;
+		}
+	} else if ($_POST['delete_visit']) {
+		foreach ($_POST['delete_visit'] as $key => $value) {
+			date('j M Y');
+			$query = "DELETE from notes WHERE id = {$value};";
+			if(!mysqli_query($link, $query))
+				$err[] = "Error while deleting vists";
+		}
+		if(!$err)
+		{
+			echo "Deleted visits successfully!";
+		}
+		else
+		{
+			implode($err_total, $err);
+			echo $err_total;
+		}
+	} 
+	if($_GET['id'])
+	{
+		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
+		$siblings_result = mysqli_query($link, "SELECT * FROM siblings WHERE p_id = {$_GET['id']}");
+		if(!$patient)
+		{
+			echo "<h3>No patient with given ID found</h3>";
+			include("footer.php");
+			exit;
+		}
+		$temp_result = mysqli_query($link, "SELECT id FROM vaccines WHERE 1");
+		$temp_nrows = mysqli_num_rows($temp_result);
+		?>
+		<?php 
+		$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} AND paid = 'N' ORDER BY date;");
+		$total = 0;
+		while ($row = mysqli_fetch_assoc($result)) {
+			$total += $row['amount'];
+		}
+		if ($total > 0) {
+			?>
+			<marquee id="flash_text" >
+				<h3><font color="red"><strong>Due amount: Rs. <?php echo $total; ?>!</strong></font></h3>
+			</marquee>
+			<?php
+
+		}
+
+		?>
+		<script type="text/javascript">
+			function checkRed()
+			{
+				var array = document.getElementsByTagName("input");
+				for(var ii = 0; ii < array.length; ii++)
+				{
+					if(array[ii].type == "checkbox")
+					{
+						if(array[ii].className == "focus_red")
+						{
+							array[ii].checked = true;
+						}
+					}
+				}
+			};
+
+			$( function() {
+				$( "#accordion" ).accordion({
+					heightStyle: "content",
+					collapsible: true,
+					active: false
+				});
+			} );
+
+
+			<?php for ($i=0; $i < $temp_nrows; $i++) { ?>
+
+				$(function() {
+					$( <?php echo "\"#vac_given_date".$i."\""; ?> ).datepicker({
+						changeMonth: true,
+						changeYear: true,
+						yearRange: "1970:2032",
+						dateFormat:"d M yy"
+					});
+				});
+				$(function() {
+					$( <?php echo "\"#vac_date".$i."\""; ?> ).datepicker({
+						changeMonth: true,
+						changeYear: true,
+						yearRange: "1970:2032",
+						dateFormat:"d M yy"
+					});
+				});
+
+				<?php } 
+				unset($temp_result);
+				unset($temp_nrows); 
+				?>
+				$(function() {
+					$("#payment_date").datepicker({
+						changeMonth: true,
+						changeYear: true,
+						yearRange: "1970:2032",
+						dateFormat:"d M yy"
+					});
+				});
+				$(function() {
+					$("#visit_date").datepicker({
+						changeMonth: true,
+						changeYear: true,
+						yearRange: "1970:2032",
+						dateFormat:"d M yy"
+					});
+				});
+			</script>
+
+			<h4>Patient Information</h4>
+			<div style="float:right"> <a href= <?php echo "editpatient.php?id={$patient['id']}" ?> ><strong> Edit patient </strong> </a></div>
+			<p>
+				<strong><a href=<?php echo "\""."pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
+			</p>
+			<p>
+				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."&normal=1\"" ?>>Send upcoming vaccination email</a> </strong>
+			</p>
+			<p>
+				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send vaccination history email (print format)</a> </strong>
+			</p>
+			<h4>
+				<strong>ID: <?php echo $patient['id'] ?> </strong>
+			</h4>
+
+			<table style="margin: 0px 0px 0px 0px;border:none;">
+				<tr>
+					<td>
+						<p>
+							<strong>Name :</strong> <?php echo $patient['name']; ?>
+						</p>
+						<p>
+							<strong>Date of Birth :</strong> <?php echo  date('d-F-Y', strtotime($patient['dob'])); ?>
+						</p>
+						<p>
+							<strong>Sex :</strong> <?php echo $patient['sex']; ?>
+						</p>
+						<p>
+							<strong>Phone:</strong> <?php echo $patient['phone']; ?>
+						</p>
+					</td>
+					<td>
+						<p>
+							<strong>Father's name :</strong> 
+							<?php echo $patient['father_name'];
+							if($patient['father_occ']) {
+								echo ", ".$patient['father_occ'];
+							}
+							?>
+						</p>
+						<p>
+							<strong>Mother's name :</strong>
+							<?php echo $patient['mother_name'];
+							if($patient['mother_occ']) {
+								echo ", ".$patient['mother_occ'];
+							}
+							?>
+						</p>
+
+						<p>
+							<strong>Active :</strong> <?php if($patient['active']==1) echo "<font color=green><strong>Yes</strong></font>"; else echo "<font color=red><strong>No</strong></font>"; ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+
+			<?php
+			if(!$siblings_result)
+				echo "<p><strong>Sibling: None</strong></p>";
+			else
+			{
+				while($row = mysqli_fetch_assoc($siblings_result))
+				{
+					?>
+					<p>
+						<strong>Sibling :</strong>
+						<?php
+						echo "<a href=edit-sched.php?id=".$row['s_id'].">";
+
+						$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$row['s_id']}"));
+						echo $sibling_row['name'];
+						echo "</a>";
+						?>
+					</p>
+					<p>
+						<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
+					</p>
+					<p>
+						<strong>Sibling sex:</strong> <?php echo $sibling_row['sex']; ?>
+					</p>
+					<?php
+				}
+			}
+
+			?>
+			<div id="accordion">
+				<h3> Advanced details </h3>
+				<div>
+
+					<p>
+						<strong><em>Email :</em></strong> <?php echo $patient['email']; ?>
+					</p>
+
+					<p>
+						<strong><em>Email 2:</em></strong> <?php echo $patient['email2']; ?>
+					</p>
+
+					<p>
+						<strong>Birth Weight :</strong> <?php echo $patient['birth_weight']." grams"; ?>
+					</p>
+
+					<p>
+						<strong>Birth Time :</strong> <?php echo $patient['born_at']; ?>
+					</p>
+
+					<p>
+						<strong>Head Circumference :</strong> <?php echo $patient['head_circum']; ?> cm
+					</p>
+
+					<p>
+						<strong>Length :</strong> <?php echo $patient['length']; ?> cm
+					</p>
+
+					<p>
+						<strong>Mode of Delivery :</strong> <?php echo $patient['mode_of_delivery']; ?>
+					</p>
+
+					<p>
+						<strong>Gestation :</strong> <?php echo $patient['gestation']; ?>
+					</p>
+					<p>
+						<strong>Address :</strong> <?php echo $patient['address']; ?>
+					</p>
+
+					<p>
+						<strong>Phone 2:</strong> <?php echo $patient['phone2']; ?>
+					</p>
+
+					<p>
+						<strong>Obstetrician :</strong> <?php echo $patient['obstetrician']; ?>
+					</p>
+					<p>
+						<strong>Place of Birth :</strong> <?php echo $patient['place_of_birth']; ?>
+					</p>
+					<p>
+						<strong>Date of Registration :</strong> <?php echo date('d-F-Y', strtotime($patient['date_of_registration'])); ?>
+					</p>
+
+				</div>
+
+				<h3> Due Payment </h3>
+				<div>
+					<h4> Add due payment </h4>
+					<form role="form" action="" method="post">
+						<div class="form-group">
+							<label for="payment_amount">Amount:</label>
+							<input type="number" class="form-control" id="payment_amount" name="payment_amount">
+						</div>
+						<div class="form-group">
+							<label for="payment_date">Date:</label>
+							<!-- <input type="text" class="form-control" id="due_date" name="due_date"> -->
+							<input type="text" name="payment_date" style="width:80px" id="payment_date" value=<?php echo "\"".date('j M Y')."\"";?>/>
+						</div>
+						<div class="form-group">
+							<label for="payment_comment">Comment:</label>
+							<input type="textbox" id="payment_comment" name="payment_comment"> </label>
+						</div>
+						<button type="submit" class="btn btn-default">Submit</button>
+					</form>
+					<h4> Previous dues </h4>
+					<form role="form" action="" method="post">
+						<table border="1">
+							<tr>
+								<th>S.No.</th>
+								<th>Amount</th>
+								<th>Date</th>
+								<th>Comment</th>
+								<th>Delete</th>
+							</tr>
+							<?php
+							$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} AND paid = 'N' ORDER BY date;");
+							$i=1;
+							$total = 0;
+							while($row = mysqli_fetch_assoc($result)) {
+								$total += $row['amount'];
+								?>
+								<tr>
+									<td><?php echo "{$i}"; $i += 1; ?>  </td>
+									<td><?php echo "{$row['amount']}";?> </td>
+									<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
+									<td><?php echo $row['comment']?> </td>
+									<td><?php echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_due[]\">";?>
+									</td>
+								</tr>
+								<?php } ?>
+
+							</table>
+							<p>
+								<?php echo "Total = Rs. {$total}"; ?>
+							</p>
+							<button type="submit" class="btn btn-default">Delete checked</button>
+						</form>
+					</div>
+
+					<h3> Visits </h3>
+					<div>
+						<h4> Add visit note</h4>
+						<form role="form" action="" method="post">
+							<div class="form-group">
+								<label for="note">Note:</label>
+								<textarea name="note" id="note" rows=3 cols=70></textarea>
+							</div>
+							<div class="form-group">
+								<label for="visit_date">Date:</label>
+								<!-- <input type="text" class="form-control" id="due_date" name="due_date"> -->
+								<input type="text" name="visit_date" style="width:80px" id="visit_date" value=<?php echo "\"".date('j M Y')."\"";?>/>
+							</div>
+							<br>
+							<button type="submit" class="btn btn-default">Submit</button>
+						</form>
+
+						<h4> Previous visits </h4>
+						<form role="form" action="" method="post">
+							<table border="1">
+								<tr>
+									<th>S.No.</th>
+									<th>Date</th>
+									<th>Note</th>
+									<th>Delete</th>
+								</tr>
+								<?php
+								$result = mysqli_query($link, "SELECT * FROM notes WHERE p_id = {$_GET['id']} ORDER BY date;");
+								$i=1;
+								$total = 0;
+								while($row = mysqli_fetch_assoc($result)) {
+									$total += $row['amount'];
+									?>
+									<tr>
+										<td><?php echo "{$i}"; $i += 1; ?>  </td>
+										<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
+										<td><?php echo "{$row['note']}";?> </td>
+										<td><?php echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";?>
+										</td>
+									</tr>
+									<?php } ?>
+
+								</table>
+								<button type="submit" class="btn btn-default">Delete checked</button>
+							</form>
+						</div>
+					</div>
+
+					<h4>Schedule</h4>
+					<form name="myform" action="" method="post" style="width:800px;background:none;border:none">
+						<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
+						<input type="submit" name="submit" value="Save Changes" />
+						<br />
+						<input type="button" name="CHECKRED" value="Check vaccines which cannot be given now" onClick="checkRed()" />
+						<input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" />
+						<table>
+							<tbody>
+								<tr>
+									<th>Given</th>
+									<th>Vaccine</th>
+									<th>Sched Date</th>
+									<th>Given Date</th>
+									<th>Lower Limit</th>
+									<th>Upper Limit</th>
+									<th>Product Name</th>
+									<th>Remove</th>
+								</tr>
+
+								<?php
+								$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date, v_id");
+	//To show lower and upper limit, we add them to birth date 
+								$count = 0;
+								while($row = mysqli_fetch_assoc($result))
+								{
+									$vac = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE id = {$row['v_id']}"));
+									$temp_nofdays = "+".$vac['lower_limit']." days";
+									$lower_limit = date('d-F-Y', strtotime($temp_nofdays, strtotime($patient['dob'])));
+									if($vac['upper_limit'] > 36500)
+										$upper_limit = "None";
+									else
+									{
+										$temp_nofdays = "+".$vac['upper_limit']." days";
+										$upper_limit = date('d-F-Y', strtotime($temp_nofdays, strtotime($patient['dob'])));
+									}
+									echo "<tr ";
+									if ($row['given']=='Y')
+									{
 			echo "id=\"focus_green\"";	//green focus if vaccine has been given
 			$color_id = "focus_green";
 		}
@@ -460,8 +547,8 @@ else
 		echo "<td>";
 		?>
 		<select name="given[]" style="">
-		<option value='Y' <?php if($row['given']=='Y') echo "selected"; ?> >Y</option>
-		<option value='N' <?php if($row['given']=='N') echo "selected"; ?> >N</option>
+			<option value='Y' <?php if($row['given']=='Y') echo "selected"; ?> >Y</option>
+			<option value='N' <?php if($row['given']=='N') echo "selected"; ?> >N</option>
 		</select>
 		<?php
 		echo "</td>";
@@ -472,21 +559,21 @@ else
 		?>
 
 		<td>
-	<input type="hidden" name="vac_date_hidden[]" value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
-	<input type="text" name="vac_date[]" style="width:80px" <?php echo "id=\"vac_date".$count."\""; ?> value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
+			<input type="hidden" name="vac_date_hidden[]" value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
+			<input type="text" name="vac_date[]" style="width:80px" <?php echo "id=\"vac_date".$count."\""; ?> value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
 		</td>
 
 		<td>
-	<input type="hidden" name="vac_given_date_hidden[]" value=<?php 
-	if($row['date_given']=='0000-00-00'||$row['date_given']=='')
-		echo "\"nil\"";
-	else
-		echo "\"".date('j M Y',strtotime($row['date_given']))."\"";?>/>
-	<input type="text" name="vac_given_date[]" style="width:80px" <?php echo "id=\"vac_given_date".$count."\""; ?> value=<?php 
-	if($row['date_given']=='0000-00-00'||$row['date_given']=='')
-		echo "\"nil\"";
-	else
-		echo "\"".date('j M Y',strtotime($row['date_given']))."\"";?>/>
+			<input type="hidden" name="vac_given_date_hidden[]" value=<?php 
+			if($row['date_given']=='0000-00-00'||$row['date_given']=='')
+				echo "\"nil\"";
+			else
+				echo "\"".date('j M Y',strtotime($row['date_given']))."\"";?>/>
+			<input type="text" name="vac_given_date[]" style="width:80px" <?php echo "id=\"vac_given_date".$count."\""; ?> value=<?php 
+			if($row['date_given']=='0000-00-00'||$row['date_given']=='')
+				echo "\"nil\"";
+			else
+				echo "\"".date('j M Y',strtotime($row['date_given']))."\"";?>/>
 		</td>		
 		<?php
 		echo "<td>";
@@ -500,7 +587,7 @@ else
 			<select name="make[]">
 				<?php
 				$result_make = mysqli_query($link, "SELECT vm.id as id, vm.name as name FROM vac_make vm, vac_to_make vtm WHERE vm.id = vtm.vm_id AND vtm.v_id = {$vac['id']} ORDER BY vm.id ASC");
-								echo $query;
+				echo $query;
 				while($vac_make = mysqli_fetch_assoc($result_make))
 				{
 					echo "<option value=".$vac_make['id'];
@@ -522,7 +609,7 @@ else
 		$count++;
 	}
 	?>
-	</tbody>
+</tbody>
 </table>
 <input type="submit" name="submit" value="Save Changes" />
 <br />
