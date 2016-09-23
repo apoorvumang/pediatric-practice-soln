@@ -204,7 +204,7 @@ if($_POST['vac_date'])
 				$( "#accordion" ).accordion({
 					heightStyle: "content",
 					collapsible: true,
-					active: 2
+					active: 4
 				});
 			} );
 
@@ -305,10 +305,16 @@ if($_POST['vac_date'])
 							<strong>Date of Birth :</strong> <?php echo  date('d-F-Y', strtotime($patient['dob'])); ?>
 						</p>
 						<p>
-							<strong>Sex :</strong> <?php echo $patient['sex']; ?>
+							<strong>Age :</strong>
+							<?php
+								$from = new DateTime($patient['dob']);
+								$to   = new DateTime('today');
+								$age = $from->diff($to);
+								echo $age->y." years ".$age->m." months";
+							?>
 						</p>
 						<p>
-							<strong>Phone:</strong> <?php echo $patient['phone']; ?>
+							<strong>Sex :</strong> <?php echo $patient['sex']; ?>
 						</p>
 					</td>
 					<td>
@@ -328,7 +334,9 @@ if($_POST['vac_date'])
 							}
 							?>
 						</p>
-
+						<p>
+							<strong>Phone:</strong> <?php echo $patient['phone']; ?>
+						</p>
 						<p>
 							<strong>Active :</strong> <?php if($patient['active']==1) echo "<font color=green><strong>Yes</strong></font>"; else echo "<font color=red><strong>No</strong></font>"; ?>
 						</p>
@@ -473,6 +481,8 @@ if($_POST['vac_date'])
 							<button type="submit" class="btn btn-default">Delete checked</button>
 						</form>
 					</div>
+					<h3> Send SMS </h3>
+					<div></div>
 
 					<h3> Visits </h3>
 					<div>
