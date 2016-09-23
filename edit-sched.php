@@ -1,6 +1,6 @@
 <?php include('header.php'); 
-if($_POST['vac_date'])
-{
+
+if($_POST['vac_date']) {
 	$err = array();
 
 	foreach ($_POST['delete_vac'] as $key => $value) {
@@ -147,7 +147,15 @@ if($_POST['vac_date'])
 			implode($err_total, $err);
 			echo $err_total;
 		}
-	} 
+	} else if($_POST['sendsms']) {
+		if($_POST['phone'])
+			mail($dr_email_sms, $_POST['phone'], $_POST['message']);
+		else
+			echo "Problem sending SMS to phone number 1 <br>";
+		if($_POST['phone2'])
+			mail($dr_email_sms, $_POST['phone2'], $_POST['message']);
+		echo "SMS sent! <br>";
+	}
 	if($_GET['id'])
 	{
 		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
@@ -204,7 +212,7 @@ if($_POST['vac_date'])
 				$( "#accordion" ).accordion({
 					heightStyle: "content",
 					collapsible: true,
-					active: 4
+					active: 3
 				});
 			} );
 
@@ -482,7 +490,26 @@ if($_POST['vac_date'])
 						</form>
 					</div>
 					<h3> Send SMS </h3>
-					<div></div>
+					<div>
+						<form role="form" method="post" action="">
+							<div class="form-group">
+								<label for="message">Message:</label>
+								<br />
+								<?php
+									$message = "Address: C-14 Community Centre Naraina Vihar\n"
+									."Phone: +91 9811129950\n"
+									."Timings: Mon to Sat 6.30 to 8.30pm\n"
+									."Dr.Mahima";
+									echo "<textarea name=\"message\" id = \"message\" rows=4 cols=80>".$message."</textarea>";
+								?>
+							</div>
+							<input type="hidden" name="phone" value=<?php echo "\"".$patient['phone']."\""?>>
+							<input type="hidden" name="phone2" value=<?php echo "\"".$patient['phone2']."\""?>>
+							<input type="hidden" name="sendsms" value="1"/>
+							<br />
+							<button type="submit" class="btn btn-default">Send SMS</button>
+						</form>
+					</div>
 
 					<h3> Visits </h3>
 					<div>
