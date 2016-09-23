@@ -178,6 +178,13 @@ if($_POST['vac_date'])
 
 		?>
 		<script type="text/javascript">
+			$(function() {
+			    $("visits_section").pagination({
+			        items: 100,
+			        itemsOnPage: 10,
+			        cssStyle: 'light-theme'
+			    });
+			});
 			function checkRed()
 			{
 				var array = document.getElementsByTagName("input");
@@ -398,7 +405,7 @@ if($_POST['vac_date'])
 						</div>
 						<div class="form-group">
 							<label for="payment_comment">Comment:</label>
-							<input type="textbox" id="payment_comment" name="payment_comment"> </label>
+							<input type="textbox" id="payment_comment" name="payment_comment" style="width:400px"> </label>
 						</div>
 						<button type="submit" class="btn btn-default">Submit</button>
 					</form>
@@ -443,12 +450,13 @@ if($_POST['vac_date'])
 						<form role="form" action="" method="post">
 							<div class="form-group">
 								<label for="note">Note:</label>
+								<br/>
 								<textarea name="note" id="note" rows=3 cols=70></textarea>
 							</div>
 							<div class="form-group">
 								<label for="visit_date">Date:</label>
 								<!-- <input type="text" class="form-control" id="due_date" name="due_date"> -->
-								<input type="text" name="visit_date" style="width:80px" id="visit_date" value=<?php echo "\"".date('j M Y')."\"";?>/>
+								<input type="text" name="visit_date" style="width:80px;margin-left: 20px" id="visit_date" value=<?php echo "\"".date('j M Y')."\"";?>/>
 							</div>
 							<br>
 							<button type="submit" class="btn btn-default">Submit</button>
@@ -461,10 +469,12 @@ if($_POST['vac_date'])
 									<th>S.No.</th>
 									<th>Date</th>
 									<th>Note</th>
+									<th>Vaccinations</th>
 									<th>Delete</th>
 								</tr>
 								<?php
-								$result = mysqli_query($link, "SELECT * FROM notes WHERE p_id = {$_GET['id']} ORDER BY date;");
+								$q = "SELECT null as id, group_concat(v.name order by v.name asc separator ',') as vaccines, vs.date_given as date, null as note FROM vac_schedule vs, vaccines v WHERE vs.p_id = {$_GET['id']} AND NOT vs.date_given = '0000-00-00' AND v.id = vs.v_id GROUP BY vs.date_given UNION SELECT id, null as vaccines, date, note FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
+								$result = mysqli_query($link, $q);
 								$i=1;
 								$total = 0;
 								while($row = mysqli_fetch_assoc($result)) {
@@ -474,7 +484,14 @@ if($_POST['vac_date'])
 										<td><?php echo "{$i}"; $i += 1; ?>  </td>
 										<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
 										<td><?php echo "{$row['note']}";?> </td>
-										<td><?php echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";?>
+										<td><?php echo "{$row['vaccines']}";?> </td>
+										<td><?php 
+										if($row['id']) {
+											echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";
+										} else {
+											echo " ";
+										}
+										?>
 										</td>
 									</tr>
 									<?php } ?>
@@ -486,13 +503,13 @@ if($_POST['vac_date'])
 					</div>
 
 					<h4>Schedule</h4>
-					<form name="myform" action="" method="post" style="width:800px;background:none;border:none">
+					<form name="myform" action="" method="post" style="width:800px;background:none;border:none;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px">
 						<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
 						<input type="submit" name="submit" value="Save Changes" />
 						<br />
 						<input type="button" name="CHECKRED" value="Check vaccines which cannot be given now" onClick="checkRed()" />
 						<input type="button" name="uncheck" value="Uncheck All" onClick="uncheckAll()" />
-						<table>
+						<table style="margin:0px 0px 0px 0px;">
 							<tbody>
 								<tr>
 									<th>Given</th>

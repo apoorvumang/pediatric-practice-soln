@@ -117,10 +117,13 @@ echo $title;
 </title>
 
 <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
+<!-- css for simplePagination  -->
+<link type="text/css" rel="stylesheet" href="css/simplePagination.css"/>
 <!-- datepicker things from jqueryui -->
 <link type="text/css" href="jquery-ui-1.12.1.custom/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery.simplePagination.js"></script>
 <script type="text/javascript">
 
 function uncheckAll()
