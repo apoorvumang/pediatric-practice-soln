@@ -101,22 +101,6 @@ if($_POST['vac_date']) {
 			implode($err_total, $err);
 			echo $err_total;
 		}
-	} else if ($_POST['delete_due']) {
-		foreach ($_POST['delete_due'] as $key => $value) {
-			date('j M Y');
-			$query = "UPDATE payment_due SET paid = 'Y', date_paid = '".date('Y-m-d')."' WHERE id = {$value};";
-			if(!mysqli_query($link, $query))
-				$err[] = "Unknown error";
-		}
-		if(!$err)
-		{
-			echo "Deleted due payments successfully!";
-		}
-		else
-		{
-			implode($err_total, $err);
-			echo $err_total;
-		}
 	} else if ($_POST['visit_date']) {
 		$value = date('Y-m-d', strtotime($_POST['visit_date']));
 		$q = "INSERT INTO notes (p_id, date, note) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}');";
@@ -133,7 +117,6 @@ if($_POST['vac_date']) {
 		}
 	} else if ($_POST['delete_visit']) {
 		foreach ($_POST['delete_visit'] as $key => $value) {
-			date('j M Y');
 			$query = "DELETE from notes WHERE id = {$value};";
 			if(!mysqli_query($link, $query))
 				$err[] = "Error while deleting vists";
@@ -155,6 +138,23 @@ if($_POST['vac_date']) {
 		if($_POST['phone2'])
 			mail($dr_email_sms, $_POST['phone2'], $_POST['message']);
 		echo "SMS sent! <br>";
+	} else if($_POST['save_dues']) {
+		foreach ($_POST['due_paid_date'] as $key => $value) {
+			if($value != 'nil') {
+				$query = "UPDATE payment_due SET paid='Y', date_paid='".date('Y-m-d', strtotime($value))."' WHERE id = ".$_POST['due_paid_id'][$key];
+				if(!mysqli_query($link, $query))
+					$err[] = "Error while saving dues";
+			}
+		}
+		if(!$err)
+		{
+			echo "Saved dues successfully!";
+		}
+		else
+		{
+			implode($err_total, $err);
+			echo $err_total;
+		}
 	}
 	if($_GET['id'])
 	{
@@ -267,6 +267,20 @@ if($_POST['vac_date']) {
 				});
 
 				<?php } 
+				// LOL hardcoding 100, should never be more than 100
+				for ($i=0; $i < 100; $i++) { ?>
+
+				$(function() {
+					$( <?php echo "\"#due_paid_date".$i."\""; ?> ).datepicker({
+						changeMonth: true,
+						changeYear: true,
+						yearRange: "1970:2032",
+						dateFormat:"d M yy"
+					});
+				});
+				
+				<?php
+				}
 				unset($temp_result);
 				unset($temp_nrows); 
 				?>
@@ -463,30 +477,42 @@ if($_POST['vac_date']) {
 								<th>Amount</th>
 								<th>Date</th>
 								<th>Comment</th>
-								<th>Delete</th>
+								<th>Paid</th>
+								<th>Date paid</th>
 							</tr>
 							<?php
-							$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} AND paid = 'N' ORDER BY date;");
+							$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} ORDER BY date;");
 							$i=1;
 							$total = 0;
+							$count = 0;
 							while($row = mysqli_fetch_assoc($result)) {
-								$total += $row['amount'];
+								$count++;
+								if($row['paid'] == 'N')
+									$total += $row['amount'];
 								?>
 								<tr>
 									<td><?php echo "{$i}"; $i += 1; ?>  </td>
 									<td><?php echo "{$row['amount']}";?> </td>
 									<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
 									<td><?php echo $row['comment']?> </td>
-									<td><?php echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_due[]\">";?>
+									<td><?php echo $row['paid']?> </td>
+									<td>
+									<input type="text" name="due_paid_date[]" style="width:80px" <?php echo "id=\"due_paid_date".$count."\""; ?> value=<?php 
+									if($row['date_paid']=='0000-00-00'||$row['date_paid']=='')
+										echo "\"nil\"";
+									else
+										echo "\"".date('j M Y',strtotime($row['date_paid']))."\"";?>/>
+									<input type="hidden" name="due_paid_id[]" value=<?php echo $row['id']; ?>>
 									</td>
 								</tr>
 								<?php } ?>
 
 							</table>
 							<p>
-								<?php echo "Total = Rs. {$total}"; ?>
+								<?php echo "Total due = Rs. {$total}"; ?>
 							</p>
-							<button type="submit" class="btn btn-default">Delete checked</button>
+							<input type="hidden" name = "save_dues" value="1" />
+							<button type="submit" class="btn btn-default">Save changes</button>
 						</form>
 					</div>
 					<h3> Send SMS </h3>
@@ -497,8 +523,8 @@ if($_POST['vac_date']) {
 								<br />
 								<?php
 									$message = "Address: C-14 Community Centre Naraina Vihar\n"
-									."Phone: +91 9811129950\n"
-									."Timings: Mon to Sat 6.30 to 8.30pm\n"
+									."Phone: 9717585207, 25774759\n"
+									."Timings: Mon to Sat 10.30am to 1.30pm, 6.00 to 8.30pm, \n"
 									."Dr.Mahima";
 									echo "<textarea name=\"message\" id = \"message\" rows=4 cols=80>".$message."</textarea>";
 								?>
