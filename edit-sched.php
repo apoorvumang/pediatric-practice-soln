@@ -178,14 +178,14 @@ if($_POST['vac_date'])
 
 		?>
 		<script type="text/javascript">
-			$(function() {
-			    $("visits_section").pagination({
-			        items: 100,
-			        itemsOnPage: 10,
-			        cssStyle: 'light-theme'
-			    });
-			});
-			function checkRed()
+			// $(function() {
+			//     $(".pagination").pagination({
+			//         items: 100,
+			//         itemsOnPage: 10,
+			//         cssStyle: 'light-theme'
+			//     });
+			// });
+			// function checkRed()
 			{
 				var array = document.getElementsByTagName("input");
 				for(var ii = 0; ii < array.length; ii++)
@@ -207,6 +207,36 @@ if($_POST['vac_date'])
 					active: false
 				});
 			} );
+
+			jQuery(function($) {
+			    // consider adding an id to your table,
+			    // just incase a second table ever enters the picture..?
+			    var items = $("#visits_section  > tr");
+			    console.log(items);
+			    var numItems = items.length;
+			    var perPage = 6;
+
+			    // only show the first 2 (or "first per_page") items initially
+			    items.slice(perPage).hide();
+
+			    // now setup your pagination
+			    // you need that .pagination-page div before/after your table
+			    $(".pagination-page").pagination({
+			        items: numItems,
+			        itemsOnPage: perPage,
+			        cssStyle: "light-theme",
+			        onPageClick: function(pageNumber) { // this is where the magic happens
+			            // someone changed page, lets hide/show trs appropriately
+			            var showFrom = perPage * (pageNumber - 1);
+			            var showTo = showFrom + perPage;
+
+			            items.hide() // first hide everything, then show for the new page
+			                 .slice(showFrom, showTo).show();
+
+
+			        }
+			    });
+			});
 
 
 			<?php for ($i=0; $i < $temp_nrows; $i++) { ?>
@@ -464,37 +494,41 @@ if($_POST['vac_date'])
 
 						<h4> Previous visits </h4>
 						<form role="form" action="" method="post">
-							<table border="1">
-								<tr>
-									<th>S.No.</th>
-									<th>Date</th>
-									<th>Note</th>
-									<th>Vaccinations</th>
-									<th>Delete</th>
-								</tr>
-								<?php
-								$q = "SELECT null as id, group_concat(v.name order by v.name asc separator ',') as vaccines, vs.date_given as date, null as note FROM vac_schedule vs, vaccines v WHERE vs.p_id = {$_GET['id']} AND NOT vs.date_given = '0000-00-00' AND v.id = vs.v_id GROUP BY vs.date_given UNION SELECT id, null as vaccines, date, note FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
-								$result = mysqli_query($link, $q);
-								$i=1;
-								$total = 0;
-								while($row = mysqli_fetch_assoc($result)) {
-									$total += $row['amount'];
-									?>
+							<div class="pagination-page"></div>
+							<table border="1" width="540px">
+
 									<tr>
-										<td><?php echo "{$i}"; $i += 1; ?>  </td>
-										<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
-										<td><?php echo "{$row['note']}";?> </td>
-										<td><?php echo "{$row['vaccines']}";?> </td>
-										<td><?php 
-										if($row['id']) {
-											echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";
-										} else {
-											echo " ";
-										}
-										?>
-										</td>
+										<!-- <th>S.No.</th> -->
+										<th>Date</th>
+										<th>Note</th>
+										<th>Vaccinations</th>
+										<th>Delete</th>
 									</tr>
-									<?php } ?>
+									<tbody id="visits_section">
+									<?php
+									$q = "SELECT null as id, group_concat(v.name order by v.name asc separator ',') as vaccines, vs.date_given as date, null as note FROM vac_schedule vs, vaccines v WHERE vs.p_id = {$_GET['id']} AND NOT vs.date_given = '0000-00-00' AND v.id = vs.v_id GROUP BY vs.date_given UNION SELECT id, null as vaccines, date, note FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
+									$result = mysqli_query($link, $q);
+									$i=1;
+									$total = 0;
+									while($row = mysqli_fetch_assoc($result)) {
+										$total += $row['amount'];
+										?>
+										<tr>
+											<!-- <td><?php echo "{$i}"; $i += 1; ?>  </td> -->
+											<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
+											<td><?php echo "{$row['note']}";?> </td>
+											<td><?php echo "{$row['vaccines']}";?> </td>
+											<td><?php 
+											if($row['id']) {
+												echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";
+											} else {
+												echo " ";
+											}
+											?>
+											</td>
+										</tr>
+										<?php } ?>
+										</tbody>
 
 								</table>
 								<button type="submit" class="btn btn-default">Delete checked</button>
