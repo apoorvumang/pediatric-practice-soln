@@ -120,7 +120,6 @@ if($_POST['vac_date'])
 	} else if ($_POST['visit_date']) {
 		$value = date('Y-m-d', strtotime($_POST['visit_date']));
 		$q = "INSERT INTO notes (p_id, date, note) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}');";
-		echo $q;
 		if(!mysqli_query($link, $q))
 			$err[] = "Error adding visit";
 		if(!$err)
