@@ -204,7 +204,7 @@ if($_POST['vac_date'])
 				$( "#accordion" ).accordion({
 					heightStyle: "content",
 					collapsible: true,
-					active: false
+					active: 2
 				});
 			} );
 
