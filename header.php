@@ -98,6 +98,9 @@ switch($currentFile)
 	case "visits.php":
 	$title="Visit log";
 	break;
+	case "visits-results.php":
+	$title="Visit log - results";
+	break;
 	case "payment_due.php":
 	$title="Payments Due";
 	break;

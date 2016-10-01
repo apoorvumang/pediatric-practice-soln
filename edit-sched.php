@@ -332,7 +332,7 @@ if($_POST['vac_date']) {
 								$from = new DateTime($patient['dob']);
 								$to   = new DateTime('today');
 								$age = $from->diff($to);
-								echo $age->y." years ".$age->m." months";
+								echo $age->y." years ".$age->m." months ".$age->d." days";
 							?>
 						</p>
 						<p>
