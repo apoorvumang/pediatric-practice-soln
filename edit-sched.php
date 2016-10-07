@@ -586,10 +586,10 @@ if($_POST['vac_date']) {
 										?>
 										<tr>
 											<!-- <td><?php echo "{$i}"; $i += 1; ?>  </td> -->
-											<td style="text-align:center;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
+											<td style="text-align:center;vertical-align: middle;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
 											<td><textarea name="change_note[]" cols="60" rows="3"><?php echo "{$row['note']}";?></textarea> </td>
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
-											<td style="text-align:center;"><?php 
+											<td style="text-align:center; vertical-align: middle;"><?php 
 											if($row['id']) {
 												echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";
 											} else {
