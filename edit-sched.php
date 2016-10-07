@@ -118,16 +118,11 @@ if($_POST['vac_date']) {
 	} else if ($_POST['delete_visit'] || $_POST['note_id']) {
 
 		if($_POST['note_id']) {
-			$str = "";
-			$str2 = "(";
 			foreach ($_POST['note_id'] as $key => $value) {
-				$str = $str."WHEN ".$value." THEN '".$_POST['change_note'][$key]."' ";
-				$str2 = $str2.$value.",";
+				$query = "UPDATE notes SET note = '".$_POST['change_note'][$key]."' WHERE id = ".$value;
+				if(!mysqli_query($link, $query))
+					$err[] = "Error while updating vists";
 			}
-			$str2 = $str2.")";
-			$query = "UPDATE notes SET note = CASE id ".$str." END WHERE id IN ".$str2 ;
-			if(!mysqli_query($link, $query))
-				$err[] = "Error while updating visits, query was " + $query;
 		}
 		
 		foreach ($_POST['delete_visit'] as $key => $value) {
@@ -591,10 +586,10 @@ if($_POST['vac_date']) {
 										?>
 										<tr>
 											<!-- <td><?php echo "{$i}"; $i += 1; ?>  </td> -->
-											<td style="text-align: center;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
+											<td style="text-align:center;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
 											<td><textarea name="change_note[]" cols="60" rows="3"><?php echo "{$row['note']}";?></textarea> </td>
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
-											<td style="text-align: center;"><?php 
+											<td style="text-align:center;"><?php 
 											if($row['id']) {
 												echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";
 											} else {
