@@ -564,12 +564,11 @@ if($_POST['vac_date']) {
 										<!-- <th>S.No.</th> -->
 										<th>Date</th>
 										<th>Note</th>
-										<th>Vaccinations</th>
 										<th>Delete</th>
 									</tr>
 									<tbody id="visits_section">
 									<?php
-									$q = "SELECT null as id, group_concat(v.name order by v.name asc separator ',') as vaccines, vs.date_given as date, null as note FROM vac_schedule vs, vaccines v WHERE vs.p_id = {$_GET['id']} AND NOT vs.date_given = '0000-00-00' AND v.id = vs.v_id GROUP BY vs.date_given UNION SELECT id, null as vaccines, date, note FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
+									$q = "SELECT id, date, note FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
 									$result = mysqli_query($link, $q);
 									$i=1;
 									$total = 0;
@@ -579,8 +578,7 @@ if($_POST['vac_date']) {
 										<tr>
 											<!-- <td><?php echo "{$i}"; $i += 1; ?>  </td> -->
 											<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
-											<td><?php echo "{$row['note']}";?> </td>
-											<td><?php echo "{$row['vaccines']}";?> </td>
+											<td><textarea><?php echo "{$row['note']}";?></textarea> </td>
 											<td><?php 
 											if($row['id']) {
 												echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";
