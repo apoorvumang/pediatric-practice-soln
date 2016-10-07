@@ -115,7 +115,21 @@ if($_POST['vac_date']) {
 			implode($err_total, $err);
 			echo $err_total;
 		}
-	} else if ($_POST['delete_visit']) {
+	} else if ($_POST['delete_visit'] || $_POST['note_id']) {
+
+		if($_POST['note_id']) {
+			$str = "";
+			$str2 = "(";
+			foreach ($_POST['note_id'] as $key => $value) {
+				$str = $str."WHEN ".$value." THEN '".$_POST['change_note'][$key]."' ";
+				$str2 = $str2.$value.",";
+			}
+			$str2 = $str2.")";
+			$query = "UPDATE notes SET note = CASE id ".$str." END WHERE id IN ".$str2 ;
+			if(!mysqli_query($link, $query))
+				$err[] = "Error while updating visits, query was " + $query;
+		}
+		
 		foreach ($_POST['delete_visit'] as $key => $value) {
 			$query = "DELETE from notes WHERE id = {$value};";
 			if(!mysqli_query($link, $query))
@@ -123,7 +137,7 @@ if($_POST['vac_date']) {
 		}
 		if(!$err)
 		{
-			echo "Deleted visits successfully!";
+			echo "Updated/deleted visits successfully!";
 		}
 		else
 		{
@@ -577,9 +591,10 @@ if($_POST['vac_date']) {
 										?>
 										<tr>
 											<!-- <td><?php echo "{$i}"; $i += 1; ?>  </td> -->
-											<td><?php echo date('j M Y',strtotime($row['date']))?> </td>
-											<td><textarea><?php echo "{$row['note']}";?></textarea> </td>
-											<td><?php 
+											<td style="text-align: center;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
+											<td><textarea name="change_note[]" cols="60" rows="3"><?php echo "{$row['note']}";?></textarea> </td>
+											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
+											<td style="text-align: center;"><?php 
 											if($row['id']) {
 												echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";
 											} else {
@@ -592,7 +607,7 @@ if($_POST['vac_date']) {
 										</tbody>
 
 								</table>
-								<button type="submit" class="btn btn-default">Delete checked</button>
+								<button type="submit" class="btn btn-default">Save changes</button>
 							</form>
 						</div>
 					</div>
