@@ -51,12 +51,12 @@ function set_item(item) {
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
   <label for="date">Date : &nbsp;&nbsp;&nbsp;&nbsp;</label>
   <input type="text" name="date" id="date" style="margin-right:40px;" value= <?php echo "\"".date("Y-m-d")."\""; ?>/>
-
   <br>
-  <label for="p_id">Patient ID:&nbsp;&nbsp;</label>
-  <input type="text" id = "patient_id" name ="p_id" onkeyup="autocomplet()" />
-  <ul id="patient_autocomplet_list"></ul>
-
+  <div class="clear input_container">
+    <label for="p_id">Patient ID:&nbsp;&nbsp;</label>
+    <input type="text" id = "patient_id" name ="p_id" onkeyup="autocomplet()" />
+    <ul id="patient_autocomplet_list"></ul>
+  </div>
   <br>
   <label for="note">Additional info (height/weight): </label>
   <br>
@@ -65,7 +65,6 @@ function set_item(item) {
   Weight: 
   </textarea>
   <br>
-
 <input type="submit" name="addvisit" value="Go" />
 </form>
 <?php include('footer.php'); ?>
