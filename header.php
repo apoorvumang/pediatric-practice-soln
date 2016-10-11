@@ -101,6 +101,9 @@ switch($currentFile)
 	case "visits-results.php":
 	$title="Visit log - results";
 	break;
+	case "addvisit.php":
+	$title="Add visit";
+	break;
 	case "payment_due.php":
 	$title="Payments Due";
 	break;
@@ -196,7 +199,7 @@ function countMessages(e)
 			<li <?php if($currentFile=="search-patient.php") { ?> id="current" <?php }?>><a href="search-patient.php">Patient info</a></li>
 			<?php } ?>
 			<?php if($_SESSION['type']=='employee') { ?>
-			<li <?php if($currentFile=="visits.php") { ?> id="current" <?php }?>><a href="visits.php">Add Patient Visit</a></li>
+			<li <?php if($currentFile=="addvisit.php") { ?> id="current" <?php }?>><a href="addvisit.php">Add Patient Visit</a></li>
 			<?php } ?>
 			<?php if($_SESSION['type']=='doctor') { ?>
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
