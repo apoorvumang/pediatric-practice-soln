@@ -53,10 +53,11 @@ function set_item(item) {
   <input type="text" name="date" id="date" style="margin-right:40px;" value= <?php echo "\"".date("Y-m-d")."\""; ?>/>
   <br>
   <div class="clear input_container">
-    <label for="p_id">Patient ID:&nbsp;&nbsp;</label>
+    <label for="p_id">Patient ID (type name for suggestion):&nbsp;&nbsp;</label>
     <input type="text" id = "patient_id" name ="p_id" onkeyup="autocomplet()" />
     <ul id="patient_autocomplet_list"></ul>
   </div>
+  <br>
   <br>
   <label for="note">Additional info (height/weight): </label>
   <br>
