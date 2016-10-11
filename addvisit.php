@@ -19,32 +19,6 @@ $(function() {
     dateFormat:"Y-m-d"
   });
 });
-
-function autocomplet() {
-  var min_length = 3; // min characters to display the autocomplete
-  var keyword = $('#patient_id').val();
-  var myId = 0;
-  if (keyword.length >= min_length) {
-    $.ajax({
-      url: 'ajax_refresh.php',
-      type: 'POST',
-      data: {"keyword":keyword, "myid": myId},
-      success:function(data){
-        $('#patient_autocomplet_list').show();
-        $('#patient_autocomplet_list').html(data);
-      }
-    });
-  } else {
-    $('#patient_autocomplet_list').hide();
-  }
-
-function set_item(item) {
-  // change input value
-  $('#patient_id').val(item);
-  // hide proposition list
-  $('#patient_autocomplet_list').hide();
-}
-
 </script>
 <h3>Add Visit</h3>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
