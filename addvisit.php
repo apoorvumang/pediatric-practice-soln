@@ -1,8 +1,7 @@
 <?php include('header.php'); 
 
   if($_POST['date'] && $_POST['p_id'] && $_POST['note']) {
-    $query = "INSERT into notes (p_id, date, note) VALUES ({$_POST['p_id']}, '{$_POST['date']}', \"{$_POST['note']})\";";
-    echo $query;
+    $query = "INSERT into notes (p_id, date, note) VALUES ({$_POST['p_id']}, '{$_POST['date']}', \"{$_POST['note']}\");";
     if(!mysqli_query($link, $query)) {
       echo "Error adding visit!";
     } else {
@@ -11,7 +10,7 @@
   }
 
 ?>
-<script>
+<script type="text/javascript">
 $(function() {
   $( "#date" ).datepicker({
     changeMonth: true,
@@ -49,22 +48,21 @@ function set_item(item) {
 </script>
 <h3>Add Visit</h3>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
-<p>
   <label for="date">Date : &nbsp;&nbsp;&nbsp;&nbsp;</label>
   <input type="text" name="date" id="date" style="margin-right:40px;" value= <?php echo "\"".date("Y-m-d")."\""; ?>/>
-</p>
-<p>
-  <label for="p_id">Patient ID (type name to search):&nbsp;&nbsp;</label>
+
+
+  <label for="p_id">Patient ID:&nbsp;&nbsp;</label>
   <input type="text" id = "patient_id" name ="p_id" onkeyup="autocomplet()" />
   <ul id="patient_autocomplet_list"></ul>
-</p>
-<p>
+
+
   <label for="note">Additional info (height/weight): </label>
   <textarea name="note" rows="3" cols="50">
   Height:
   Weight: 
   </textarea>
-</p>
+
 <input type="submit" name="addvisit" value="Go" />
 </form>
 <?php include('footer.php'); ?>
