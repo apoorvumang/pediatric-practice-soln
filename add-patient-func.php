@@ -76,7 +76,7 @@ function prePatient(&$patient_var)
 	}
 	if((!$patient_var['doregistration'])||($patient_var['doregistration']=='0000-00-00'))
 	{
-		$patient_var['doregistration'] = $patient_var['dob'];
+		$patient_var['doregistration'] = date('Y-m-d');
 	}
 	if($patient_var['phone'][0]!='0')
 			$patient_var['phone']='0'.$patient_var['phone'];
