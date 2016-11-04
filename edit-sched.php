@@ -1,10 +1,10 @@
-<?php include('header.php'); 
+<?php include('header.php');
 
 if($_POST['vac_date']) {
 	$err = array();
 
 	foreach ($_POST['delete_vac'] as $key => $value) {
-		mysqli_query($link, "DELETE FROM vac_schedule WHERE id={$value}");		
+		mysqli_query($link, "DELETE FROM vac_schedule WHERE id={$value}");
 	}
 
 	//Old values are in same format as new values (slight overhead)
@@ -17,7 +17,7 @@ if($_POST['vac_date']) {
 				if(!mysqli_query($link, "UPDATE vac_schedule SET date_given='{$value}', given='Y' WHERE id={$_POST['vac_sched_id'][$key]}"))
 					$err[] = "Unknown error";	//set own given_date first
 				//Now begins setting of dates of those dependent on this
-				//If some vaccination from vac_schedule has been deleted, this code should not cause problem, as no value from vac_schedule is being read to 
+				//If some vaccination from vac_schedule has been deleted, this code should not cause problem, as no value from vac_schedule is being read to
 				//calculate further values
 				//TODO: optimize this thing, only select things that are needed
 				//PROBLEM: multiple vaccines are dependent on same
@@ -43,7 +43,7 @@ if($_POST['vac_date']) {
 						$value = $date_temp;//$value = $date_temp
 						$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE dependent ={$vaccine['id']}"));//$vaccine = new vaccine with dep as $vaccine['id']
 					}//loop end
-				}			
+				}
 			}
 		}
 		else
@@ -89,7 +89,7 @@ if($_POST['vac_date']) {
 	} else if ($_POST['payment_date']) {
 		$value = date('Y-m-d', strtotime($_POST['payment_date']));
 
-		if(!mysqli_query($link, 
+		if(!mysqli_query($link,
 			"INSERT INTO payment_due (p_id, date, amount, comment)VALUES ({$_GET['id']}, '{$value}', {$_POST['payment_amount']}, '{$_POST['payment_comment']}');"))
 			$err[] = "Unknown error";
 		if(!$err)
@@ -124,7 +124,7 @@ if($_POST['vac_date']) {
 					$err[] = "Error while updating vists";
 			}
 		}
-		
+
 		foreach ($_POST['delete_visit'] as $key => $value) {
 			$query = "DELETE from notes WHERE id = {$value};";
 			if(!mysqli_query($link, $query))
@@ -178,7 +178,7 @@ if($_POST['vac_date']) {
 		$temp_result = mysqli_query($link, "SELECT id FROM vaccines WHERE 1");
 		$temp_nrows = mysqli_num_rows($temp_result);
 		?>
-		<?php 
+		<?php
 		$result = mysqli_query($link, "SELECT * FROM payment_due WHERE p_id = {$_GET['id']} AND paid = 'N' ORDER BY date;");
 		$total = 0;
 		while ($row = mysqli_fetch_assoc($result)) {
@@ -275,7 +275,7 @@ if($_POST['vac_date']) {
 					});
 				});
 
-				<?php } 
+				<?php }
 				// LOL hardcoding 100, should never be more than 100
 				for ($i=0; $i < 100; $i++) { ?>
 
@@ -287,11 +287,11 @@ if($_POST['vac_date']) {
 						dateFormat:"d M yy"
 					});
 				});
-				
+
 				<?php
 				}
 				unset($temp_result);
-				unset($temp_nrows); 
+				unset($temp_nrows);
 				?>
 				$(function() {
 					$("#payment_date").datepicker({
@@ -350,7 +350,7 @@ if($_POST['vac_date']) {
 					</td>
 					<td>
 						<p>
-							<strong>Father's name :</strong> 
+							<strong>Father&rsquo;s name :</strong>
 							<?php echo $patient['father_name'];
 							if($patient['father_occ']) {
 								echo ", ".$patient['father_occ'];
@@ -358,7 +358,7 @@ if($_POST['vac_date']) {
 							?>
 						</p>
 						<p>
-							<strong>Mother's name :</strong>
+							<strong>Mother&rsquo;s name :</strong>
 							<?php echo $patient['mother_name'];
 							if($patient['mother_occ']) {
 								echo ", ".$patient['mother_occ'];
@@ -506,7 +506,7 @@ if($_POST['vac_date']) {
 									<td><?php echo $row['comment']?> </td>
 									<td><?php echo $row['paid']?> </td>
 									<td>
-									<input type="text" name="due_paid_date[]" style="width:80px" <?php echo "id=\"due_paid_date".$count."\""; ?> value=<?php 
+									<input type="text" name="due_paid_date[]" style="width:80px" <?php echo "id=\"due_paid_date".$count."\""; ?> value=<?php
 									if($row['date_paid']=='0000-00-00'||$row['date_paid']=='')
 										echo "\"nil\"";
 									else
@@ -589,7 +589,7 @@ if($_POST['vac_date']) {
 											<td style="text-align:center;vertical-align: middle;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
 											<td><textarea name="change_note[]" cols="60" rows="3"><?php echo "{$row['note']}";?></textarea> </td>
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
-											<td style="text-align:center; vertical-align: middle;"><?php 
+											<td style="text-align:center; vertical-align: middle;"><?php
 											if($row['id']) {
 												echo "<input type=\"checkbox\" value=\"".$row['id']."\" name=\"delete_visit[]\">";
 											} else {
@@ -629,7 +629,7 @@ if($_POST['vac_date']) {
 
 								<?php
 								$result = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id = {$_GET['id']} ORDER BY date, v_id");
-	//To show lower and upper limit, we add them to birth date 
+	//To show lower and upper limit, we add them to birth date
 								$count = 0;
 								while($row = mysqli_fetch_assoc($result))
 								{
@@ -660,7 +660,7 @@ if($_POST['vac_date']) {
 			$color_id = "focus_orange";
 		}
 		else
-		{	
+		{
 			echo "id=\"focus_red\"";	//red focus if vaccine cant be given now
 			$color_id = "focus_red";
 		}
@@ -685,17 +685,17 @@ if($_POST['vac_date']) {
 		</td>
 
 		<td>
-			<input type="hidden" name="vac_given_date_hidden[]" value=<?php 
+			<input type="hidden" name="vac_given_date_hidden[]" value=<?php
 			if($row['date_given']=='0000-00-00'||$row['date_given']=='')
 				echo "\"nil\"";
 			else
 				echo "\"".date('j M Y',strtotime($row['date_given']))."\"";?>/>
-			<input type="text" name="vac_given_date[]" style="width:80px" <?php echo "id=\"vac_given_date".$count."\""; ?> value=<?php 
+			<input type="text" name="vac_given_date[]" style="width:80px" <?php echo "id=\"vac_given_date".$count."\""; ?> value=<?php
 			if($row['date_given']=='0000-00-00'||$row['date_given']=='')
 				echo "\"nil\"";
 			else
 				echo "\"".date('j M Y',strtotime($row['date_given']))."\"";?>/>
-		</td>		
+		</td>
 		<?php
 		echo "<td>";
 		echo $lower_limit;
