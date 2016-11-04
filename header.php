@@ -30,7 +30,7 @@ if(isset($_GET['logout']))
 <link rel="shortcut icon" href="http://www.drmahima.com/favicon.ico" />
 <head>
 <meta charset="utf8" />
- 
+
 <title>
 <?php
 $title = "Access Denied";
@@ -39,7 +39,7 @@ $parts = Explode('/', $currentFile);
 $currentFile = $parts[count($parts) - 1];
 switch($currentFile)
 {
-	case "index.php": 
+	case "index.php":
 	$title = "Home";
 	if($_SESSION['name'])
 	{
@@ -116,7 +116,7 @@ switch($currentFile)
 }
 
 echo $title;
-	
+
 //Switch case for Title in header.php
 
 ?>
@@ -130,6 +130,8 @@ echo $title;
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/jquery.simplePagination.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+
 <script type="text/javascript">
 
 function uncheckAll()

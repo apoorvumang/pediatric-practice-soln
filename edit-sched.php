@@ -1,5 +1,33 @@
 <?php include('header.php');
+?>
+<script>
+        // $(document).ready(function() {
+        //     // bind 'myForm' and provide a simple callback function
+        //     $('#addduepayments').ajaxForm(function() {
+				// 			console.log('hello');
+        //       alert("Thank you for your comment!");
+        //     });
+        // });
+				$(document).ready(function() {
+					$("#submitall").click(function() {
+						$('#addduepayments').ajaxSubmit();
+						$('#previousdues').ajaxSubmit();
+						$('#addvisitnote').ajaxSubmit();
+						$('#previousvisits').ajaxSubmit();
+						$('#myform').ajaxSubmit();
+						alert("Submitted!");
+					});
+				});
+				// wait for the DOM to be loaded
+        // $(document).ready(function() {
+        //     // bind 'myForm' and provide a simple callback function
+        //     $('#myForm2').ajaxForm(function() {
+        //         alert("Thank you for your comment!");
+        //     });
+        // });
 
+</script>
+<?
 if($_POST['vac_date']) {
 	$err = array();
 
@@ -103,17 +131,19 @@ if($_POST['vac_date']) {
 		}
 	} else if ($_POST['visit_date']) {
 		$value = date('Y-m-d', strtotime($_POST['visit_date']));
-		$q = "INSERT INTO notes (p_id, date, note) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}');";
-		if(!mysqli_query($link, $q))
-			$err[] = "Error adding visit";
-		if(!$err)
-		{
-			echo "Note added  successfully!";
-		}
-		else
-		{
-			implode($err_total, $err);
-			echo $err_total;
+		if($_POST['note'] != "") {
+			$q = "INSERT INTO notes (p_id, date, note) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}');";
+			if(!mysqli_query($link, $q))
+				$err[] = "Error adding visit";
+			if(!$err)
+			{
+				echo "Note added  successfully!";
+			}
+			else
+			{
+				implode($err_total, $err);
+				echo $err_total;
+			}
 		}
 	} else if ($_POST['delete_visit'] || $_POST['note_id']) {
 
@@ -310,7 +340,9 @@ if($_POST['vac_date']) {
 					});
 				});
 			</script>
-
+			<p>
+				<button id="submitall" class="btn btn-default" type="submit">Submit all</button>
+			</p>
 			<h4>Patient Information</h4>
 			<div style="float:right"> <a href= <?php echo "editpatient.php?id={$patient['id']}" ?> ><strong> Edit patient </strong> </a></div>
 			<p>
@@ -350,7 +382,7 @@ if($_POST['vac_date']) {
 					</td>
 					<td>
 						<p>
-							<strong>Father&rsquo;s name :</strong>
+							<strong>Father's name :</strong>
 							<?php echo $patient['father_name'];
 							if($patient['father_occ']) {
 								echo ", ".$patient['father_occ'];
@@ -358,7 +390,7 @@ if($_POST['vac_date']) {
 							?>
 						</p>
 						<p>
-							<strong>Mother&rsquo;s name :</strong>
+							<strong>Mother's name :</strong>
 							<?php echo $patient['mother_name'];
 							if($patient['mother_occ']) {
 								echo ", ".$patient['mother_occ'];
@@ -462,7 +494,7 @@ if($_POST['vac_date']) {
 				<h3> Due Payment </h3>
 				<div>
 					<h4> Add due payment </h4>
-					<form role="form" action="" method="post">
+					<form id="addduepayments" role="form" action="" method="post">
 						<div class="form-group">
 							<label for="payment_amount">Amount:</label>
 							<input type="number" class="form-control" id="payment_amount" name="payment_amount">
@@ -479,7 +511,7 @@ if($_POST['vac_date']) {
 						<button type="submit" class="btn btn-default">Submit</button>
 					</form>
 					<h4> Previous dues </h4>
-					<form role="form" action="" method="post">
+					<form id="previousdues" role="form" action="" method="post">
 						<table border="1">
 							<tr>
 								<th>S.No.</th>
@@ -526,7 +558,7 @@ if($_POST['vac_date']) {
 					</div>
 					<h3> Send SMS </h3>
 					<div>
-						<form role="form" method="post" action="">
+						<form id="sendsms" role="form" method="post" action="">
 							<div class="form-group">
 								<label for="message">Message:</label>
 								<br />
@@ -549,7 +581,7 @@ if($_POST['vac_date']) {
 					<h3> Visits </h3>
 					<div>
 						<h4> Add visit note</h4>
-						<form role="form" action="" method="post">
+						<form id="addvisitnote" role="form" action="" method="post">
 							<div class="form-group">
 								<label for="note">Note:</label>
 								<br/>
@@ -565,7 +597,7 @@ if($_POST['vac_date']) {
 						</form>
 
 						<h4> Previous visits </h4>
-						<form role="form" action="" method="post">
+						<form id="previousvisits" role="form" action="" method="post">
 							<div class="pagination-page"></div>
 							<table border="1" width="540px">
 
@@ -608,7 +640,7 @@ if($_POST['vac_date']) {
 					</div>
 
 					<h4>Schedule</h4>
-					<form name="myform" action="" method="post" style="width:800px;background:none;border:none;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px">
+					<form id="myform" action="" method="post" style="width:800px;background:none;border:none;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px">
 						<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
 						<input type="submit" name="submit" value="Save Changes" />
 						<br />
