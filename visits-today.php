@@ -6,7 +6,6 @@
 <h3>Today's visits</h3>
 <?php
   $today = date('Y-m-d');
-  $today = mysqli_real_escape_string($link, today);
   $result = mysqli_query($link, "SELECT n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname FROM notes n, patients p WHERE n.date='".$today."' AND n.p_id = p.id ORDER BY n.id");
   $nrows = mysqli_num_rows($result);
 ?>
