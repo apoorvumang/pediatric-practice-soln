@@ -65,6 +65,9 @@ switch($currentFile)
 	case "addvac.php":
 	$title = "Add/Edit Vaccine";
 	break;
+  case "visits-today.php":
+	$title = "Visits";
+	break;
 	case "addvacmake.php":
 	$title = "Add product";
 	break;
@@ -203,11 +206,11 @@ function countMessages(e)
 			<?php if($_SESSION['type']=='employee') { ?>
 			<li <?php if($currentFile=="addvisit.php") { ?> id="current" <?php }?>><a href="addvisit.php">Add Patient Visit</a></li>
 			<?php } ?>
+      <li <?php if($currentFile=="visits-today.php") { ?> id="current" <?php }?>><a href="visits-today.php">Visits</a></li>
 			<?php if($_SESSION['type']=='doctor') { ?>
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
 			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
 			<li <?php if($currentFile=="payment_due.php") { ?> id="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
-			<li <?php if($currentFile=="visits.php") { ?> id="current" <?php }?>><a href="visits.php">Visits</a></li>
 			<li <?php if($currentFile=="settings.php") { ?> id="current" <?php }?>><a href="settings.php">Settings</a></li>
 			<?php } ?>
 			<?php if($_SESSION['name']) { ?>

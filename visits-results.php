@@ -8,11 +8,10 @@
 <?php
 if($_POST['specificdate'])  //If some submit button clicked
 {
-  
   $_POST['date'] = date('Y-m-d', strtotime($_POST['date']));
   $_POST['date'] = mysqli_real_escape_string($link, $_POST['date']);
-  $result = mysqli_query($link, "SELECT n.p_id as pid, n.date as date, n.note as note, p.name as pname FROM notes n, patients p WHERE n.date='".$_POST['date']."' AND n.p_id = p.id");
-  $nrows = mysqli_num_rows($result);  
+  $result = mysqli_query($link, "SELECT n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname FROM notes n, patients p WHERE n.date='".$_POST['date']."' AND n.p_id = p.id ORDER BY n.id");
+  $nrows = mysqli_num_rows($result);
 ?>
 
 <table>
