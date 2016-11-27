@@ -1,0 +1,6 @@
+input.required {
+   padding-right: 25px;
+   background-image: url('img/star.png');
+   background-position: right center;
+   background-repeat: no-repeat;
+}
