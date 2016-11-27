@@ -77,16 +77,23 @@ if($_POST['submit'])
 }
 
 if($_SESSION['name']){ 
-
-	echo "<h3>Welcome {$_SESSION['name']}!</h3><br />";
+?>
+<div class="row">
+	<div class="col-six tab-full text-center">
+	<?php
+		echo "<h3>Welcome {$_SESSION['name']}!</h3><br/>";
 	?>
-<p><strong>Use the above links to navigate.</strong></p>
+			<p><strong>Use the above links to navigate.</strong></p>
+	</div>
+</div>
 <?php
 	include('footer.php');
 	exit;
 }
 
 ?>
+<div class="row">
+	<div class="col-six tab-full">
 			<form class="clearfix" action="" method="post">
 					<h3>Doctor Login</h3>
 					<p>
@@ -106,4 +113,6 @@ if($_SESSION['name']){
 					</p>
 				
 			</form>
+	</div>
+</div>
 <?php include('footer.php');?>

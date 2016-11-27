@@ -83,93 +83,94 @@ $( function() {
 
 </script>
 
-<form action="" method="post" enctype="multipart/form-data" style="width:auto">
-	<h3>Add patient</h3>
-	<p>
-		* = Required
-	</p>
+<div class="row">
+<div class="col-six tab-full">
+<form action="" method="post" enctype="multipart/form-data">
+	<h3>Add patient
+	<small>
+		(* = Required)
+	</small>
+	</h3>
 	<div id="accordion">
 		<h3> Basic </h3>
 		<div>
-			<p>
-				<label for="first_name">First Name:&nbsp;&nbsp;</label>
-				<input type="text" name="first_name" id="first_name" style="width:477px" />
-				*
-			</p>
+			<div>
+				<label for="first_name">First Name:</label>
+				<input class="full-width required" type="text" name="first_name" id="first_name"  />
+			</div>
 
-			<p>
-				<label for="last_name">Last Name:&nbsp;&nbsp;</label>
-				<input type="text" name="last_name" id="last_name" style="width:477px" />
-			</p>
+			<div>
+				<label for="last_name">Last Name:</label>
+				<input class="full-width" type="text" name="last_name" id="last_name"/>
+			</div>
 
-			<p>
-				<label for="dob_show">Date of Birth:&nbsp;&nbsp;</label>
+			<div>
+				<label for="dob_show">Date of Birth:</label>
 				<input type="hidden" name="dob" id="dob" />
-				<input type="text" name="dob_show" id="dob_show" />*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input class="full-width required" type="text" name="dob_show" id="dob_show" />
 
-				<label class="grey" for="sex">Sex:&nbsp;&nbsp;</label>
-				<select name="sex" style="margin-right:60px;">
+				<label class="grey" for="sex">Sex:</label>
+				<select name="sex" >
 					<option value='M'>Male</option>
 					<option value='F'>Female</option>
 				</select>
-			</p>
+			</div>
 
-			<p>
-				<label for="phone">Phone number 1:&nbsp;&nbsp;</label>
-				<input type="text" name="phone" id="phone"  />
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<label for="phone2">Phone number 2:&nbsp;&nbsp;</label>
-				<input type="text" name="phone2" id="phone2"  />
-			</p>
+			<div>
+				<label for="phone">Phone number 1:</label>
+				<input class="full-width" type="text" name="phone" id="phone"  />
+				<label for="phone2">Phone number 2:</label>
+				<input class="full-width" type="text" name="phone2" id="phone2"  />
+			</div>
 
-			<p>
-				<label for="note">Notes: &nbsp;&nbsp;</label>
+			<div>
+				<label for="note">Notes:</label>
 				<textarea name="note" id="note" rows=3 cols=90></textarea>
-			</p>
+			</div>
 
 		</div>
 		<h3> Extra </h3>
 		<div>
 
-			<p>
-				<label for="email">Email:&nbsp;&nbsp;</label>
-				<input type="text" name="email" id="email"  />
-			</p>
+			<div>
+				<label for="email">Email:</label>
+				<input class="full-width" type="text" name="email" id="email"  />
+			</div>
 
-			<p>
-				<label for="email2">Email 2:&nbsp;&nbsp;</label>
-				<input type="text" name="email2" id="email2"  />
-			</p>
+			<div>
+				<label for="email2">Email 2:</label>
+				<input class="full-width" type="text" name="email2" id="email2"  />
+			</div>
 
-			<p>
-				<label for="address">Address:&nbsp;&nbsp;</label><br />
+			<div>
+				<label for="address">Address:</label><br />
 				<textarea name="address" id="address" rows=3 cols=70></textarea>
-			</p>
+			</div>
 
-			<p>
-				<label for="father_name">Father's name:&nbsp;&nbsp;</label>
-				<input type="text" name="father_name" id="father_name"  />
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<div>
+				<label for="father_name">Father's name:</label>
+				<input class="full-width" type="text" name="father_name" id="father_name"  />
+				
 
-				<label for="father_occ">Father's occupation:&nbsp;&nbsp;</label>
-				<input type="text" name="father_occ" id="father_occ"  />
-			</p>
+				<label for="father_occ">Father's occupation:</label>
+				<input class="full-width" type="text" name="father_occ" id="father_occ"  />
+			</div>
 
-			<p>
-				<label for="mother_name">Mother's name:&nbsp;&nbsp;</label>
-				<input type="text" name="mother_name" id="mother_name"  />
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<label for="mother_occ">Mother's occupation:&nbsp;&nbsp;</label>
-				<input type="text" name="mother_occ" id="mother_occ"  />
-			</p>
+			<div>
+				<label for="mother_name">Mother's name:</label>
+				<input class="full-width" type="text" name="mother_name" id="mother_name"  />
+				
+				<label for="mother_occ">Mother's occupation:</label>
+				<input class="full-width" type="text" name="mother_occ" id="mother_occ"  />
+			</div>
 
 			<!-- <p> -->
-	    <!-- <label class="grey" for="sibling">Sibling ID:&nbsp;&nbsp;</label>
-	    <input type="text" name="sibling" value="0" style="width:20px" id="sibling"/> -->
+	    <!-- <label class="grey" for="sibling">Sibling ID:</label>
+	    <input class="full-width" type="text" name="sibling" value="0" style="width:20px" id="sibling"/> -->
 
 	    <div class="clear input_container">
-	    	<label for="add_sibling">Add sibling:&nbsp;&nbsp;</label>
-	    	<input type="text" id = "sibling_id" name ="add_sibling" onkeyup="autocomplet()" />
+	    	<label for="add_sibling">Add sibling:</label>
+	    	<input class="full-width" type="text" id = "sibling_id" name ="add_sibling" onkeyup="autocomplet()" />
 	    	<ul id="sibling_autocomplet_list"></ul>
 	    </div>
 	<!--    <select name="sibling" style="margin-right:60px;">
@@ -184,63 +185,65 @@ $( function() {
 	  </select>
 	-->
 	<!-- </p> -->
-	<p>
-		<label class="grey" for="born_at">Birth Time:&nbsp;&nbsp;</label>
-		<input type="text" name="born_at" id="born_at"/>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<label class="grey" for="birth_weight">Birth Weight:&nbsp;&nbsp;</label>
-		<input type="text" name="birth_weight" id="birth_weight"/>
-	</p>
+	<div>
+		<label class="grey" for="born_at">Birth Time:</label>
+		<input class="full-width" type="text" name="born_at" id="born_at"/>
+		
+		<label class="grey" for="birth_weight">Birth Weight:</label>
+		<input class="full-width" type="text" name="birth_weight" id="birth_weight"/>
+	</div>
 
-	<p>
-		<label class="grey" for="length">Length:&nbsp;&nbsp;</label>
-		<input type="text" name="length" id="length"/>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<label class="grey" for="head_circum">Head Circumference:&nbsp;&nbsp;</label>
-		<input type="text" name="head_circum" id="head_circum"/>
-	</p>
+	<div>
+		<label class="grey" for="length">Length:</label>
+		<input class="full-width" type="text" name="length" id="length"/>
+		
+		<label class="grey" for="head_circum">Head Circumference:</label>
+		<input class="full-width" type="text" name="head_circum" id="head_circum"/>
+	</div>
 
-	<p>
-		<label class="grey" for="mode_of_delivery">Mode of Delivery:&nbsp;&nbsp;</label>
-		<select name="mode_of_delivery" style="margin-right:60px;">
+	<div>
+		<label class="grey" for="mode_of_delivery">Mode of Delivery:</label>
+		<select name="mode_of_delivery" >
 			<option value="Normal">Normal</option>
 			<option value="Caesarean">Caesarean</option>
 			<option value="Forceps">Forceps</option>
 			<option value="Vacuum">Vacuum</option>
 		</select>
 
-		<label class="grey" for="gestation">Gestation:&nbsp;&nbsp;</label>
-		<select name="gestation" style="margin-right:60px;">
+		<label class="grey" for="gestation">Gestation:</label>
+		<select name="gestation" >
 			<option value="FT">FT</option>
 			<option value="PT">PT</option>
 			<option value="LPT">LPT</option>
 		</select>
-	</p>
-	<p>
-		<label for="doregistration_show">Date of Registration:&nbsp;&nbsp;</label>
+	</div>
+	<div>
+		<label for="doregistration_show">Date of Registration:</label>
 		<input type="hidden" name="doregistration" id="doregistration" />
-		<input type="text" name="doregistration_show" id="doregistration_show" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input class="full-width" type="text" name="doregistration_show" id="doregistration_show" />
 		<input type="checkbox" name="active" id="active" value="1" checked="true"/>
 		<label for="active">Active</label>
-	</p>
+	</div>
 
-	<p>
-		<label for="place_of_birth">Place of Birth:&nbsp;&nbsp;</label>
-		<input type="text" name="place_of_birth" id="place_of_birth"  />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<label for="obstetrician">Obstetrician:&nbsp;&nbsp;</label>
-		<input type="text" name="obstetrician" id="obstetrician"  />
-	</p>
+	<div>
+		<label for="place_of_birth">Place of Birth:</label>
+		<input class="full-width" type="text" name="place_of_birth" id="place_of_birth"  />
+		
+		<label for="obstetrician">Obstetrician:</label>
+		<input class="full-width" type="text" name="obstetrician" id="obstetrician"  />
+	</div>
 </div>
 </div>
-<p>
+<div>
 	<input type="checkbox" name="gen_sched" value="1" checked="true"/> Generate New Schedule
-</p>
-<p>
+</div>
+<div>
 	<input type="submit" name="submit" value="Register"/>
-</p>
+</div>
 
 </form>
+</div>
+</div>
 <?php
 include('footer.php');
 ?>

@@ -30,7 +30,30 @@ if(isset($_GET['logout']))
 <link rel="shortcut icon" href="http://www.drmahima.com/favicon.ico" />
 <head>
 <meta charset="utf8" />
+<!--- basic page needs
+   ================================================== -->
+   <meta charset="utf-8">
 
+   <!-- mobile specific metas
+   ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+ 	<!-- CSS
+   ================================================== -->
+   <link rel="stylesheet" href="css/base.css">
+   <link rel="stylesheet" href="css/vendor.css">  
+   <link rel="stylesheet" href="css/main.css">
+   <link rel="stylesheet" href="css/mycss.css">     
+
+   <!-- script
+   ================================================== -->
+	<script src="js/modernizr.js"></script>
+	<script src="js/pace.min.js"></script>
+
+   <!-- favicons
+	================================================== -->
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
 <title>
 <?php
 $title = "Access Denied";
@@ -125,11 +148,6 @@ echo $title;
 ?>
 </title>
 
-<link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
-<!-- css for simplePagination  -->
-<link type="text/css" rel="stylesheet" href="css/simplePagination.css"/>
-<!-- datepicker things from jqueryui -->
-<link type="text/css" href="jquery-ui-1.12.1.custom/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/jquery.simplePagination.js"></script>
@@ -187,49 +205,56 @@ function countMessages(e)
 
 </script>
 </head>
-<body>
-<!--header -->
-<div id="header-wrap"><div id="header">
+<body id="top">
 
-	<a name="top"></a>
+<header class="short-header">   
 
-	<h1 id="logo-text"><a href="index.php" title="">Pediatric Software</a></h1>
-	<p id="slogan">Schedules vaccines for patients</p>
+   	<div class="gradient-block"></div>	
 
-	<div  id="nav">
-		<ul>
-			<li <?php if($currentFile=="index.php") { ?> id="current" <?php }?>><a href="index.php">Home</a></li>
-			<?php if($_SESSION['name']) { ?>
-			<li <?php if($currentFile=="register.php") { ?> id="current" <?php }?>><a href="register.php">New patient</a></li>
-			<li <?php if($currentFile=="search-patient.php") { ?> id="current" <?php }?>><a href="search-patient.php">Patient info</a></li>
-			<?php } ?>
-			<?php if($_SESSION['type']=='employee') { ?>
-			<li <?php if($currentFile=="addvisit.php") { ?> id="current" <?php }?>><a href="addvisit.php">Add Patient Visit</a></li>
-			<?php } ?>
-      <li <?php if($currentFile=="visits-today.php") { ?> id="current" <?php }?>><a href="visits-today.php">Visits</a></li>
-			<?php if($_SESSION['type']=='doctor') { ?>
-			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
-			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
-			<li <?php if($currentFile=="payment_due.php") { ?> id="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
-			<li <?php if($currentFile=="settings.php") { ?> id="current" <?php }?>><a href="settings.php">Settings</a></li>
-			<?php } ?>
-			<?php if($_SESSION['name']) { ?>
-			<li><a href="index.php?logout=1">Logout</a></li>
-			<?php } ?>
-		</ul>
-	</div>
+   	<div class="row header-content">
 
-<!--/header-->
-</div></div>
+   		<div class="logo">
+	        <a href="index.php">Author</a>
+	      </div>
+
+	   	<nav id="main-nav-wrap">
+				<ul class="main-navigation sf-menu">
+					<li <?php if($currentFile=="index.php") { ?> class="current" <?php }?>><a href="index.php">Home</a></li>
+					<?php if($_SESSION['name']) { ?>
+					<li <?php if($currentFile=="register.php") { ?> class="current" <?php }?>><a href="register.php">New patient</a></li>
+					<li <?php if($currentFile=="search-patient.php") { ?> class="current" <?php }?>><a href="search-patient.php">Patient info</a></li>
+					<?php } ?>
+					<?php if($_SESSION['type']=='employee') { ?>
+					<li <?php if($currentFile=="addvisit.php") { ?> class="current" <?php }?>><a href="addvisit.php">Add Patient Visit</a></li>
+					<?php } ?>
+		      <li <?php if($currentFile=="visits-today.php") { ?> class="current" <?php }?>><a href="visits-today.php">Visits</a></li>
+					<?php if($_SESSION['type']=='doctor') { ?>
+					<li <?php if($currentFile=="search-sched.php") { ?> class="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
+					<li <?php if($currentFile=="search-scheddg.php") { ?> class="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
+					<li <?php if($currentFile=="payment_due.php") { ?> class="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
+					<li <?php if($currentFile=="settings.php") { ?> class="current" <?php }?>><a href="settings.php">Settings</a></li>
+					<?php } ?>
+					<?php if($_SESSION['name']) { ?>
+					<li><a href="index.php?logout=1">Logout</a></li>
+					<?php } ?>
+				</ul>
+			</nav> <!-- end main-nav-wrap -->
+
+			
+
+			<div class="triggers">
+				<a class="menu-toggle" href="#"><span>Menu</span></a>
+			</div> <!-- end triggers -->	
+   		
+   	</div>     		
+   	
+   </header> <!-- end header -->
+
 
 <!-- content-outer -->
-<div id="content-wrap" class="clear" >
+<div id="content-wrap" class="styles" >
 
-	<!-- content -->
-   <div id="content">
-
-   	<!-- main -->
-	   <div id="main">
+	
 	   <?php if((!$_SESSION['name'])&&($currentFile!="index.php")) {
 
 	   	echo "<h2>Access Denied!</h2>";
