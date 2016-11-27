@@ -2,7 +2,8 @@
 //What needs to be done on this page:
 // List out all schedules for current day.
 ?>
-
+<div class="row">
+<div class="col-six tab-full">
 <h3>Today's visits</h3>
 <?php
   $today = date('Y-m-d');
@@ -46,7 +47,8 @@ $count++;
 </table>
 
 <a href="visits.php">Search visits</a>
-
+</div>
+</div>
 <?php
 
 include('footer.php'); ?>

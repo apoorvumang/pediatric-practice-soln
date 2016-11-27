@@ -3,7 +3,8 @@
 // List out all schedules for a particular date, in a form.
 // The dates *only* can be edited. Give a link for the patient also.
 ?>
-
+<div class="row">
+<div class="col-six tab-full">
 <h3>Search Results</h3>
 <?php
 if($_POST['specificdate'])  //If some submit button clicked
@@ -48,11 +49,12 @@ $count++;
 ?>
 </tbody>
 </table>
-
+</div></div>
 <?php
 }
 else
 {
 echo "<h4>You cannot access this page directly!</h4>";
 }
+
 include('footer.php'); ?>

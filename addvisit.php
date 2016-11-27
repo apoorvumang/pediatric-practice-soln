@@ -47,25 +47,28 @@ function set_item(item) {
 }
 
 </script>
+<div class="row">
+<div class="col-six tab-full">
 <h3>Add Visit</h3>
-<form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
-  <label for="date">Date : &nbsp;&nbsp;&nbsp;&nbsp;</label>
-  <input type="text" name="date" id="date" style="margin-right:40px;" value= <?php echo "\"".date("Y-m-d")."\""; ?>/>
-  <br>
+<form action="" method="post" enctype="multipart/form-data" name="1">
+  <div>
+  <label for="date">Date : </label>
+  <input type="text" name="date" id="date" value= <?php echo "\"".date("Y-m-d")."\""; ?>/>
+  </div>
   <div class="clear input_container">
-    <label for="p_id">Patient ID (type name for suggestion):&nbsp;&nbsp;</label>
-    <input type="text" id = "patient_id" name ="p_id" onkeyup="autocomplet()" />
+    <label for="p_id">Patient ID (type name for suggestion):</label>
+    <input class="full-width" type="text" id = "patient_id" name ="p_id" onkeyup="autocomplet()" />
     <ul id="patient_autocomplet_list"></ul>
   </div>
-  <br>
-  <br>
+  <div>
   <label for="note">Additional info (height/weight): </label>
-  <br>
-  <textarea name="note" rows="3" cols="50">
+  <textarea class="full-width" name="note" rows="3" cols="50">
   Height:
   Weight: 
   </textarea>
-  <br>
+  </div>
 <input type="submit" name="addvisit" value="Go" />
 </form>
+</div>
+</div>
 <?php include('footer.php'); ?>
