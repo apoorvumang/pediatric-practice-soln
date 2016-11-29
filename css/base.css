@@ -332,6 +332,7 @@ fieldset {
 }
 
 input[type="email"],
+input[type="date"],
 input[type="number"],
 input[type="search"],
 input[type="text"],
