@@ -25,27 +25,7 @@ if ($_SESSION['msg']['reg-success']) {
 ?>
 
 <script>
-	$(function() {
-		$( "#dob_show" ).datepicker({
-			changeMonth: true,
-			changeYear: true,
-			yearRange: "1970:2032",
-			dateFormat:"dd/mm/yy",
-			altField: "#dob",
-			altFormat: "yy-mm-dd"
-		});
-	});
-
-	$(function() {
-		$( "#doregistration_show" ).datepicker({
-			changeMonth: true,
-			changeYear: true,
-			yearRange: "1970:2032",
-			dateFormat:"dd/mm/yy",
-			altField: "#doregistration",
-			altFormat: "yy-mm-dd"
-		});
-	});
+	
 
 	function autocomplet() {
     var min_length = 3; // min characters to display the autocomplete
@@ -105,9 +85,8 @@ $( function() {
 			</div>
 
 			<div>
-				<label for="dob_show">Date of Birth:</label>
-				<input type="hidden" name="dob" id="dob" />
-				<input class="full-width required" type="text" name="dob_show" id="dob_show" />
+				<label for="dob">Date of Birth:</label>
+				<input class="full-width required" type="date" name="dob" id="dob" />
 
 				<label class="grey" for="sex">Sex:</label>
 				<select name="sex" >
@@ -118,9 +97,9 @@ $( function() {
 
 			<div>
 				<label for="phone">Phone number 1:</label>
-				<input class="full-width" type="text" name="phone" id="phone"  />
+				<input class="full-width" type="tel" name="phone" id="phone"  />
 				<label for="phone2">Phone number 2:</label>
-				<input class="full-width" type="text" name="phone2" id="phone2"  />
+				<input class="full-width" type="tel" name="phone2" id="phone2"  />
 			</div>
 
 			<div>
@@ -134,12 +113,12 @@ $( function() {
 
 			<div>
 				<label for="email">Email:</label>
-				<input class="full-width" type="text" name="email" id="email"  />
+				<input class="full-width" type="email" name="email" id="email"  />
 			</div>
 
 			<div>
 				<label for="email2">Email 2:</label>
-				<input class="full-width" type="text" name="email2" id="email2"  />
+				<input class="full-width" type="email" name="email2" id="email2"  />
 			</div>
 
 			<div>
@@ -187,18 +166,18 @@ $( function() {
 	<!-- </p> -->
 	<div>
 		<label class="grey" for="born_at">Birth Time:</label>
-		<input class="full-width" type="text" name="born_at" id="born_at"/>
+		<input class="full-width" type="datetime-local" name="born_at" id="born_at"/>
 		
 		<label class="grey" for="birth_weight">Birth Weight:</label>
-		<input class="full-width" type="text" name="birth_weight" id="birth_weight"/>
+		<input class="full-width" type="number" name="birth_weight" id="birth_weight"/>
 	</div>
 
 	<div>
 		<label class="grey" for="length">Length:</label>
-		<input class="full-width" type="text" name="length" id="length"/>
+		<input class="full-width" type="number" name="length" id="length"/>
 		
 		<label class="grey" for="head_circum">Head Circumference:</label>
-		<input class="full-width" type="text" name="head_circum" id="head_circum"/>
+		<input class="full-width" type="number" name="head_circum" id="head_circum"/>
 	</div>
 
 	<div>
@@ -218,11 +197,12 @@ $( function() {
 		</select>
 	</div>
 	<div>
-		<label for="doregistration_show">Date of Registration:</label>
-		<input type="hidden" name="doregistration" id="doregistration" />
-		<input class="full-width" type="text" name="doregistration_show" id="doregistration_show" />
-		<input type="checkbox" name="active" id="active" value="1" checked="true"/>
+		<label for="doregistration">Date of Registration:</label>
+		<input class="full-width" type="date" name="doregistration" id="doregistration" />
+	</div>
+	<div>
 		<label for="active">Active</label>
+		<input type="checkbox" name="active" id="active" value="1" checked="true"/>
 	</div>
 
 	<div>
