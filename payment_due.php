@@ -2,7 +2,7 @@
 
 if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 {
-	foreach ($_POST['send_sms_id'] as $key => $value) 
+	foreach ($_POST['send_sms_id'] as $key => $value)
 	{
 		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT p.name, p.phone, p.phone2, pd.date, pd.amount, pd.comment from patients p, payment_due pd where p.id = pd.p_id and p.id = {$value};"));
 		if(isset($_POST['sendautosms']))
@@ -13,7 +13,7 @@ if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
 			$message = $_POST['customsms'];
 		}
-	
+
 		if($patient['phone'])
 			mail($dr_email_sms, $patient['phone'], $message);
 		if($patient['phone2'])
@@ -51,7 +51,7 @@ while($payment_due = mysqli_fetch_assoc($result)) {
 		<a href= <?php echo "\"edit-sched.php?id={$payment_due['id']}\""; ?> ><?php echo $payment_due['name']; ?></a>
 	</td>
 	<?php
-	
+
 	echo "<td>".$payment_due['amount']."</td>";
 	echo "<td>".$payment_due['comment']."</td>";
 	echo "<td>".date('d M Y', strtotime($payment_due['date']))."</td>";
@@ -61,7 +61,7 @@ while($payment_due = mysqli_fetch_assoc($result)) {
 		<?php if($payment_due['phone2']) echo "<br />" + $payment_due['phone2']; ?>
 	</td>
 	<td>
-		<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$payment_due['id']}\""; ?> phoneCount= <?php if($payment_due['phone2']) echo "2"; else echo "1"; ?> />
+		<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$payment_due['id']}\""; ?> phoneCount= <?php if($payment_due['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $payment_due['id'];?>/>
 	</td>
 	<?php
 
