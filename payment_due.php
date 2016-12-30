@@ -2,23 +2,31 @@
 
 if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 {
-	foreach ($_POST['send_sms_id'] as $key => $value)
+	$queryPart1 = "SELECT p.id as pid, p.name as pname, sum(pd.amount) as total_amount, group_concat(pd.comment order by pd.comment asc separator ',') as comment, p.phone as phone, p.phone2 as phone2 FROM patients p, payment_due pd WHERE  p.id = pd.p_id AND pd.id in(";
+	$queryPart3 = ") group by p.id";
+	$queryPart2 = "";
+	foreach ($_POST['send_sms_id'] as $key => $value) {
+		$queryPart2 .= "{$value},";
+	}
+	$queryPart2 .="0";
+	$query = $queryPart1.$queryPart2.$queryPart3;
+	$result = mysqli_query($link, $query);
+	while ($row = mysqli_fetch_assoc($result))
 	{
-		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT p.name, p.phone, p.phone2, pd.date, pd.amount, pd.comment from patients p, payment_due pd where p.id = pd.p_id and p.id = {$value};"));
 		if(isset($_POST['sendautosms']))
 		{
-			$message = "Dear {$patient['name']} \nYou have Rs.{$patient['amount']} payment due for {$patient['comment']} done on ".date('d M Y', strtotime($patient['date']))."\n" .$dr_name."\n".$dr_phone;
+			$message = "Dear {$row['pname']} \nYou have Rs.{$row['total_amount']} payment due for {$row['comment']} \n" .$dr_name."\n".$dr_phone;
 		}
 		else if(isset($_POST['sendcustomsms']))
 		{
 			$message = $_POST['customsms'];
 		}
 
-		if($patient['phone'])
-			mail($dr_email_sms, $patient['phone'], $message);
-		if($patient['phone2'])
-			mail($dr_email_sms, $patient['phone2'], $message);
-		echo "SMS sent to {$patient['name']} <br>";
+		if($row['phone'])
+			mail($dr_email_sms, $row['phone'], $message);
+		if($row['phone2'])
+			mail($dr_email_sms, $row['phone2'], $message);
+		echo "SMS sent to {$row['pname']} <br>";
 	}
 }
 
@@ -61,7 +69,7 @@ while($payment_due = mysqli_fetch_assoc($result)) {
 		<?php if($payment_due['phone2']) echo "<br />" + $payment_due['phone2']; ?>
 	</td>
 	<td>
-		<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$payment_due['id']}\""; ?> phoneCount= <?php if($payment_due['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $payment_due['id'];?>/>
+		<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$payment_due['pd_id']}\""; ?> phoneCount= <?php if($payment_due['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $payment_due['id'];?>/>
 	</td>
 	<?php
 
