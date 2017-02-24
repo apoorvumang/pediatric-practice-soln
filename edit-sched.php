@@ -251,7 +251,14 @@ if($_POST['vac_date']) {
 				$( "#accordion" ).accordion({
 					heightStyle: "content",
 					collapsible: true,
-					active: 3
+					active:
+					<?php if(strcmp($_SESSION['username'], 'mahima') == 0) {
+							echo '3';
+						}
+						else {
+							echo '0';
+						}
+					?>
 				});
 			} );
 
@@ -340,11 +347,24 @@ if($_POST['vac_date']) {
 					});
 				});
 			</script>
+			<div class='to_hide_from_employee'
+			<?php
+				if(strcmp($_SESSION['username'],'mahima') != 0) {
+					echo " style='display:none' ";
+				}
+			?> >
 			<p>
 				<button id="submitall" class="btn btn-default" type="submit">Submit all</button>
 			</p>
+			</div>
 			<h4>Patient Information</h4>
 			<div style="float:right"> <a href= <?php echo "editpatient.php?id={$patient['id']}" ?> ><strong> Edit patient </strong> </a></div>
+			<div class='to_hide_from_employee'
+			<?php
+				if(strcmp($_SESSION['username'],'mahima') != 0) {
+					echo " style='display:none' ";
+				}
+			?> >
 			<p>
 				<strong><a href=<?php echo "\""."pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
 			</p>
@@ -354,6 +374,7 @@ if($_POST['vac_date']) {
 			<p>
 				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send vaccination history email (print format)</a> </strong>
 			</p>
+			</div>
 			<h4>
 				<strong>ID: <?php echo $patient['id'] ?> </strong>
 			</h4>
@@ -490,9 +511,18 @@ if($_POST['vac_date']) {
 					</p>
 
 				</div>
-
-				<h3> Due Payment </h3>
-				<div>
+				<h3 class='to_hide_from_employee'
+				<?php
+					if(strcmp($_SESSION['username'],'mahima') != 0) {
+						echo " style='display:none' ";
+					}
+				?> > Due Payment </h3>
+				<div class='to_hide_from_employee'
+				<?php
+					if(strcmp($_SESSION['username'],'mahima') != 0) {
+						echo " style='display:none' ";
+					}
+				?> >
 					<h4> Add due payment </h4>
 					<form id="addduepayments" role="form" action="" method="post">
 						<div class="form-group">
@@ -556,8 +586,18 @@ if($_POST['vac_date']) {
 							<button type="submit" class="btn btn-default">Save changes</button>
 						</form>
 					</div>
-					<h3> Send SMS </h3>
-					<div>
+					<h3 class='to_hide_from_employee'
+					<?php
+						if(strcmp($_SESSION['username'],'mahima') != 0) {
+							echo " style='display:none' ";
+						}
+					?> > Send SMS </h3>
+					<div class='to_hide_from_employee'
+					<?php
+						if(strcmp($_SESSION['username'],'mahima') != 0) {
+							echo " style='display:none' ";
+						}
+					?> >
 						<form id="sendsms" role="form" method="post" action="">
 							<div class="form-group">
 								<label for="message">Message:</label>
@@ -578,8 +618,18 @@ if($_POST['vac_date']) {
 						</form>
 					</div>
 
-					<h3> Visits </h3>
-					<div>
+					<h3 class='to_hide_from_employee'
+					<?php
+						if(strcmp($_SESSION['username'],'mahima') != 0) {
+							echo " style='display:none' ";
+						}
+					?> > Visits </h3>
+					<div class='to_hide_from_employee'
+					<?php
+						if(strcmp($_SESSION['username'],'mahima') != 0) {
+							echo " style='display:none' ";
+						}
+					?> >
 						<h4> Add visit note</h4>
 						<form id="addvisitnote" role="form" action="" method="post">
 							<div class="form-group">
@@ -638,7 +688,12 @@ if($_POST['vac_date']) {
 							</form>
 						</div>
 					</div>
-
+					<div class='to_hide_from_employee'
+					<?php
+						if(strcmp($_SESSION['username'],'mahima') != 0) {
+							echo " style='display:none' ";
+						}
+					?> >
 					<h4>Schedule</h4>
 					<form id="myform" action="" method="post" style="width:800px;background:none;border:none;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px">
 						<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
@@ -771,6 +826,7 @@ if($_POST['vac_date']) {
 <br />
 <br />
 </form>
+</div>
 <?php
 }
 else
