@@ -174,7 +174,7 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 
 	while ($row = mysqli_fetch_assoc($result))
 	{
-		str_replace("PNEUMOCOCCAL ", "PCV", $row['vaccines']);
+		$row['vaccines'] = str_replace("PNEUMOCOCCAL", "PCV", $row['vaccines']);
 		if(isset($_POST['sendautosms'])||isset($_POST['sendemail']))
 		{
 			if(strtotime($row['date']) < strtotime("now"))	//If date has passed
