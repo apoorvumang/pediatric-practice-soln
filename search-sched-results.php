@@ -1,4 +1,4 @@
-<?php include('header.php'); 
+<?php include('header.php');
 //What needs to be done on this page:
 // List out all schedules for a particular date, in a form.
 // The dates *only* can be edited. Give a link for the patient also.
@@ -46,9 +46,9 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 					dateFormat:"d M yy"
 				});
 			});
-			
+
 	<?php } ?>
-	
+
 </script>
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
@@ -80,7 +80,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, upper_limit FROM vaccines WHERE id={$row['v_id']}"));
 
 ?>
-	<tr <?php 
+	<tr <?php
 
 if ($row['given']=='Y')
 		{
@@ -95,7 +95,7 @@ if ($row['given']=='Y')
 			echo "id=\"focus_orange\"";	//orange focus if sched date has gone but vac can still be given
 		}
 		else
-		{	
+		{
 			echo "id=\"focus_red\"";	//red focus if vaccine cant be given now
 		}
 
@@ -125,7 +125,7 @@ if ($row['given']=='Y')
 			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> phoneCount= <?php if($patient['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $row['p_id'];?>/>
 		</td>
 	</tr>
-<?php 
+<?php
 	$count++;
 	}
 ?>
@@ -161,19 +161,20 @@ else if(isset($_POST['save']))
 	}
 }
 else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_POST['sendemail']))
-{	
+{
 	$queryPart1 = "SELECT p.email as email, p.id as pid, p.first_name as pname, group_concat(v.name order by v.name asc separator ',') as vaccines, vs.date as date, p.phone as phone, p.phone2 as phone2 FROM patients p, vaccines v, vac_schedule vs WHERE  p.id = vs.p_id AND v.id = vs.v_id AND vs.id in(";
 	$queryPart3 = ") group by p.id, vs.date";
 	$queryPart2 = "";
 	foreach ($_POST['send_sms_id'] as $key => $value) {
 		$queryPart2 .= "{$value},";
 	}
-	$queryPart2 .="0";	
+	$queryPart2 .="0";
 	$query = $queryPart1.$queryPart2.$queryPart3;
 	$result = mysqli_query($link, $query);
 
-	while ($row = mysqli_fetch_assoc($result)) 
+	while ($row = mysqli_fetch_assoc($result))
 	{
+		str_replace("PNEUMOCOCCAL ", "PCV", $row['vaccines']);
 		if(isset($_POST['sendautosms'])||isset($_POST['sendemail']))
 		{
 			if(strtotime($row['date']) < strtotime("now"))	//If date has passed
@@ -189,7 +190,7 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 		{
 			$message = $_POST['customsms'];
 		}
-		
+
 		if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
 			if($row['phone'])
