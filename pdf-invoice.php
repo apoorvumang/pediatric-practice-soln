@@ -15,6 +15,6 @@ if((!isset($_GET['id']))||(!(isset($_SESSION['id'])||isset($_SESSION['username']
 	echo '<h2>Access Denied</h2>';
 	exit;
 }
-$pdf = createPrintSchedulePDF($_GET['id'], $link);
-$pdf->Output();
+// $pdf = createPrintSchedulePDF($_GET['id'], $link);
+// $pdf->Output();
 ?>
