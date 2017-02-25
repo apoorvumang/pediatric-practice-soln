@@ -53,6 +53,9 @@ switch($currentFile)
 	case "register.php":
 	$title = "Register New Patient";
 	break;
+  case "create-invoice.php":
+	$title = "Create Invoice";
+	break;
 	case "vaccine.php":
 	$title = "Add New Vaccine";
 	break;
