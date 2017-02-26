@@ -27,40 +27,40 @@ class PDF extends FPDF
 	}
 
 	function InvoiceDetails($info) {
-		$this->Ln(20);
+		$this->Ln(12);
 		$headers = array("Invoice No.:", "Invoice date:", "Patient ID:", "Patient name");
 		for($i = 0; $i < 4; ++$i)
     {
-				$this->Cell(60,7,$headers[$i]);
-				$this->Cell(40,7,$info[$i]);
+				$this->Cell(60,5,$headers[$i]);
+				$this->Cell(40,5,$info[$i]);
         $this->Ln();
     }
 	}
 
 	function AmountDetails($amountInfo, $mode) {
-		$this->Ln(15);
+		$this->Ln(10);
 		$descriptions = explode(",",$amountInfo[0]);
 		$amounts = explode(",",$amountInfo[1]);
 		$this->SetFont('Arial','B',12);
 		$this->SetFillColor(200,200,200);
-		$this->Cell(15,10,'S.No.','1','','C');
-		$this->Cell(120,10,'Description','1','','C');
-		$this->Cell(30,10,'Amount','1','','C');
+		$this->Cell(15,7,'S.No.','1','','C');
+		$this->Cell(120,7,'Description','1','','C');
+		$this->Cell(30,7,'Amount','1','','C');
 		$this->Ln();
 		$this->SetFont('Arial','',12);
 		$total = 0;
 		$fill = 0;
 		for($i = 0; $i < sizeof($descriptions); $i++) {
-			$this->Cell(15,10,$i+1,'LR','','C',$fill);
-			$this->Cell(120,10,"  ".$descriptions[$i],'LR','','L',$fill);
-			$this->Cell(30,10,$amounts[$i]."  ",'LR','','R',$fill);
+			$this->Cell(15,7,$i+1,'LR','','C',$fill);
+			$this->Cell(120,7,"  ".$descriptions[$i],'LR','','L',$fill);
+			$this->Cell(30,7,$amounts[$i]."  ",'LR','','R',$fill);
 			$this->Ln();
 			$total += intval($amounts[$i]);
 			$fill = !$fill;
 		}
-		$this->Cell(15,10,'','LRB','','L', $fill);
-		$this->Cell(120,10,"Grand Total:",'LRB','','R', $fill);
-		$this->Cell(30,10,$total."  ",'LRB','','R', $fill);
+		$this->Cell(15,7,'','LRB','','L', $fill);
+		$this->Cell(120,7,"Grand Total:",'LRB','','R', $fill);
+		$this->Cell(30,7,$total."  ",'LRB','','R', $fill);
 
 		$this->Ln(20);
 		$stringTotal = (string)$total;
