@@ -192,12 +192,12 @@ function countMessages(e)
 </head>
 <body>
 <!--header -->
-<div id="header-wrap"><div id="header">
+<div id="header-wrap" style="height:60px;"><div id="header">
 
-	<a name="top"></a>
+	<!-- <a name="top"></a>
 
 	<h1 id="logo-text"><a href="index.php" title="">Pediatric Software</a></h1>
-	<p id="slogan">Schedules vaccines for patients</p>
+	<p id="slogan">Schedules vaccines for patients</p> -->
 
 	<div  id="nav">
 		<ul>
