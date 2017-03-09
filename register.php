@@ -195,10 +195,6 @@ $( function() {
 		<label class="grey" for="born_at">Birth Time:&nbsp;&nbsp;</label>
 		<input type="text" name="born_at" id="born_at"/>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	</p>
-
-	<p>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<label class="grey" for="head_circum">Head Circumference:&nbsp;&nbsp;</label>
 		<input type="text" name="head_circum" id="head_circum"/>
 	</p>
