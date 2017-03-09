@@ -131,8 +131,10 @@ if($_POST['vac_date']) {
 		}
 	} else if ($_POST['visit_date']) {
 		$value = date('Y-m-d', strtotime($_POST['visit_date']));
-		if($_POST['note'] != "") {
-			$q = "INSERT INTO notes (p_id, date, note) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}');";
+		$height = $_POST['height'];
+		$weight = $_POST['weight'];
+		if($_POST['note'] != "" || $weight!=0 || $height!=0) {
+			$q = "INSERT INTO notes (p_id, date, note, height, weight) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}', '{$weight}', {$height});";
 			if(!mysqli_query($link, $q))
 				$err[] = "Error adding visit";
 			if(!$err)
@@ -149,7 +151,9 @@ if($_POST['vac_date']) {
 
 		if($_POST['note_id']) {
 			foreach ($_POST['note_id'] as $key => $value) {
-				$query = "UPDATE notes SET note = '".$_POST['change_note'][$key]."' WHERE id = ".$value;
+				$weight = $_POST['change_weight'][$key];
+				$height = $_POST['change_height'][$key];
+				$query = "UPDATE notes SET note = '".$_POST['change_note'][$key]."', weight='{$weight}', height='{$height}' WHERE id = ".$value;
 				if(!mysqli_query($link, $query))
 					$err[] = "Error while updating vists";
 			}
@@ -645,6 +649,14 @@ if($_POST['vac_date']) {
 								<!-- <input type="text" class="form-control" id="due_date" name="due_date"> -->
 								<input type="text" name="visit_date" style="width:80px;margin-left: 20px" id="visit_date" value=<?php echo "\"".date('j M Y')."\"";?>/>
 							</div>
+							<div class="form-group">
+								<label for="weight">Weight:</label>
+								<input type="number" name="weight" style="width:80px;margin-left: 7px" id="weight" value='0'/>
+							</div>
+							<div class="form-group">
+								<label for="height">Height:</label>
+								<input type="number" name="height" style="width:80px;margin-left: 8px" id="height" value='0'/>
+							</div>
 							<br>
 							<button type="submit" class="btn btn-default">Submit</button>
 						</form>
@@ -657,8 +669,8 @@ if($_POST['vac_date']) {
 									<tr>
 										<!-- <th>S.No.</th> -->
 										<th>Date</th>
-										<th>Height</th>
-										<th>Weight</th>
+										<th>Height (cm)</th>
+										<th>Weight (kg)</th>
 										<th>Note</th>
 										<th>Delete</th>
 									</tr>
@@ -674,8 +686,8 @@ if($_POST['vac_date']) {
 										<tr>
 											<!-- <td><?php echo "{$i}"; $i += 1; ?>  </td> -->
 											<td style="text-align:center;vertical-align: middle;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
-											<td style="text-align:center;vertical-align: middle;"><?php echo $row['height']." cm"; ?></td>
-											<td style="text-align:center;vertical-align: middle;"><?php echo $row['weight']." kg"; ?></td>
+											<td> <input style="text-align:center;vertical-align: middle;width:20px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
+											<td> <input style="text-align:center;vertical-align: middle;width:20px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
 											<td><textarea name="change_note[]" cols="40" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
 											<td style="text-align:center; vertical-align: middle;"><?php
