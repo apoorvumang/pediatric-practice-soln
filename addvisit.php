@@ -1,7 +1,7 @@
-<?php include('header.php'); 
+<?php include('header.php');
 
   if($_POST['date'] && $_POST['p_id'] && $_POST['note']) {
-    $query = "INSERT into notes (p_id, date, note) VALUES ({$_POST['p_id']}, '{$_POST['date']}', \"{$_POST['note']}\");";
+    $query = "INSERT into notes (p_id, date, note, height, weight) VALUES ({$_POST['p_id']}, '{$_POST['date']}', \"{$_POST['note']}\", '{$_POST['height']}', '{$_POST['weight']}');";
     if(!mysqli_query($link, $query)) {
       echo "Error adding visit!";
     } else {
@@ -59,11 +59,19 @@ function set_item(item) {
   </div>
   <br>
   <br>
-  <label for="note">Additional info (height/weight): </label>
+  <label for="height">Height (in cms):&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input type="number" name="height" id="height" width="40px"/>
+    <span>&nbsp;&nbsp;&nbsp;cm </span>
+  <br>
+  <br>
+  <label for="weight">Weight (in kg):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input type="number" name="weight" id="weight" width="40px"/>
+    <span>&nbsp;&nbsp;&nbsp;kg </span>
+  <br>
+  <br>
+  <label for="note">Additional info: </label>
   <br>
   <textarea name="note" rows="3" cols="50">
-  Height:
-  Weight: 
   </textarea>
   <br>
 <input type="submit" name="addvisit" value="Go" />

@@ -657,12 +657,14 @@ if($_POST['vac_date']) {
 									<tr>
 										<!-- <th>S.No.</th> -->
 										<th>Date</th>
+										<th>Height</th>
+										<th>Weight</th>
 										<th>Note</th>
 										<th>Delete</th>
 									</tr>
 									<tbody id="visits_section">
 									<?php
-									$q = "SELECT id, date, note FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
+									$q = "SELECT id, date, note, height, weight FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
 									$result = mysqli_query($link, $q);
 									$i=1;
 									$total = 0;
@@ -672,7 +674,9 @@ if($_POST['vac_date']) {
 										<tr>
 											<!-- <td><?php echo "{$i}"; $i += 1; ?>  </td> -->
 											<td style="text-align:center;vertical-align: middle;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
-											<td><textarea name="change_note[]" cols="60" rows="3"><?php echo "{$row['note']}";?></textarea> </td>
+											<td style="text-align:center;vertical-align: middle;"><?php echo $row['height']." cm"; ?></td>
+											<td style="text-align:center;vertical-align: middle;"><?php echo $row['weight']." kg"; ?></td>
+											<td><textarea name="change_note[]" cols="40" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
 											<td style="text-align:center; vertical-align: middle;"><?php
 											if($row['id']) {
