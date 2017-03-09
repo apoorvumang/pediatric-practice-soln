@@ -12,7 +12,7 @@ function checkEmail($str)
 function validatePatient($patient_var)
 {
 	$err = array();
-	
+
 	if(($patient_var['email']))
 	{
 		if(!checkEmail($patient_var['email']))
@@ -44,7 +44,7 @@ function validatePatient($patient_var)
 			$err[]='Your phone number 2 is not valid!';
 		}
 	}
-	
+
 	if(!$patient_var['name'] || !$patient_var['dob'])
 	{
 		$err[] = 'First name and date of birth must be filled!';
@@ -81,7 +81,7 @@ function prePatient(&$patient_var)
 	if($patient_var['phone'][0]!='0')
 			$patient_var['phone']='0'.$patient_var['phone'];
 	if($patient_var['phone2'])
-	{	
+	{
 		if($patient_var['phone2'][0]!='0')
 			$patient_var['phone2']='0'.$patient_var['phone2'];
 	}
@@ -147,15 +147,17 @@ function addPatient($patient_var)
 			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
 			// add not for patient if it exists
 			if($patient_var['note']) {
-				$q =  "INSERT into notes(p_id, date, note)
+				$height = $patient_var['length'];
+				$weight = $patient_var['birth_weight'];
+				$q =  "INSERT into notes(p_id, date, note, height, weight)
 						VALUES(
 						{$new_patient_id},
 						'".date("Y-m-d")."',
-						'{$patient_var['note']}')";
+						'{$patient_var['note']}', {$height}, {$weight})";
 				if(mysqli_query($link, $q)) {
 					$_SESSION['msg']['reg-success']="Note successfully added!";
 				} else {
-					
+
 					$err[] = "Error in adding note. Query: ".$q;
 				}
 			}
@@ -214,7 +216,7 @@ function editPatient($patient_var)
 		$patient_var['add_sibling'] = mysqli_real_escape_string($link, $patient_var['add_sibling']);
 		// Escape the input data
 
-		if(mysqli_query($link, "UPDATE patients SET 
+		if(mysqli_query($link, "UPDATE patients SET
 			name = '{$patient_var['name']}',
 			first_name = '".$patient_var['first_name']."',
 			last_name =  '".$patient_var['last_name']."',
