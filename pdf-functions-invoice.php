@@ -27,18 +27,20 @@ class PDF extends FPDF
 	}
 
 	function InvoiceDetails($info) {
-		$this->Ln(12);
-		$headers = array("Invoice No.:", "Invoice date:", "Patient ID:", "Patient name");
-		for($i = 0; $i < 4; ++$i)
+		$this->Ln(7);
+		$headers = array("Invoice No.:", "Invoice date:", "Patient ID:", "Patient name:");
+		for($i = 0; $i < 2; ++$i)
     {
-				$this->Cell(60,5,$headers[$i]);
-				$this->Cell(40,5,$info[$i]);
+				$this->Cell(30,5,$headers[$i*2]);
+				$this->Cell(40,5,$info[$i*2]);
+				$this->Cell(30,5,$headers[$i*2+1]);
+				$this->Cell(40,5,$info[$i*2+1]);
         $this->Ln();
     }
 	}
 
 	function AmountDetails($amountInfo, $mode) {
-		$this->Ln(10);
+		$this->Ln(5);
 		$descriptions = explode(",",$amountInfo[0]);
 		$amounts = explode(",",$amountInfo[1]);
 		$this->SetFont('Arial','B',12);
@@ -62,7 +64,7 @@ class PDF extends FPDF
 		$this->Cell(120,7,"Grand Total:",'LRB','','R', $fill);
 		$this->Cell(30,7,$total."  ",'LRB','','R', $fill);
 
-		$this->Ln(20);
+		$this->Ln(12);
 		$stringTotal = (string)$total;
 		$this->SetFont('Arial','B',12);
 		$this->Cell(70,5,"To Pay: Rs. ".$stringTotal."  only",'','','L');
@@ -79,7 +81,7 @@ class PDF extends FPDF
 	{
 		$this->Ln(10);
 		$this->SetFont('Arial','I',12);
-		$this->Cell(165,5,"for Dr.Mahima Anurag",'','','R');
+		$this->Cell(165,5,"Authorised signatory",'','','R');
 	}
 }
 
