@@ -68,6 +68,12 @@ switch($currentFile)
 	case "addvac.php":
 	$title = "Add/Edit Vaccine";
 	break;
+  case "invoice-results.php":
+	$title = "Invoice results";
+	break;
+  case "search-invoice.php":
+	$title = "Search invoice";
+	break;
   case "visits-today.php":
 	$title = "Visits";
 	break;
@@ -214,6 +220,7 @@ function countMessages(e)
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
 			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
 			<li <?php if($currentFile=="payment_due.php") { ?> id="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
+      <li <?php if($currentFile=="search-invoice.php") { ?> id="current" <?php }?>><a href="search-invoice.php">Search invoice</a></li>
 			<li <?php if($currentFile=="settings.php") { ?> id="current" <?php }?>><a href="settings.php">Settings</a></li>
 			<?php } ?>
 			<?php if($_SESSION['name']) { ?>
