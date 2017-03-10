@@ -14,7 +14,7 @@ function addInvoice($link, $invoiceInfo) {
   $mode = $invoiceInfo["mode"];
   $length = sizeof($invoiceInfo['description']);
   for($i = 0; $i < $length; $i++) {
-    if(strcmp($invoiceInfo['description'][$i],"") == 0) {
+    if(strcmp($invoiceInfo['description'][$i],"") == 0 || strcmp($invoiceInfo['description'][$i],"N/A") == 0 ) {
       continue;
     }
     $descriptionConcat = $descriptionConcat.$invoiceInfo['description'][$i].",";
@@ -25,7 +25,7 @@ function addInvoice($link, $invoiceInfo) {
   for($i = 0; $i < $length; $i++) {
     // Keeping same as description because both strings must have same number
     // of entries (descriptionConcat and amountConcat)
-    if(strcmp($invoiceInfo['description'][$i],"") == 0) {
+    if(strcmp($invoiceInfo['description'][$i],"") == 0 || strcmp($invoiceInfo['description'][$i],"N/A") == 0 ) {
       continue;
     }
     $amountConcat = $amountConcat.$invoiceInfo['amount'][$i].",";
@@ -72,6 +72,21 @@ $(function() {
     dateFormat:"d M yy"
   });
 });
+
+function setDescriptionAndAmountValues(val, id) {
+  console.log('#'+id+'amount');
+  $('#'+id+'amount').val(val.split(',')[0]);
+  $('#'+id+'descript').val(val.split(',')[1]);
+}
+
+$(document).ready(function () {
+  $('#productName').change(function () {
+    console.log('ckicked');
+    $('#kjhkh').val('200');
+  })
+
+});
+
 </script>
 <h4>Create Invoice for <?php echo $patientName; ?></h4>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
@@ -92,30 +107,54 @@ $(function() {
     <label>Description and amount </label>
     <br>
     <br>
-    <input type="text" name="description[]" value="Consultation"/>
+    <?php
+      $query = "SELECT * FROM vac_make ORDER BY name ASC;";
+      $result = mysqli_query($link, $query);
+      $vaccines = [];
+      while($vaccine = mysqli_fetch_assoc($result)){
+        $vaccines[] = $vaccine;
+      }
+      for ($i=0; $i < 5; $i++) {
+
+        ?>
+        <select name="selectBoxForVaccines[]" id=<?php echo "'{$i}consult'" ?> onchange="setDescriptionAndAmountValues(this.value, this.id)" style="font-size:15px">
+        <?php
+          foreach ($vaccines as $key => $vaccine) {
+            # code...
+          $price = $vaccine['price'];
+          $name = $vaccine['name'];
+          if($name=='N/A') {
+            echo "<option value='{$price},{$name}' selected='selected'>";
+          }
+          else {
+            echo "<option value='{$price},{$name}'>";
+          }
+          echo $name;
+          echo "</option>";
+        }
+        echo "</select>";
+        echo "<input type='hidden' name='description[]' id='{$i}consultdescript'/>";
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        echo "<input type='text' name='amount[]' id='{$i}consultamount'/>";
+
+        echo "<br>";
+      }
+    ?>
+
+    <input type="text" name="description[]" style="font-size:15px"/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="amount[]" value = "400"/>
+    <input type="text" name="amount[]"/ style="font-size:15px">
     <br>
-    <input type="text" name="description[]"/>
+    <input type="text" name="description[]" style="font-size:15px"/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="amount[]"/>
+    <input type="text" name="amount[]" style="font-size:15px"/>
     <br>
-    <input type="text" name="description[]"/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="amount[]"/>
-    <br>
-    <input type="text" name="description[]"/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="amount[]"/>
-    <br>
-    <input type="text" name="description[]"/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="amount[]"/>
     <br>
   </p>
   <p>
   	<input type="submit" name="submit" value="Create invoice"/>
   </p>
+
 </form>
 
 

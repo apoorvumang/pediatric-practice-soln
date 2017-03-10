@@ -1,4 +1,4 @@
-<?php include('header.php'); 
+<?php include('header.php');
 if(isset($_POST['submit']))
 {
 	if(!$_POST['name'])
@@ -24,7 +24,7 @@ if(isset($_POST['submit']))
 
 <form action="" method="post" enctype="multipart/form-data">
 	<h3>Add Product</h3>
-	
+
 	<p>
 	<label for="name">Name of product:</label><br />
 	<input type="text" name="name" id="name" autofocus="autofocus" />
