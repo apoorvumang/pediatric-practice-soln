@@ -31,7 +31,11 @@ function addInvoice($link, $invoiceInfo) {
     $amountConcat = $amountConcat.$invoiceInfo['amount'][$i].",";
   }
   $amountConcat = rtrim($amountConcat, ',');
-  $query = "INSERT into invoice(p_id, date, mode, descriptions, amounts) VALUES ('{$p_id}', '{$date}', '{$mode}', '{$descriptionConcat}', '{$amountConcat}');";
+  $time = time();
+  $stime = "$time";
+  $finaltime = substr($stime,-3);
+  $invoice_id = "SP".$p_id.$finaltime;
+  $query = "INSERT into invoice(p_id, date, mode, descriptions, amounts, invoice_id) VALUES ('{$p_id}', '{$date}', '{$mode}', '{$descriptionConcat}', '{$amountConcat}', '{$invoice_id}');";
   $retval = mysqli_query($link, $query);
   if($retval) {
     $invoiceId = mysqli_insert_id($link);

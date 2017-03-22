@@ -89,7 +89,7 @@ class PDF extends FPDF
 	$pdf->SetMargins(20,20,10);
 
 	$pdf->AddPage();
-	$invoiceInfo = mysqli_fetch_assoc(mysqli_query($link, "SELECT i.id as id, i.p_id as p_id, i.date as date, i.mode as mode, i.descriptions as descriptions, i.amounts as amounts, p.name as name FROM patients p, invoice i WHERE i.id = {$_GET['id']} AND p.id = i.p_id"));
+	$invoiceInfo = mysqli_fetch_assoc(mysqli_query($link, "SELECT i.invoice_id as id, i.p_id as p_id, i.date as date, i.mode as mode, i.descriptions as descriptions, i.amounts as amounts, p.name as name FROM patients p, invoice i WHERE i.id = {$_GET['id']} AND p.id = i.p_id"));
 	$info = array($invoiceInfo["id"], date('d M Y', strtotime($invoiceInfo["date"])), $invoiceInfo["p_id"], $invoiceInfo["name"]);
 	$amountInfo = array($invoiceInfo["descriptions"], $invoiceInfo["amounts"]);
 	$mode = $invoiceInfo["mode"];
