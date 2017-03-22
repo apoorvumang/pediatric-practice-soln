@@ -134,7 +134,7 @@ if($_POST['vac_date']) {
 		$height = $_POST['height'];
 		$weight = $_POST['weight'];
 		if($_POST['note'] != "" || $weight!=0 || $height!=0) {
-			$q = "INSERT INTO notes (p_id, date, note, height, weight) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}', '{$weight}', {$height});";
+			$q = "INSERT INTO notes (p_id, date, note, height, weight) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}', '{$height}', {$weight});";
 			if(!mysqli_query($link, $q))
 				$err[] = "Error adding visit";
 			if(!$err)
@@ -651,11 +651,11 @@ if($_POST['vac_date']) {
 							</div>
 							<div class="form-group">
 								<label for="weight">Weight:</label>
-								<input type="number" name="weight" style="width:80px;margin-left: 7px" id="weight" value='0'/>
+								<input type="number" step="any" name="weight" style="width:80px;margin-left: 7px" id="weight" value='0'/>
 							</div>
 							<div class="form-group">
 								<label for="height">Height:</label>
-								<input type="number" name="height" style="width:80px;margin-left: 8px" id="height" value='0'/>
+								<input type="number" step="any" name="height" style="width:80px;margin-left: 8px" id="height" value='0'/>
 							</div>
 							<br>
 							<button type="submit" class="btn btn-default">Submit</button>
@@ -669,8 +669,8 @@ if($_POST['vac_date']) {
 									<tr>
 										<!-- <th>S.No.</th> -->
 										<th>Date</th>
-										<th>Height (cm)</th>
-										<th>Weight (kg)</th>
+										<th>Height       (cm)</th>
+										<th>Weight      (kg)</th>
 										<th>Note</th>
 										<th>Delete</th>
 									</tr>
@@ -686,8 +686,8 @@ if($_POST['vac_date']) {
 										<tr>
 											<!-- <td><?php echo "{$i}"; $i += 1; ?>  </td> -->
 											<td style="text-align:center;vertical-align: middle;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
-											<td> <input style="text-align:center;vertical-align: middle;width:20px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
-											<td> <input style="text-align:center;vertical-align: middle;width:20px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
+											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
+											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
 											<td><textarea name="change_note[]" cols="40" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
 											<td style="text-align:center; vertical-align: middle;"><?php
