@@ -45,7 +45,7 @@ if($_GET['specificdate'])  //If some submit button clicked
 <?php
 $count = 0;
 $cash = 0;
-$credit = 0;
+$card = 0;
 $paytm = 0;
 while($row = mysqli_fetch_assoc($result))
 {
@@ -79,8 +79,8 @@ while($row = mysqli_fetch_assoc($result))
   echo $total;
   if($row['mode'] == "CASH") {
     $cash += $total;
-  } else if($row['mode'] == "CREDIT") {
-    $credit += $total;
+  } else if($row['mode'] == "CARD") {
+    $card += $total;
   } else if($row['mode'] == "PAYTM") {
     $paytm += $total;
   }
@@ -94,7 +94,7 @@ while($row = mysqli_fetch_assoc($result))
 $count++;
 }
 
-$totalDisplay = "CASH: ".$cash.".00<br>CREDIT: ".$credit.".00<br>PAYTM: ".$paytm.".00<br>FINAL AMOUNT: ".($cash + $credit + $paytm).".00";
+$totalDisplay = "CASH: ".$cash.".00<br>CARD: ".$card.".00<br>PAYTM: ".$paytm.".00<br>FINAL AMOUNT: ".($cash + $card + $paytm).".00";
 
 ?>
 </tbody>
