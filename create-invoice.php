@@ -114,7 +114,7 @@ $(document).ready(function () {
 
 </script>
 <h4>Create Invoice for <?php echo $patientName; ?></h4>
-<form action="" method="post" enctype="multipart/form-data" style="width:auto">
+<form onsubmit="return confirm('Create invoice?');" action="" method="post" enctype="multipart/form-data" style="width:auto" >
   <input type="hidden" name="p_id" value=<?php echo "'".$_GET['id']."'"; ?> />
   <p>
     <label for="date">Date:&nbsp;&nbsp;</label>
@@ -177,7 +177,7 @@ $(document).ready(function () {
     <br>
   </p>
   <p>
-  	<input type="submit" name="submit" value="Create invoice"/>
+  	<input type="submit" name="submit" value="Create invoice" />
   </p>
 
 </form>
