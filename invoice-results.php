@@ -4,7 +4,9 @@
 // The dates *only* can be edited. Give a link for the patient also.
 ?>
 
-<h3>Search Results</h3>
+<h3>Search Results for invoice</h3>
+<h4>Totals for <?php echo $_GET['date']; ?></h4>
+<p style="font-size:16px;" id="amountTotalsByType">Nothing here!</p>
 <?php
 if($_POST['delete']) {
   $array = $_POST['delete'];
@@ -42,6 +44,9 @@ if($_GET['specificdate'])  //If some submit button clicked
 </tr>
 <?php
 $count = 0;
+$cash = 0;
+$credit = 0;
+$paytm = 0;
 while($row = mysqli_fetch_assoc($result))
 {
 ?>
@@ -72,6 +77,13 @@ while($row = mysqli_fetch_assoc($result))
     $total = $total + $amount;
   }
   echo $total;
+  if($row['mode'] == "CASH") {
+    $cash += $total;
+  } else if($row['mode'] == "CREDIT") {
+    $credit += $total;
+  } else if($row['mode'] == "PAYTM") {
+    $paytm += $total;
+  }
   ?>
 </td>
 <td>
@@ -81,9 +93,16 @@ while($row = mysqli_fetch_assoc($result))
 <?php
 $count++;
 }
+
+$totalDisplay = "CASH: ".$cash.".00<br>CREDIT: ".$credit.".00<br>PAYTM: ".$paytm.".00<br>FINAL AMOUNT: ".($cash + $credit + $paytm).".00";
+
 ?>
 </tbody>
 </table>
+<script type="text/javascript">
+    document.getElementById("amountTotalsByType").innerHTML = <?php echo "\"".$totalDisplay."\""; ?>;
+</script>
+
 <input type="submit" value="Delete invoices">
 </form>
 <?php
