@@ -1,4 +1,7 @@
 <?php include('header.php');
+if($_SESSION['type']!=='doctor') {
+  exit();
+}
 //What needs to be done on this page:
 // List out all schedules for a particular date, in a form.
 // The dates *only* can be edited. Give a link for the patient also.

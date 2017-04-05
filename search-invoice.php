@@ -1,4 +1,8 @@
-<?php include('header.php'); ?>
+<?php include('header.php'); 
+if($_SESSION['type']!=='doctor') {
+  exit();
+}
+?>
 <script>
 $(function() {
 $( "#date" ).datepicker({
