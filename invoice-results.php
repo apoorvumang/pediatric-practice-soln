@@ -26,14 +26,14 @@ if($_GET['specificdate'])  //If some submit button clicked
 {
   $date = date('Y-m-d', strtotime($_GET['date']));
   $date = mysqli_real_escape_string($link, $date);
-  $result = mysqli_query($link, "SELECT i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts FROM invoice i, patients p WHERE i.date='".$date."' AND i.p_id = p.id ORDER BY i.id");
+  $result = mysqli_query($link, "SELECT i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts FROM invoice i, patients p WHERE i.date='".$date."' AND i.p_id = p.id ORDER BY i.id");
   $nrows = mysqli_num_rows($result);
 ?>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
 <table>
 <tbody>
 <tr>
-<th>ID</th>
+<th>Invoice ID</th>
 <th>Patient</th>
 <th>Date</th>
 <th>Mode</th>
@@ -52,7 +52,7 @@ while($row = mysqli_fetch_assoc($result))
 ?>
 <tr>
 <td>
-<?php echo $row['pid'];?>
+<?php echo $row['invoice_id'];?>
 </td>
 <td>
 <a href= <?php echo "\"pdf-invoice.php?id={$row['id']}\""; ?> ><?php echo $row['pname']; ?></a>

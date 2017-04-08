@@ -17,7 +17,7 @@ if($_POST['specificdate'])  //If some submit button clicked
 <table>
 <tbody>
 <tr>
-<th>ID</th>
+<th>Visit ID</th>
 <th>Patient</th>
 <th>Height</th>
 <th>Weight</th>
@@ -33,7 +33,7 @@ while($row = mysqli_fetch_assoc($result))
 ?>
 <tr>
 <td>
-<?php echo $row['pid'];?>
+<?php echo $row['id'];?>
 </td>
 <td>
 <a href= <?php echo "\"edit-sched.php?id={$row['pid']}\""; ?> ><?php echo $row['pname']; ?></a>
