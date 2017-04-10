@@ -14,6 +14,7 @@
 <tbody>
 <tr>
 <th>Visit ID</th>
+<th>Patient ID</th>
 <th>Patient</th>
 <th>Height</th>
 <th>Weight</th>
@@ -30,6 +31,9 @@ while($row = mysqli_fetch_assoc($result))
 <tr>
 <td>
 <?php echo $row['id'];?>
+</td>
+<td>
+<?php echo "<b>".$row['pid']."</b>";?>
 </td>
 <td>
 <a href= <?php echo "\"edit-sched.php?id={$row['pid']}\""; ?> ><?php echo $row['pname']; ?></a>

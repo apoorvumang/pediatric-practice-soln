@@ -37,6 +37,7 @@ if($_GET['specificdate'])  //If some submit button clicked
 <tbody>
 <tr>
 <th>Invoice ID</th>
+<th>Patient ID</th>
 <th>Patient</th>
 <th>Date</th>
 <th>Mode</th>
@@ -56,6 +57,9 @@ while($row = mysqli_fetch_assoc($result))
 <tr>
 <td>
 <?php echo $row['invoice_id'];?>
+</td>
+<td>
+<?php echo "<b>".$row['pid']."</b>";?>
 </td>
 <td>
 <a href= <?php echo "\"pdf-invoice.php?id={$row['id']}\""; ?> ><?php echo $row['pname']; ?></a>
