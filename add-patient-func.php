@@ -146,21 +146,22 @@ function addPatient($patient_var)
 			$new_patient_id = mysqli_insert_id($link);
 			$_SESSION['msg']['reg-success']="Patient successfully added! Patient id is <strong>".$new_patient_id."</strong>";
 			// add not for patient if it exists
-			if($patient_var['note'] || $patient_var['length'] || $patient_var['birth_weight']) {
-				$height = $patient_var['length'];
-				$weight = $patient_var['birth_weight'];
-				$q =  "INSERT into notes(p_id, date, note, height, weight)
-						VALUES(
-						{$new_patient_id},
-						'".date("Y-m-d")."',
-						'{$patient_var['note']}', {$height}, {$weight})";
-				if(mysqli_query($link, $q)) {
-					$_SESSION['msg']['reg-success']="Note successfully added!";
-				} else {
-
-					$err[] = "Error in adding note. Query: ".$q;
-				}
-			}
+			// We don't want to make a default first visit for new registrations
+			// if($patient_var['note'] || $patient_var['length'] || $patient_var['birth_weight']) {
+			// 	$height = $patient_var['length'];
+			// 	$weight = $patient_var['birth_weight'];
+			// 	$q =  "INSERT into notes(p_id, date, note, height, weight)
+			// 			VALUES(
+			// 			{$new_patient_id},
+			// 			'".date("Y-m-d")."',
+			// 			'{$patient_var['note']}', {$height}, {$weight})";
+			// 	if(mysqli_query($link, $q)) {
+			// 		$_SESSION['msg']['reg-success']="Note successfully added!";
+			// 	} else {
+			//
+			// 		$err[] = "Error in adding note. Query: ".$q;
+			// 	}
+			// }
 			if($patient_var['add_sibling']!=0)
 			{
 				$siblings_result = mysqli_query($link, "SELECT * FROM siblings WHERE p_id = {$patient_var['add_sibling']}");

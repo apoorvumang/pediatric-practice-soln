@@ -122,7 +122,8 @@ $( function() {
 				<input type="text" name="phone2" id="phone2"  />
 			</p>
 
-			<p>
+			<!--We don't want to make a default first visit for new registrations -->
+			<!-- <p>
 				<label for="note">Notes: &nbsp;&nbsp;</label>
 				<textarea name="note" id="note" rows=3 cols=90>First visit</textarea>
 			</p>
@@ -132,7 +133,7 @@ $( function() {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<label class="grey" for="length">Length:&nbsp;&nbsp;</label>
 				<input type="number" name="length" id="length" value='0'/>
-			</p>
+			</p> -->
 
 		</div>
 		<h3> Extra </h3>
