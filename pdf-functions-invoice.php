@@ -53,6 +53,9 @@ class PDF extends FPDF
 		$total = 0;
 		$fill = 0;
 		for($i = 0; $i < sizeof($descriptions); $i++) {
+			if($descriptions[$i] != "CONSULTATION") {
+				$descriptions[$i] .= " Vaccination";
+			}
 			$this->Cell(15,7,$i+1,'LR','','C',$fill);
 			$this->Cell(120,7,"  ".$descriptions[$i],'LR','','L',$fill);
 			$this->Cell(30,7,$amounts[$i]."  ",'LR','','R',$fill);
