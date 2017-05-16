@@ -77,7 +77,14 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE id={$row['p_id']}"));
 		if($patient['active']==0)
 			continue;
-		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, upper_limit FROM vaccines WHERE id={$row['v_id']}"));
+		$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT name, upper_limit, dependent FROM vaccines WHERE id={$row['v_id']}"));
+		if($vaccine['dependent'] != 0) {
+			$query_for_dependent = "SELECT vs.given as given FROM vac_schedule vs WHERE p_id={$row['p_id']} and v_id = {$vaccine['dependent']}";
+		  $dependent_schedule = mysqli_fetch_assoc(mysqli_query($link, $query_for_dependent));
+			if($dependent_schedule['given'] == 'N') {
+				continue;
+			}
+		}
 
 ?>
 	<tr <?php
