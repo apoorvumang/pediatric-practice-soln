@@ -10,6 +10,7 @@ error_reporting(0);
 function addInvoice($link, $invoiceInfo) {
   $descriptionConcat = "";
   $p_id = $invoiceInfo["p_id"];
+  $doctor = $invoiceInfo["doctor"];
   $date = date('Y-m-d', strtotime($invoiceInfo['date']));
   $mode = $invoiceInfo["mode"];
   $length = sizeof($invoiceInfo['description']);
@@ -36,7 +37,6 @@ function addInvoice($link, $invoiceInfo) {
   $finaltime = substr($stime,-3);
   $invoice_id = "SP".$p_id.$finaltime;
 
-
 	$month = intval(date('n', strtotime($invoiceInfo["date"])));
 	$year1 = intval(date('y', strtotime($invoiceInfo["date"])));
 	if($month <=3) {
@@ -45,18 +45,23 @@ function addInvoice($link, $invoiceInfo) {
 	$year2 = $year1 + 1;
 	$year = sprintf( "%d-%d", $year1, $year2);
 
+  if($doctor == 'Dr. Mahima') {
+    $doctor_header = "SCPed/";
+  } else {
+    $doctor_header = "SCMed/";
+  }
 
-  $query = "SELECT * FROM invoice	 WHERE invoice_id like 'SCPed/".$year."/%' ORDER BY id desc";
+  $query = "SELECT * FROM invoice	 WHERE invoice_id like '".$doctor_header.$year."/%' ORDER BY id desc";
   $row = mysqli_fetch_assoc(mysqli_query($link, $query));
   if($row['invoice_id']) {
     $invoice_id_number = intval(substr($row['invoice_id'], -5));
     $invoice_id_new_number = $invoice_id_number + 1;
-    $invoice_id = sprintf("SCPed/".$year."/%05d", $invoice_id_new_number);
+    $invoice_id = sprintf($doctor_header.$year."/%05d", $invoice_id_new_number);
   } else {
-    $invoice_id = "SCPed/".$year."/00001";
+    $invoice_id = $doctor_header.$year."/00001";
   }
 
-  $query = "INSERT into invoice(p_id, date, mode, descriptions, amounts, invoice_id) VALUES ('{$p_id}', '{$date}', '{$mode}', '{$descriptionConcat}', '{$amountConcat}', '{$invoice_id}');";
+  $query = "INSERT into invoice(p_id, date, mode, descriptions, amounts, invoice_id, doctor) VALUES ('{$p_id}', '{$date}', '{$mode}', '{$descriptionConcat}', '{$amountConcat}', '{$invoice_id}', '{$doctor}');";
   $retval = mysqli_query($link, $query);
   if($retval) {
     $invoiceId = mysqli_insert_id($link);
@@ -117,6 +122,13 @@ $(document).ready(function () {
 <form onsubmit="return confirm('Create invoice?');" action="" method="post" enctype="multipart/form-data" style="width:auto" >
   <input type="hidden" name="p_id" value=<?php echo "'".$_GET['id']."'"; ?> />
   <p>
+    <label class="grey" for="doctor">Doctor:&nbsp;&nbsp;</label>
+    <select name="doctor" style="margin-right:60px;">
+      <option value='Dr. Mahima' selected="1">Dr. Mahima</option>
+      <option value='Dr. Anurag'>Dr. Anurag</option>
+    </select>
+  </p>
+  <p>
     <label for="date">Date:&nbsp;&nbsp;</label>
     <input type="text" name="date" id="date" value= <?php echo "'".date('j M Y')."'";?>/>
   </p>
@@ -151,7 +163,7 @@ $(document).ready(function () {
             $name = $vaccine['name'];
           } else {
             $name = $vaccine['name'].' ('.$vaccine['description'].')';
-          }          
+          }
           if($name=='N/A') {
             echo "<option value='{$price},{$name}' selected='selected'>";
           }

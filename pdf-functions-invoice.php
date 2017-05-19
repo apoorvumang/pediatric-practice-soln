@@ -7,26 +7,41 @@ class PDF extends FPDF
 	{
 		// Arial bold 15
 
+
+	}
+
+	function InvoiceDetails($info, $doctor) {
+
+		if($doctor == 'Dr. Mahima') {
+			$doctor_name = 'Dr. Mahima Anurag';
+			$doctor_degree = "MBBS, MD(Pediatrics)";
+			$doctor_work = "Consultant Child Specialist and Neonatologist";
+			$doctor_regn = "DMC-3334";
+		} else {
+			$doctor_name = 'Dr. Anurag Saxena';
+			$doctor_degree = "MBBS, MD(Medicine)";
+			$doctor_work = "Consultant Physician";
+			$doctor_regn = "DMC-3283";
+		}
 		$this->SetFont('Arial','B',16);
-		$this->Cell(100,15,'Dr. Mahima Anurag');
+		$this->Cell(100,15, $doctor_name);
 		$this->SetFont('Arial','B',12);
 		$this->Cell(70,7,"Specialists' Clinic",'',1,'R');
 
 		$this->SetFont('Arial','',12);
-		$this->Cell(100,15,'MBBS, MD (Pediatrics)');
+		$this->Cell(100,15, $doctor_degree);
 		$this->Cell(70,5,'C-14 Community Centre','',1,'R');
 
-		$this->Cell(100,15,'Consultant Child Specialist and Neonatologist ');
+		$this->Cell(100,15, $doctor_work.' ');
 		$this->Cell(70,5,'Naraina Vihar','',1,'R');
 
-		$this->Cell(100,15,'Regn. No. DMC-3334');
+		$this->Cell(100,15,'Regn. No. '.$doctor_regn);
 		$this->Cell(70,5,'New Delhi - 110028','',1,'R');
 
 		$this->Cell(100,15,'');
 		$this->Cell(70,5,'Tel. 9717585207','',1,'R');
-	}
 
-	function InvoiceDetails($info) {
+
 		$this->Ln(7);
 		$headers = array("Invoice No.:", "Invoice date:", "Patient ID:", "Patient name:");
 		for($i = 0; $i < 2; ++$i)
@@ -89,11 +104,12 @@ class PDF extends FPDF
 	$pdf->SetMargins(20,20,10);
 
 	$pdf->AddPage();
-	$invoiceInfo = mysqli_fetch_assoc(mysqli_query($link, "SELECT i.invoice_id as id, i.p_id as p_id, i.date as date, i.mode as mode, i.descriptions as descriptions, i.amounts as amounts, p.name as name FROM patients p, invoice i WHERE i.id = {$_GET['id']} AND p.id = i.p_id"));
+	$invoiceInfo = mysqli_fetch_assoc(mysqli_query($link, "SELECT i.invoice_id as id, i.p_id as p_id, i.date as date, i.mode as mode, i.descriptions as descriptions, i.amounts as amounts, p.name as name, i.doctor as doctor FROM patients p, invoice i WHERE i.id = {$_GET['id']} AND p.id = i.p_id"));
 	$info = array($invoiceInfo["id"], date('d M Y', strtotime($invoiceInfo["date"])), $invoiceInfo["p_id"], $invoiceInfo["name"]);
+	$doctor = $invoiceInfo['doctor'];
 	$amountInfo = array($invoiceInfo["descriptions"], $invoiceInfo["amounts"]);
 	$mode = $invoiceInfo["mode"];
-	$pdf->InvoiceDetails($info);
+	$pdf->InvoiceDetails($info, $doctor);
 	$pdf->AmountDetails($amountInfo, $mode);
 
 
