@@ -133,7 +133,7 @@ $(document).ready(function () {
     <br>
     <br>
     <?php
-      $query = "SELECT * FROM vac_make ORDER BY name ASC;";
+      $query = "SELECT * FROM vac_make WHERE for_invoice = 'Y' ORDER BY name ASC;";
       $result = mysqli_query($link, $query);
       $vaccines = [];
       while($vaccine = mysqli_fetch_assoc($result)){
@@ -147,7 +147,11 @@ $(document).ready(function () {
           foreach ($vaccines as $key => $vaccine) {
             # code...
           $price = $vaccine['price'];
-          $name = $vaccine['name'];
+          if($vaccine['name'] == 'N/A') {
+            $name = $vaccine['name'];
+          } else {
+            $name = $vaccine['name'].' ('.$vaccine['description'].')';
+          }          
           if($name=='N/A') {
             echo "<option value='{$price},{$name}' selected='selected'>";
           }
