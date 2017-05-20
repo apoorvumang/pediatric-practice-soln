@@ -123,7 +123,7 @@ $(document).ready(function () {
   <input type="hidden" name="p_id" value=<?php echo "'".$_GET['id']."'"; ?> />
   <p>
     <label class="grey" for="doctor">Doctor:&nbsp;&nbsp;</label>
-    <select name="doctor" style="margin-right:60px;">
+    <select name="doctor" id="doctor" style="margin-right:60px;">
       <option value='Dr. Mahima' selected="1">Dr. Mahima</option>
       <option value='Dr. Anurag'>Dr. Anurag</option>
     </select>

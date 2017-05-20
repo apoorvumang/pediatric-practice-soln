@@ -29,7 +29,14 @@ if($_GET['specificdate'])  //If some submit button clicked
 {
   $date = date('Y-m-d', strtotime($_GET['date']));
   $date = mysqli_real_escape_string($link, $date);
-  $result = mysqli_query($link, "SELECT i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.date='".$date."' AND i.p_id = p.id ORDER BY i.id");
+  $doctor = $_GET['doctor'];
+  if($doctor == "Both") {
+    $doctor_query = "";
+  } else {
+    $doctor_query = "AND i.doctor = '{$doctor}' ";
+  }
+  $query = "SELECT i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.date='".$date."' AND i.p_id = p.id {$doctor_query} ORDER BY i.id";
+  $result = mysqli_query($link, $query);
   $nrows = mysqli_num_rows($result);
 ?>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
