@@ -222,7 +222,7 @@ function countMessages(e)
       <li <?php if($currentFile=="visits-today.php") { ?> id="current" <?php }?>><a href="visits-today.php">Visits</a></li>
 			<?php if($_SESSION['type']=='doctor') { ?>
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
-			<li <?php if($currentFile=="search-scheddg.php") { ?> id="current" <?php }?>><a href="search-scheddg.php">Given Search</a></li>
+			
 			<li <?php if($currentFile=="payment_due.php") { ?> id="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
       <li <?php if($currentFile=="search-invoice.php") { ?> id="current" <?php }?>><a href="search-invoice.php">Search invoice</a></li>
 			<li <?php if($currentFile=="settings.php") { ?> id="current" <?php }?>><a href="settings.php">Settings</a></li>
