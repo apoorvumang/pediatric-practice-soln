@@ -13,6 +13,7 @@ function addInvoice($link, $invoiceInfo) {
   $doctor = $invoiceInfo["doctor"];
   $date = date('Y-m-d', strtotime($invoiceInfo['date']));
   $mode = $invoiceInfo["mode"];
+  $visit_id = $invoiceInfo['visit_id'];
   $length = sizeof($invoiceInfo['description']);
   for($i = 0; $i < $length; $i++) {
     if(strcmp($invoiceInfo['description'][$i],"") == 0 || strcmp($invoiceInfo['description'][$i],"N/A") == 0 ) {
@@ -65,6 +66,11 @@ function addInvoice($link, $invoiceInfo) {
   $retval = mysqli_query($link, $query);
   if($retval) {
     $invoiceId = mysqli_insert_id($link);
+    // Add invoice ID to visit_id
+    $query = "UPDATE notes SET invoice_id=".$invoiceId." WHERE id=".$visit_id;
+    if(mysqli_query($link, $query)) {
+      // Updated visit and added invoice id to it
+    }
     return $invoiceId;
   }
   else {
@@ -83,7 +89,7 @@ if (isset($_POST['submit'])) { //If the new invoice form has been submitted
 	}
 }
 
-if((!isset($_GET['id']))||(!(isset($_SESSION['id'])||isset($_SESSION['username']))))
+if((!isset($_GET['visit_id']))||(!isset($_GET['id']))||(!(isset($_SESSION['id'])||isset($_SESSION['username']))))
 {
 	echo '<h2>Access Denied</h2>';
 	exit;
@@ -121,6 +127,7 @@ $(document).ready(function () {
 <h4>Create Invoice for <?php echo $patientName; ?></h4>
 <form onsubmit="return confirm('Create invoice?');" action="" method="post" enctype="multipart/form-data" style="width:auto" >
   <input type="hidden" name="p_id" value=<?php echo "'".$_GET['id']."'"; ?> />
+  <input type="hidden" name="visit_id" value=<?php echo "'".$_GET['visit_id']."'"; ?> />
   <p>
     <label class="grey" for="doctor">Doctor:&nbsp;&nbsp;</label>
     <select name="doctor" id="doctor" style="margin-right:60px;">
@@ -159,7 +166,7 @@ $(document).ready(function () {
           foreach ($vaccines as $key => $vaccine) {
             # code...
           $price = $vaccine['price'];
-          if($vaccine['name'] == 'N/A') {
+          if($vaccine['name'] == 'N/A' || $vaccine['name'] == 'CONSULTATION') {
             $name = $vaccine['name'];
           } else {
             $name = $vaccine['name'].' ('.$vaccine['description'].')';

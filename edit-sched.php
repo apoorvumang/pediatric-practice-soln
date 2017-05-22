@@ -133,8 +133,14 @@ if($_POST['vac_date']) {
 		$value = date('Y-m-d', strtotime($_POST['visit_date']));
 		$height = $_POST['height'];
 		$weight = $_POST['weight'];
+    if($_POST['invoice_id']) {
+      $invoice_id = $_POST['invoice_id'];
+    } else {
+      $invoice_id = 0;
+    }
+
 		if($_POST['note'] != "" || $weight!=0 || $height!=0) {
-			$q = "INSERT INTO notes (p_id, date, note, height, weight) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}', '{$height}', {$weight});";
+			$q = "INSERT INTO notes (p_id, date, note, height, weight, invoice_id) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}', '{$height}', {$weight}, {$invoice_id});";
 			if(!mysqli_query($link, $q))
 				$err[] = "Error adding visit";
 			if(!$err)
@@ -672,11 +678,13 @@ if($_POST['vac_date']) {
 										<th>Height       (cm)</th>
 										<th>Weight      (kg)</th>
 										<th>Note</th>
+                    <th>Invoice</th>
 										<th>Delete</th>
 									</tr>
 									<tbody id="visits_section">
 									<?php
-									$q = "SELECT id, date, note, height, weight FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
+                  $patient_id = $_GET['id'];
+									$q = "SELECT id, date, note, height, weight, invoice_id FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
 									$result = mysqli_query($link, $q);
 									$i=1;
 									$total = 0;
@@ -689,6 +697,13 @@ if($_POST['vac_date']) {
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
 											<td><textarea name="change_note[]" cols="40" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
+                      <td><?php
+                      if($row['invoice_id']) {
+                        echo "<a href=pdf-invoice.php?id=".$row['invoice_id'].">"."Show invoice</a>";
+                      } else {
+                        echo "<a href=create-invoice.php?id={$patient_id}&visit_id=".$row['id'].">"."Create invoice</a>";
+                      }
+                      ?></td>
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
 											<td style="text-align:center; vertical-align: middle;"><?php
 											if($row['id']) {
