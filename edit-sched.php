@@ -384,9 +384,6 @@ if($_POST['vac_date']) {
 			<p>
 				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send vaccination history email (print format)</a> </strong>
 			</p>
-			<p>
-				<strong><a href=<?php echo "\""."create-invoice.php?id=".$patient['id']."\"" ?>>Create invoice</a> </strong>
-			</p>
 			</div>
 			<h4>
 				<strong>ID: <?php echo $patient['id'] ?> </strong>
