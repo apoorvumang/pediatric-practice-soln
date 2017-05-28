@@ -6,6 +6,15 @@
       echo "Error adding visit!";
     } else {
       echo "Visit added successfully!";
+      $query = "SELECT * from patients WHERE id={$_POST['p_id']}";
+      $patient = mysqli_fetch_assoc(mysqli_query($link, $query));
+      $name = $patient['name'];
+      $date = new DateTime();
+      $formatted_date = $date->format('Y-m-d H:i:s');
+      $message = "Visit added for {$name} on {$formatted_date}";
+      // echo $message;
+      if($patient['phone'])
+				mail($dr_email_sms, $row['phone'], $message);
     }
   }
 
