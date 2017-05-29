@@ -17,7 +17,7 @@
 
       $subject = "Visit added for {$name} on {$formatted_date}";
       $message = "<a href='https://www.drmahima.com/edit-sched.php?id=".$_POST['p_id']."'>Patient profile</a>";
-      // echo $message;
+      echo $message;
       if(mail("anuragmahima@gmail.com", $subject, $message, $headers)) {
   			echo 'success';
   		}
