@@ -11,10 +11,16 @@
       $name = $patient['name'];
       $date = new DateTime();
       $formatted_date = $date->format('Y-m-d H:i:s');
+      $headers = 'MIME-Version: 1.0' . "\r\n";
+  		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
+  		$headers .= "From: ".$dr_name." <".$dr_email.">\r\n";
+
       $subject = "Visit added for {$name} on {$formatted_date}";
       $message = "<a href='https://www.drmahima.com/edit-sched.php?id=".$_POST['p_id']."'>Patient profile</a>";
       // echo $message;
-			mail("anuragmahima@gmail.com", $subject, $message);
+      if(mail("anuragmahima@gmail.com", $subject, $message, $headers)) {
+  			echo 'success';
+  		}
     }
   }
 
