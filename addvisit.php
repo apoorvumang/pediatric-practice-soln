@@ -13,8 +13,7 @@
       $formatted_date = $date->format('Y-m-d H:i:s');
       $message = "Visit added for {$name} on {$formatted_date}";
       // echo $message;
-      if($patient['phone'])
-				mail($dr_email_sms, $row['phone'], $message);
+			mail($dr_email_sms, $doctor_phone, $message);
     }
   }
 
