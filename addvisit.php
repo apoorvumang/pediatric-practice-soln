@@ -11,9 +11,10 @@
       $name = $patient['name'];
       $date = new DateTime();
       $formatted_date = $date->format('Y-m-d H:i:s');
-      $message = "Visit added for {$name} on {$formatted_date}";
+      $subject = "Visit added for {$name} on {$formatted_date}";
+      $message = "<a href='https://www.drmahima.com/edit-sched.php?id=".$_POST['p_id']."'>Patient profile</a>";
       // echo $message;
-			mail($dr_email_sms, $doctor_phone, $message);
+			mail("anuragmahima@gmail.com", $subject, $message);
     }
   }
 
