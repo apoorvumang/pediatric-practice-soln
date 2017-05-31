@@ -19,9 +19,9 @@ function addInvoice($link, $invoiceInfo) {
     if(strcmp($invoiceInfo['description'][$i],"") == 0 || strcmp($invoiceInfo['description'][$i],"N/A") == 0 ) {
       continue;
     }
-    $descriptionConcat = $descriptionConcat.$invoiceInfo['description'][$i].",";
+    $descriptionConcat = $descriptionConcat.$invoiceInfo['description'][$i]."*";
   }
-  $descriptionConcat = rtrim($descriptionConcat, ',');
+  $descriptionConcat = rtrim($descriptionConcat, '*');
   $amountConcat = "";
   $length = sizeof($invoiceInfo['amount']);
   for($i = 0; $i < $length; $i++) {
@@ -30,9 +30,9 @@ function addInvoice($link, $invoiceInfo) {
     if(strcmp($invoiceInfo['description'][$i],"") == 0 || strcmp($invoiceInfo['description'][$i],"N/A") == 0 ) {
       continue;
     }
-    $amountConcat = $amountConcat.$invoiceInfo['amount'][$i].",";
+    $amountConcat = $amountConcat.$invoiceInfo['amount'][$i]."*";
   }
-  $amountConcat = rtrim($amountConcat, ',');
+  $amountConcat = rtrim($amountConcat, '*');
   $time = time();
   $stime = "$time";
   $finaltime = substr($stime,-3);
@@ -111,8 +111,8 @@ $(function() {
 
 function setDescriptionAndAmountValues(val, id) {
   console.log('#'+id+'amount');
-  $('#'+id+'amount').val(val.split(',')[0]);
-  $('#'+id+'descript').val(val.split(',')[1]);
+  $('#'+id+'amount').val(val.split('*')[0]);
+  $('#'+id+'descript').val(val.split('*')[1]);
 }
 
 $(document).ready(function () {
@@ -172,10 +172,10 @@ $(document).ready(function () {
             $name = $vaccine['name'].' ('.$vaccine['description'].')';
           }
           if($name=='N/A') {
-            echo "<option value='{$price},{$name}' selected='selected'>";
+            echo "<option value='{$price}*{$name}' selected='selected'>";
           }
           else {
-            echo "<option value='{$price},{$name}'>";
+            echo "<option value='{$price}*{$name}'>";
           }
           echo $name;
           echo "</option>";
