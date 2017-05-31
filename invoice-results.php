@@ -21,6 +21,12 @@ if($_POST['delete']) {
   $query = "DELETE from invoice where id in(".$concat.")";
   if(mysqli_query($link, $query)) {
     echo "Succesfully deleted invoices!";
+    $query = "UPDATE notes SET invoice_id=0 WHERE invoice_id IN(".$concat.")";
+    if(mysqli_query($link, $query)) {
+      echo "Succesfully unlinked invoice_id from visit!";
+    } else {
+      echo "Error in unlinking invoice_id from visit!";
+    }
   } else {
     echo "Unable to delete invoices";
   }

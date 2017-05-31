@@ -696,7 +696,7 @@ if($_POST['vac_date']) {
 											<td><textarea name="change_note[]" cols="40" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
                       <td><?php
                       if($row['invoice_id']) {
-                        echo "<a href=pdf-invoice.php?id=".$row['invoice_id'].">"."Show invoice</a>";
+                        echo "<a href=pdf-invoice.php?id=".$row['invoice_id'].">"."Show invoice ".$row['invoice_id']."</a>";
                       } else {
                         echo "<a href=create-invoice.php?id={$patient_id}&visit_id=".$row['id'].">"."Create invoice</a>";
                       }
