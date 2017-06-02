@@ -1,8 +1,8 @@
 <?php
 require('connect.php');
-$db_host		= 'localhost';
-$db_user		= 'root';
-$db_pass		= '';
+// $db_host		= 'localhost';
+$db_user		= 'drmahima_com';
+$db_pass		= 'CjU6MQNu';
 $db_database	= 'drmahima_com';
 $link = mysqli_connect($db_host, $db_user, $db_pass, $db_database) or die('Unable to establish DB connection');
 mysqli_query($link_root, "SET names UTF8");
