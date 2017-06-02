@@ -671,6 +671,7 @@ if($_POST['vac_date']) {
 
 									<tr>
 										<!-- <th>S.No.</th> -->
+                    <th>ID</th>
 										<th>Date</th>
 										<th>Height       (cm)</th>
 										<th>Weight      (kg)</th>
@@ -691,6 +692,7 @@ if($_POST['vac_date']) {
 										?>
 										<tr>
 											<!-- <td><?php echo "{$i}"; $i += 1; ?>  </td> -->
+                      <td><?php echo $row['id']; ?></td>
 											<td style="text-align:center;vertical-align: middle;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
