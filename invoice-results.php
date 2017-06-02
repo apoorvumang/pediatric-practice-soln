@@ -88,10 +88,14 @@ while($row = mysqli_fetch_assoc($result))
 <?php echo $row['mode']; ?>
 </td>
 <td>
-<?php echo $row['descriptions']; ?>
+<?php 
+  $row['descriptions'] = str_replace("*", ",", $row['descriptions']);
+  echo $row['descriptions']; ?>
 </td>
 <td>
-<?php echo $row['amounts']; ?>
+<?php 
+ $row['amounts'] = str_replace("*", ",", $row['amounts']);
+ echo $row['amounts']; ?>
 </td>
 <td>
   <?php
