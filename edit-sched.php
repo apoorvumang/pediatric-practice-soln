@@ -675,13 +675,14 @@ if($_POST['vac_date']) {
 										<th>Height       (cm)</th>
 										<th>Weight      (kg)</th>
 										<th>Note</th>
+                    <th>Prescription</th>
                     <th>Invoice</th>
 										<th>Delete</th>
 									</tr>
 									<tbody id="visits_section">
 									<?php
                   $patient_id = $_GET['id'];
-									$q = "SELECT id, date, note, height, weight, invoice_id FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
+									$q = "SELECT id, date, note, height, weight, invoice_id, image_url FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
 									$result = mysqli_query($link, $q);
 									$i=1;
 									$total = 0;
@@ -693,7 +694,14 @@ if($_POST['vac_date']) {
 											<td style="text-align:center;vertical-align: middle;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
-											<td><textarea name="change_note[]" cols="40" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
+											<td><textarea name="change_note[]" cols="30" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
+                      <td><?php
+                      if($row['image_url']) {
+                        echo "<a href='{$row['image_url']}'>See presc</a>";
+                      } else {
+                        echo '-';
+                      }
+                      ?></td>
                       <td><?php
                       if($row['invoice_id']) {
                         echo "<a href=pdf-invoice.php?id=".$row['invoice_id'].">"."Show invoice ".$row['invoice_id']."</a>";
