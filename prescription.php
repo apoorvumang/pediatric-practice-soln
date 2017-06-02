@@ -1,15 +1,21 @@
 <?php
 require('connect.php');
-include('header_db_link.php');
+$db_host		= 'localhost';
+$db_user		= 'root';
+$db_pass		= '';
+$db_database	= 'drmahima_com';
+$link = mysqli_connect($db_host, $db_user, $db_pass, $db_database) or die('Unable to establish DB connection');
+mysqli_query($link_root, "SET names UTF8");
 
-if($_POST['visit_id']) {
-  $visit_id = $_POST['visit_id'];
-  $image_url = $_POST['image_url'];
-  $query = "UPDATE notes SET image_url='{$image_url}' WHERE id={$visit_id};";
-  if(mysqli_query($link, $query)) {
-    echo 'Succesfully added prescription!';
-  } elso {
-    echo 'Unable to add prescription!';
-  }
+$json = file_get_contents('php://input');
+$decoded = json_decode($json, true);
+$visit_id = $decoded['id'];
+$image_url = $decoded['url'];
+$query = "UPDATE notes SET image_url='{$image_url}' WHERE id={$visit_id};";
+if(mysqli_query($link, $query)) {
+  echo 'OK';
+} else {
+  echo 'NOT OK';
 }
+
 ?>
