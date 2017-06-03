@@ -697,20 +697,23 @@ if($_POST['vac_date']) {
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
 											<td><textarea name="change_note[]" cols="30" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
-                      <td><?php
-                      if($row['image_url']) {
-                        echo "<a href='{$row['image_url']}'>See presc</a>";
-                      } else {
-                        echo '-';
-                      }
-                      ?></td>
-                      <td><?php
+                      
+											
+											<td><?php
                       if($row['invoice_id']) {
                         echo "<a href=pdf-invoice.php?id=".$row['invoice_id'].">"."Show invoice ".$row['invoice_id']."</a>";
                       } else {
                         echo "<a href=create-invoice.php?id={$patient_id}&visit_id=".$row['id'].">"."Create invoice</a>";
                       }
                       ?></td>
+											<td><?php
+                      if($row['image_url']) {
+                        echo "<a href='{$row['image_url']}'>See presc</a>";
+                      } else {
+                        echo '-';
+                      }
+                      ?></td>
+                      
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
 											<td style="text-align:center; vertical-align: middle;"><?php
 											if($row['id']) {
