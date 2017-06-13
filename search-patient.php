@@ -39,6 +39,8 @@ $(function() {
 	<input type="text" name="id" id="id" style="margin-right:40px;"/>
 	<input type="submit" name="specificid" value="Go" />
 </form>
+
+<?php if($_SESSION['type']=='doctor') { ?>
 <form action="search-patient-results.php" method="post" enctype="multipart/form-data" style="width:auto" name="5">
 	<!-- <label for="id_from">ID Range</label>
 	<br /> -->
@@ -60,6 +62,8 @@ $(function() {
 	<input type="text" name="dob_to" id="dob_to" style="margin-right:40px;"/>
 	<input type="submit" name="dobrange" value="Go" />
 </form>
+
+<?php } ?>
 <form action="search-patient-results.php" method="post" enctype="multipart/form-data" style="width:auto" name="2">
 	<label for="dob_noyear">DOB (Year not needed): &nbsp;&nbsp;&nbsp;&nbsp;</label>
 	<input type="text" name="dob_noyear" id="dob_noyear" style="margin-right:40px;"/>
