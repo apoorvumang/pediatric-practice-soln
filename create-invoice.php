@@ -109,19 +109,31 @@ $(function() {
   });
 });
 
+function updateAmountTotal() {
+  var sum = 0;
+  $(".amounts").each(function(){
+      sum += +$(this).val();
+  });
+  $("#totalBeforeDiscount").val(sum);
+  sum = sum - $("#discount").val();
+  $("#totalAmount").val(sum);
+}
+
 function setDescriptionAndAmountValues(val, id) {
   console.log('#'+id+'amount');
   $('#'+id+'amount').val(val.split('*')[0]);
   $('#'+id+'descript').val(val.split('*')[1]);
+  updateAmountTotal();
 }
 
-$(document).ready(function () {
-  $('#productName').change(function () {
-    console.log('ckicked');
-    $('#kjhkh').val('200');
-  })
-
+$(document).on("change", ".amounts", function() {
+  updateAmountTotal();
 });
+
+$(document).on("change", "#discount", function() {
+  updateAmountTotal();
+});
+
 
 </script>
 <h4>Create Invoice for <?php echo $patientName; ?></h4>
@@ -183,7 +195,7 @@ $(document).ready(function () {
         echo "</select>";
         echo "<input type='hidden' name='description[]' id='{$i}consultdescript'/>";
         echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-        echo "<input type='text' name='amount[]' id='{$i}consultamount'/>";
+        echo "<input type='text' name='amount[]' id='{$i}consultamount' class='amounts'/>";
 
         echo "<br>";
       }
@@ -191,14 +203,17 @@ $(document).ready(function () {
 
     <input type="text" name="description[]" style="font-size:15px"/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="amount[]"/ style="font-size:15px">
+    <input type="text" name="amount[]"/ style="font-size:15px" class='amounts'>
     <br>
     <input type="text" name="description[]" style="font-size:15px"/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="amount[]" style="font-size:15px"/>
+    <input type="text" name="amount[]" style="font-size:15px" class='amounts'/>
     <br>
     <br>
   </p>
+  <p>Total before discount: <input type="text" name="totalBeforeDiscount" style="font-size:15px" id='totalBeforeDiscount' readonly="1"/></p>
+  <p>Discount: <input type="text" name="discount" style="font-size:15px" id='discount'/></p>
+  <p><strong>Final amount: Rs. </strong><input type="text" name="totalAmount" style="font-size:25px" id='totalAmount' readonly="1"/></p>
   <p>
   	<input type="submit" name="submit" value="Create invoice" />
   </p>
