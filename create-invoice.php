@@ -11,6 +11,7 @@ function addInvoice($link, $invoiceInfo) {
   $descriptionConcat = "";
   $p_id = $invoiceInfo["p_id"];
   $doctor = $invoiceInfo["doctor"];
+  $discount = $invoiceInfo["discount"];
   $date = date('Y-m-d', strtotime($invoiceInfo['date']));
   $mode = $invoiceInfo["mode"];
   $visit_id = $invoiceInfo['visit_id'];
@@ -62,7 +63,7 @@ function addInvoice($link, $invoiceInfo) {
     $invoice_id = $doctor_header.$year."/00001";
   }
 
-  $query = "INSERT into invoice(p_id, date, mode, descriptions, amounts, invoice_id, doctor) VALUES ('{$p_id}', '{$date}', '{$mode}', '{$descriptionConcat}', '{$amountConcat}', '{$invoice_id}', '{$doctor}');";
+  $query = "INSERT into invoice(p_id, date, mode, descriptions, amounts, invoice_id, doctor, discount) VALUES ('{$p_id}', '{$date}', '{$mode}', '{$descriptionConcat}', '{$amountConcat}', '{$invoice_id}', '{$doctor}', '{$discount}');";
   $retval = mysqli_query($link, $query);
   if($retval) {
     $invoiceId = mysqli_insert_id($link);

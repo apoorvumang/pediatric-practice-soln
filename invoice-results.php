@@ -41,7 +41,7 @@ if($_GET['specificdate'])  //If some submit button clicked
   } else {
     $doctor_query = "AND i.doctor = '{$doctor}' ";
   }
-  $query = "SELECT i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.date='".$date."' AND i.p_id = p.id {$doctor_query} ORDER BY i.id";
+  $query = "SELECT i.discount as discount, i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.date='".$date."' AND i.p_id = p.id {$doctor_query} ORDER BY i.id";
   $result = mysqli_query($link, $query);
   $nrows = mysqli_num_rows($result);
 ?>
@@ -57,6 +57,7 @@ if($_GET['specificdate'])  //If some submit button clicked
 <th>Mode</th>
 <th>Descriptions</th>
 <th>Amounts</th>
+<th>Discount</th>
 <th>Total</th>
 <th>Delete</th>
 </tr>
@@ -88,14 +89,17 @@ while($row = mysqli_fetch_assoc($result))
 <?php echo $row['mode']; ?>
 </td>
 <td>
-<?php 
+<?php
   $row['descriptions'] = str_replace("*", ",", $row['descriptions']);
   echo $row['descriptions']; ?>
 </td>
 <td>
-<?php 
+<?php
  $row['amounts'] = str_replace("*", ",", $row['amounts']);
  echo $row['amounts']; ?>
+</td>
+<td>
+<?php echo $row['discount']; ?>
 </td>
 <td>
   <?php
@@ -104,13 +108,14 @@ while($row = mysqli_fetch_assoc($result))
   foreach ($amounts as $key => $amount) {
     $total = $total + $amount;
   }
-  echo $total;
+  $grandTotal = $total - $row['discount'];
+  echo $grandTotal;
   if($row['mode'] == "CASH") {
-    $cash += $total;
+    $cash += $grandTotal;
   } else if($row['mode'] == "CARD") {
-    $card += $total;
+    $card += $grandTotal;
   } else if($row['mode'] == "PAYTM") {
-    $paytm += $total;
+    $paytm += $grandTotal;
   }
   ?>
 </td>

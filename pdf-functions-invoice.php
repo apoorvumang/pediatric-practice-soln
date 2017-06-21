@@ -58,6 +58,7 @@ class PDF extends FPDF
 		$this->Ln(5);
 		$descriptions = explode("*",$amountInfo[0]);
 		$amounts = explode("*",$amountInfo[1]);
+		$discount = $amountInfo[2];
 		$this->SetFont('Arial','B',12);
 		$this->SetFillColor(200,200,200);
 		$this->Cell(15,7,'S.No.','1','','C');
@@ -78,14 +79,27 @@ class PDF extends FPDF
 			$total += intval($amounts[$i]);
 			$fill = !$fill;
 		}
-		$this->Cell(15,7,'','LRB','','L', $fill);
-		$this->Cell(120,7,"Grand Total:",'LRB','','R', $fill);
-		$this->Cell(30,7,$total."  ",'LRB','','R', $fill);
+
+		if($discount) {
+			$this->Cell(15,7,'','LRT','','L', $fill);
+			$this->Cell(120,7,"Total Before discount:",'LRT','','R', $fill);
+			$this->Cell(30,7,$total."  ",'LRT','','R', $fill);
+			$this->Ln();
+			$this->Cell(15,7,'','LR','','L', $fill);
+			$this->Cell(120,7,"Discount:",'LR','','R', $fill);
+			$this->Cell(30,7,$discount."  ",'LR','','R', $fill);
+			$this->Ln();
+		}
+
+		$grandTotal = $total - $discount;
+		$this->Cell(15,7,'','LRBT','','L', $fill);
+		$this->Cell(120,7,"Grand Total:",'LRBT','','R', $fill);
+		$this->Cell(30,7,$grandTotal."  ",'LRBT','','R', $fill);
 
 		$this->Ln(12);
-		$stringTotal = (string)$total;
+		$stringGrandTotal = (string)$grandTotal;
 		$this->SetFont('Arial','B',12);
-		$this->Cell(70,5,"To Pay: Rs. ".$stringTotal."  only",'','','L');
+		$this->Cell(70,5,"To Pay: Rs. ".$stringGrandTotal."  only",'','','L');
 		$this->Ln();
 		$this->SetFont('Arial','',12);
 		$this->Cell(70,5,"Mode of payment: ".$mode,'','','L');
@@ -107,10 +121,10 @@ class PDF extends FPDF
 	$pdf->SetMargins(20,20,10);
 
 	$pdf->AddPage();
-	$invoiceInfo = mysqli_fetch_assoc(mysqli_query($link, "SELECT i.invoice_id as id, i.p_id as p_id, i.date as date, i.mode as mode, i.descriptions as descriptions, i.amounts as amounts, p.name as name, i.doctor as doctor FROM patients p, invoice i WHERE i.id = {$_GET['id']} AND p.id = i.p_id"));
+	$invoiceInfo = mysqli_fetch_assoc(mysqli_query($link, "SELECT i.discount as discount, i.invoice_id as id, i.p_id as p_id, i.date as date, i.mode as mode, i.descriptions as descriptions, i.amounts as amounts, p.name as name, i.doctor as doctor FROM patients p, invoice i WHERE i.id = {$_GET['id']} AND p.id = i.p_id"));
 	$info = array($invoiceInfo["id"], date('d M Y', strtotime($invoiceInfo["date"])), $invoiceInfo["p_id"], $invoiceInfo["name"]);
 	$doctor = $invoiceInfo['doctor'];
-	$amountInfo = array($invoiceInfo["descriptions"], $invoiceInfo["amounts"]);
+	$amountInfo = array($invoiceInfo["descriptions"], $invoiceInfo["amounts"], $invoiceInfo["discount"]);
 	$mode = $invoiceInfo["mode"];
 	$pdf->InvoiceDetails($info, $doctor);
 	$pdf->AmountDetails($amountInfo, $mode);
