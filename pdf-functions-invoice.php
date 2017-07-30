@@ -117,23 +117,28 @@ class PDF extends FPDF
 	}
 }
 
+
+function createInvoicePDF($id, $link) {
 	$pdf = new PDF();
 	$pdf->SetMargins(20,20,10);
 
 	$pdf->AddPage();
-	$invoiceInfo = mysqli_fetch_assoc(mysqli_query($link, "SELECT i.discount as discount, i.invoice_id as id, i.p_id as p_id, i.date as date, i.mode as mode, i.descriptions as descriptions, i.amounts as amounts, p.name as name, i.doctor as doctor FROM patients p, invoice i WHERE i.id = {$_GET['id']} AND p.id = i.p_id"));
+	$invoiceInfo = mysqli_fetch_assoc(mysqli_query($link, "SELECT i.discount as discount, i.invoice_id as id, i.p_id as p_id, i.date as date, i.mode as mode, i.descriptions as descriptions, i.amounts as amounts, p.name as name, i.doctor as doctor FROM patients p, invoice i WHERE i.id = {$id} AND p.id = i.p_id"));
 	$info = array($invoiceInfo["id"], date('d M Y', strtotime($invoiceInfo["date"])), $invoiceInfo["p_id"], $invoiceInfo["name"]);
 	$doctor = $invoiceInfo['doctor'];
 	$amountInfo = array($invoiceInfo["descriptions"], $invoiceInfo["amounts"], $invoiceInfo["discount"]);
 	$mode = $invoiceInfo["mode"];
 	$pdf->InvoiceDetails($info, $doctor);
 	$pdf->AmountDetails($amountInfo, $mode);
+	return $pdf;
 
-
-
-
-	$pdf->Output();
-	// return $pdf;
+}
+	//
+	// // $pdf->Output("s");
+	// $filecontents = $pdf->Output('asdasd', 'S');
+	// echo $filecontents;
+	//
+	// // return $pdf;
 
 
 ?>
