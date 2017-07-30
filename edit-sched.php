@@ -384,6 +384,9 @@ if($_POST['vac_date']) {
 			<p>
 				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send vaccination history email (print format)</a> </strong>
 			</p>
+      <p>
+				<strong><a href=<?php echo "\""."email-invoice-ui.php?id=".$patient['id']."\"" ?>>Send invoice email (pdf attachments)</a> </strong>
+			</p>
 			</div>
 			<h4>
 				<strong>ID: <?php echo $patient['id'] ?> </strong>
@@ -697,8 +700,8 @@ if($_POST['vac_date']) {
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
 											<td><textarea name="change_note[]" cols="30" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
-                      
-											
+
+
 											<td><?php
                       if($row['invoice_id']) {
                         echo "<a href=pdf-invoice.php?id=".$row['invoice_id'].">"."Show invoice ".$row['invoice_id']."</a>";
@@ -713,7 +716,7 @@ if($_POST['vac_date']) {
                         echo '-';
                       }
                       ?></td>
-                      
+
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
 											<td style="text-align:center; vertical-align: middle;"><?php
 											if($row['id']) {
