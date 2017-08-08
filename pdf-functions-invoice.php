@@ -68,6 +68,8 @@ class PDF extends FPDF
 		$this->SetFont('Arial','',10);
 		$total = 0;
 		$fill = 0;
+		$length = sizeof($descriptions);
+		$this->Image('mahima-sign.png',145,85 +$length*6.5,40);
 		for($i = 0; $i < sizeof($descriptions); $i++) {
 			$this->Cell(15,7,$i+1,'LR','','C',$fill);
 			if($descriptions[$i]!="CONSULTATION") {
