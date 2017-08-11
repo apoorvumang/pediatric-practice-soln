@@ -69,6 +69,9 @@ class PDF extends FPDF
 		$total = 0;
 		$fill = 0;
 		$length = sizeof($descriptions);
+		if($discount) {
+			$length += 2;
+		}
 		$this->Image('mahima-sign.png',145,85 +$length*6.5,40);
 		for($i = 0; $i < sizeof($descriptions); $i++) {
 			$this->Cell(15,7,$i+1,'LR','','C',$fill);
