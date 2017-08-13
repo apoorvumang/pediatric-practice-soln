@@ -36,7 +36,7 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 		$result = mysqli_query($link, "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE id >= {$_POST['id_from']} AND id <= {$_POST['id_to']} ORDER BY id");
 		$nrows = mysqli_num_rows($result);
 	}
-	else if($_POST['dobrange']) 
+	else if($_POST['dobrange'])
 	{
 		$_POST['dob_from'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['dob_from'])));
 		$_POST['dob_to'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['dob_to'])));
@@ -86,7 +86,7 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> phoneCount= <?php if($row['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $row['id'];?>/>
 		</td>
 	</tr>
-<?php 
+<?php
 	}
 ?>
 	</tbody>
@@ -101,18 +101,18 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 }
 else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 {
-	foreach ($_POST['send_sms_id'] as $key => $value) 
+	foreach ($_POST['send_sms_id'] as $key => $value)
 	{
 		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT phone, phone2, first_name FROM patients WHERE id={$value}"));
 		if(isset($_POST['sendautosms']))
 		{
-			$message = "Dear {$patient['first_name']} \nWishing you a very Happy Birthday.\n" .$dr_name."\n".$dr_phone;
+			$message = "Dear {$patient['first_name']} \nWishing you a very very Happy Birthday!\n" .$dr_name."\n".$dr_phone;
 		}
 		else if(isset($_POST['sendcustomsms']))
 		{
 			$message = $_POST['customsms'];
 		}
-	
+
 		if($patient['phone'])
 			mail($dr_email_sms, $patient['phone'], $message);
 		if($patient['phone2'])
