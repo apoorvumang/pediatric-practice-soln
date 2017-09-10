@@ -12,6 +12,8 @@ function addInvoice($link, $invoiceInfo) {
   $p_id = $invoiceInfo["p_id"];
   $doctor = $invoiceInfo["doctor"];
   $discount = $invoiceInfo["discount"];
+  if($discount == '')
+    $discount = '0';
   $date = date('Y-m-d', strtotime($invoiceInfo['date']));
   $mode = $invoiceInfo["mode"];
   $visit_id = $invoiceInfo['visit_id'];
@@ -22,7 +24,17 @@ function addInvoice($link, $invoiceInfo) {
     }
     $descriptionConcat = $descriptionConcat.$invoiceInfo['description'][$i]."*";
   }
+  $descriptiona = $invoiceInfo['descriptiona'];
+  $descriptionb = $invoiceInfo['descriptionb'];
+  $amounta = $invoiceInfo['amounta'];
+  $amountb = $invoiceInfo['amountb'];
   $descriptionConcat = rtrim($descriptionConcat, '*');
+  if($descriptiona) {
+    $descriptionConcat .= "*".$descriptiona."xx";
+  }
+  if($descriptionb) {
+    $descriptionConcat .= "*".$descriptionb."xx";
+  }
   $amountConcat = "";
   $length = sizeof($invoiceInfo['amount']);
   for($i = 0; $i < $length; $i++) {
@@ -34,6 +46,12 @@ function addInvoice($link, $invoiceInfo) {
     $amountConcat = $amountConcat.$invoiceInfo['amount'][$i]."*";
   }
   $amountConcat = rtrim($amountConcat, '*');
+  if($descriptiona) {
+    $amountConcat .= "*".$amounta;
+  }
+  if($descriptionb) {
+    $amountConcat .= "*".$amountb;
+  }
   $time = time();
   $stime = "$time";
   $finaltime = substr($stime,-3);
@@ -179,7 +197,7 @@ $(document).on("change", "#discount", function() {
           foreach ($vaccines as $key => $vaccine) {
             # code...
           $price = $vaccine['price'];
-          if($vaccine['name'] == 'N/A' || $vaccine['name'] == 'CONSULTATION') {
+          if($vaccine['description'] == "")  {
             $name = $vaccine['name'];
           } else {
             $name = $vaccine['name'].' ('.$vaccine['description'].')';
@@ -202,13 +220,13 @@ $(document).on("change", "#discount", function() {
       }
     ?>
 
-    <input type="text" name="description[]" style="font-size:15px"/>
+    <input type="text" name="descriptiona" style="font-size:15px"/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="amount[]"/ style="font-size:15px" class='amounts'>
+    <input type="text" name="amounta"/ style="font-size:15px" class='amounts'>
     <br>
-    <input type="text" name="description[]" style="font-size:15px"/>
+    <input type="text" name="descriptionb" style="font-size:15px"/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="text" name="amount[]" style="font-size:15px" class='amounts'/>
+    <input type="text" name="amountb" style="font-size:15px" class='amounts'/>
     <br>
     <br>
   </p>

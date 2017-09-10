@@ -75,8 +75,10 @@ class PDF extends FPDF
 		$this->Image('mahima-sign.png',145,85 +$length*6.5,40);
 		for($i = 0; $i < sizeof($descriptions); $i++) {
 			$this->Cell(15,7,$i+1,'LR','','C',$fill);
-			if($descriptions[$i]!="CONSULTATION") {
-				$descriptions[$i].=" Vaccination";
+			if($descriptions[$i]!="CONSULTATION" && $descriptions[$i] != "Medical Certificate") {
+				if(strpos($descriptions[$i], "xx") === False)
+					$descriptions[$i].=" Vaccination";
+				$descriptions[$i]= rtrim($descriptions[$i], 'xx');
 			}
 			$this->Cell(120,7,"  ".$descriptions[$i],'LR','','L',$fill);
 			$this->Cell(30,7,$amounts[$i]."  ",'LR','','R',$fill);
