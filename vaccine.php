@@ -1,8 +1,17 @@
 <?php include('header.php'); ?>
-
+<script>
+$(function() {
+$( "#after_dob" ).datepicker({
+changeMonth: true,
+changeYear: true,
+yearRange: "1970:2032",
+dateFormat:"d M yy"
+});
+});
+</script>
 <form action="addvac.php" method="post" enctype="multipart/form-data">
 	<h3>Add Vaccine</h3>
-	
+
 	<p>
 	<label for="name">Vaccine:</label><br />
 	<input type="text" name="name" id="name"  />
@@ -47,8 +56,9 @@
 	</p>
 
 	<p>
-		<input type="checkbox" name="update" value="1" checked="checked" /> 
-		<strong> Update for existing patients </strong>
+		<input type="checkbox" name="update" value="1" checked="checked" />
+		<strong> Update for existing patients after dob </strong>
+		<input type="text" name="after_dob" id="after_dob" style="margin-right:40px;" value=<?php echo "\"".date('j M Y')."\"";?>/>
 	</p>
 
 	<p>

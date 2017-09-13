@@ -87,7 +87,7 @@ function generate_patient_schedule($patient_id)
 	}
 }
 
-function regen_patient_schedule_tuesday($patient_id) 
+function regen_patient_schedule_tuesday($patient_id)
 {
 	// Remove all from vac_sched that have not been given yet
 	// get list of those that haven't been given yet
@@ -118,11 +118,16 @@ function regen_patient_schedule_tuesday($patient_id)
 
 }
 
-function generate_vaccine_schedule($vaccine)
+function generate_vaccine_schedule($vaccine, $after_dob)
 {
 	$err="";
 	global $link;
-	$result = mysqli_query($link, "SELECT id,sex,dob FROM patients WHERE 1");
+	if($after_dob) {
+		$query = "SELECT id, sex, dob FROM patients WHERE dob > '{$after_dob}'";
+	} else {
+		$query = "SELECT id, sex, dob FROM patients WHERE 1";
+	}
+	$result = mysqli_query($link, $query);
 	while($patient = mysqli_fetch_assoc($result))
 	{
 		if(schedule($patient, $vaccine)==-1)

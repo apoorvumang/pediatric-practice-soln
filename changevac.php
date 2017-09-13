@@ -1,4 +1,4 @@
-<?php include('header.php'); 
+<?php include('header.php');
 if($_POST['choice']=="delete")
 {
 	if(mysqli_query($link, "DELETE FROM vaccines WHERE id={$_POST['vac_id']}"))
@@ -15,6 +15,16 @@ else if($_POST['choice']=="edit")
 {
 	$vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE id={$_POST['vac_id']}"));
 ?>
+<script>
+$(function() {
+$( "#after_dob" ).datepicker({
+changeMonth: true,
+changeYear: true,
+yearRange: "1970:2032",
+dateFormat:"d M yy"
+});
+});
+</script>
 
 <form action="addvac.php" method="post" enctype="multipart/form-data">
 	<h3>Edit Vaccine</h3>
@@ -25,7 +35,7 @@ else if($_POST['choice']=="edit")
 	</p>
 	<p>
 		<label>Linked to Vaccine: </label>
-		<?php 
+		<?php
 		if($vaccine['dependent']==0)
 			echo "Birth";
 		else
@@ -48,8 +58,9 @@ else if($_POST['choice']=="edit")
 	<input type="text" name="upper_limit" id="upper_limit" value=<?php echo "\"{$vaccine['upper_limit']}\"";?>/>
 	</p>
 	<p>
-		<input type="checkbox" name="update" value="1" checked="checked" /> 
-		<strong> Update for existing patients </strong>
+		<input type="checkbox" name="update" value="1" checked="checked" />
+		<strong> Update for existing patients after dob </strong>
+		<input type="text" name="after_dob" id="after_dob" style="margin-right:40px;" value=<?php echo "\"".date('j M Y')."\"";?>/>
 	</p>
 	<p>
 	<input type="submit" name="submit" value="Save changes"/>
@@ -84,6 +95,6 @@ else {
 	</p>
 </form>
 
-<?php 
+<?php
 }
 include('footer.php'); ?>
