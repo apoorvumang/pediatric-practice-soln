@@ -6,7 +6,7 @@
 <h3>Today's visits</h3>
 <?php
   $today = date('Y-m-d');
-  $result = mysqli_query($link, "SELECT n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname, n.height as height, n.weight as weight FROM notes n, patients p WHERE n.date='".$today."' AND n.p_id = p.id ORDER BY n.id");
+  $result = mysqli_query($link, "SELECT n.invoice_id as invoice_id, n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname, n.height as height, n.weight as weight FROM notes n, patients p WHERE n.date='".$today."' AND n.p_id = p.id ORDER BY n.id");
   $nrows = mysqli_num_rows($result);
 ?>
 
@@ -21,6 +21,7 @@
 <th>BMI</th>
 <th>Note</th>
 <th>Date</th>
+<th>Invoice ID</th>
 </tr>
 <?php
 $count = 0;
@@ -58,6 +59,21 @@ while($row = mysqli_fetch_assoc($result))
 </td>
 <td>
 <?php echo date('j M Y',strtotime($row['date'])); ?>
+</td>
+<td>
+<?php
+if($_SESSION['type']=='doctor') {
+  $invoice_id = $row['invoice_id'];
+  if($invoice_id) {
+    echo "<a href='pdf-invoice.php?id={$row['invoice_id']}'> Invoice ID {$row['invoice_id']} </a>";
+  } else {
+    echo "Invoice not made!";
+    echo "<a href='create-invoice.php?id={$row['pid']}&visit_id={$row['id']}'> Click here to create invoice </a>";
+  }
+} else {
+  echo '-';
+}
+?>
 </td>
 </tr>
 <?php
