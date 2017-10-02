@@ -8,7 +8,13 @@ if($_SESSION['type']!=='doctor') {
 ?>
 
 <h3>Search Results for invoice</h3>
-<h4>Totals for <?php echo $_GET['date']; ?></h4>
+<h4>Totals for <?php
+if($_GET['specificdate']) {
+  echo $_GET['date'];
+} else if($_GET['dateRange']) {
+  echo $_GET['dateFrom']." to ".$_GET['dateTo'];
+}
+ ?></h4>
 <p style="font-size:16px;" id="amountTotalsByType">Nothing here!</p>
 <?php
 if($_POST['delete']) {
@@ -31,9 +37,11 @@ if($_POST['delete']) {
     echo "Unable to delete invoices";
   }
 }
-if($_GET['specificdate'])  //If some submit button clicked
+if($_GET['specificdate'] || $_GET['dateRange'])  //If some submit button clicked
 {
   $date = date('Y-m-d', strtotime($_GET['date']));
+  $dateFrom = date('Y-m-d', strtotime($_GET['dateFrom']));
+  $dateTo = date('Y-m-d', strtotime($_GET['dateTo']));
   $date = mysqli_real_escape_string($link, $date);
   $doctor = $_GET['doctor'];
   if($doctor == "Both") {
@@ -41,7 +49,12 @@ if($_GET['specificdate'])  //If some submit button clicked
   } else {
     $doctor_query = "AND i.doctor = '{$doctor}' ";
   }
-  $query = "SELECT i.discount as discount, i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.date='".$date."' AND i.p_id = p.id {$doctor_query} ORDER BY i.id";
+  if($_GET['specificdate']) {
+    $query = "SELECT i.discount as discount, i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.date='".$date."' AND i.p_id = p.id {$doctor_query} ORDER BY i.id";
+  } else {
+    $query = "SELECT i.discount as discount, i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.date>='".$dateFrom."' AND i.date<='{$dateTo}' AND i.p_id = p.id {$doctor_query} ORDER BY i.id";
+  }
+
   $result = mysqli_query($link, $query);
   $nrows = mysqli_num_rows($result);
 ?>

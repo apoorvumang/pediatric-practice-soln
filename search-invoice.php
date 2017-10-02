@@ -13,6 +13,23 @@ dateFormat:"d M yy"
 });
 });
 
+$(function() {
+$( "#dateFrom" ).datepicker({
+changeMonth: true,
+changeYear: true,
+yearRange: "1970:2032",
+dateFormat:"d M yy"
+});
+});
+
+$(function() {
+$( "#dateTo" ).datepicker({
+changeMonth: true,
+changeYear: true,
+yearRange: "1970:2032",
+dateFormat:"d M yy"
+});
+});
 
 </script>
 <h3>Search invoices</h3>
@@ -27,5 +44,12 @@ dateFormat:"d M yy"
 <label for="date">Show transactions on : &nbsp;&nbsp;&nbsp;&nbsp;</label>
 <input type="text" name="date" id="date" style="margin-right:40px;"/>
 <input type="submit" name="specificdate" value="Go" />
+
+<br>
+<label for="dateFrom">Show transactions from : &nbsp;&nbsp;&nbsp;&nbsp;</label>
+<input type="text" name="dateFrom" id="dateFrom" style="margin-right:40px;"/>
+<label for="dateTo">To : &nbsp;&nbsp;&nbsp;&nbsp;</label>
+<input type="text" name="dateTo" id="dateTo" style="margin-right:40px;"/>
+<input type="submit" name="dateRange" value="Go" />
 </form>
 <?php include('footer.php'); ?>
