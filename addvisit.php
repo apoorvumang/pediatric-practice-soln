@@ -5,10 +5,10 @@
     if(!mysqli_query($link, $query)) {
       echo "Error adding visit!";
     } else {
-      echo "Visit added successfully!";
       $query = "SELECT * from patients WHERE id={$_POST['p_id']}";
       $patient = mysqli_fetch_assoc(mysqli_query($link, $query));
       $name = $patient['name'];
+      echo "Visit added successfully for patient <h4>{$name}</h4>";
       $date = new DateTime();
       $date->setTimezone(new DateTimeZone('Asia/Calcutta'));
       $formatted_date = $date->format('Y-m-d H:i:s');
