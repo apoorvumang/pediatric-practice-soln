@@ -1,7 +1,13 @@
 <?php include('header.php');
 
   if($_POST['date'] && $_POST['p_id'] && $_POST['note']) {
-    $query = "INSERT into notes (p_id, date, note, height, weight) VALUES ({$_POST['p_id']}, '{$_POST['date']}', \"{$_POST['note']}\", '{$_POST['height']}', '{$_POST['weight']}');";
+    $height = 0;
+    $weight = 0;
+    if($_POST['height'])
+      $height = $_POST['height'];
+    if($_POST['weight'])
+      $weight = $_POST['weight'];
+    $query = "INSERT into notes (p_id, date, note, height, weight) VALUES ({$_POST['p_id']}, '{$_POST['date']}', \"{$_POST['note']}\", {$height}, {$weight});";
     if(!mysqli_query($link, $query)) {
       echo "Error adding visit!";
     } else {

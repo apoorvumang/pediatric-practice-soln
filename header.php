@@ -219,10 +219,12 @@ function countMessages(e)
 			<li <?php if($currentFile=="addvisit.php") { ?> id="current" <?php }?>><a href="addvisit.php">Add Patient Visit</a></li>
       <li <?php if($currentFile=="patient-vaccination-appointment-employee.php") { ?> id="current" <?php }?>><a href="patient-vaccination-appointment-employee.php">Search for vaccination appointment</a></li>
 			<?php } ?>
+      <?php if($_SESSION['name']) { ?>
       <li <?php if($currentFile=="visits-today.php") { ?> id="current" <?php }?>><a href="visits-today.php">Visits</a></li>
+      <?php } ?>
 			<?php if($_SESSION['type']=='doctor') { ?>
 			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
-			
+
 			<li <?php if($currentFile=="payment_due.php") { ?> id="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
       <li <?php if($currentFile=="search-invoice.php") { ?> id="current" <?php }?>><a href="search-invoice.php">Search invoice</a></li>
 			<li <?php if($currentFile=="settings.php") { ?> id="current" <?php }?>><a href="settings.php">Settings</a></li>

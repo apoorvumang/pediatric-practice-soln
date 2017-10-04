@@ -3,13 +3,37 @@
 // List out all schedules for current day.
 ?>
 
+<?php
+if($_POST['delete']) {
+  $deleteArray = $_POST['delete'];
+  $query1 = "DELETE from notes WHERE id in (";
+  $idList = "";
+  $arrLength = sizeof($deleteArray);
+  foreach ($deleteArray as $key => $value) {
+    $idList = $idList.$value;
+    if($key != $arrLength - 1) {
+      $idList = $idList.",";
+    }
+  }
+  $query = $query1.$idList.");";
+  echo $query;
+  if(mysqli_query($link, $query)) {
+    echo 'Deletion successful!';
+  } else {
+    echo 'Error in deleting visits';
+  }
+}
+
+?>
+
 <h3>Today's visits</h3>
 <?php
   $today = date('Y-m-d');
   $result = mysqli_query($link, "SELECT n.invoice_id as invoice_id, n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname, n.height as height, n.weight as weight FROM notes n, patients p WHERE n.date='".$today."' AND n.p_id = p.id ORDER BY n.id");
   $nrows = mysqli_num_rows($result);
 ?>
-
+<form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
+<input type="submit" value="Delete">
 <table>
 <tbody>
 <tr>
@@ -22,6 +46,7 @@
 <th>Note</th>
 <th>Date</th>
 <th>Invoice ID</th>
+<th>Delete</th>
 </tr>
 <?php
 $count = 0;
@@ -75,6 +100,9 @@ if($_SESSION['type']=='doctor') {
 }
 ?>
 </td>
+<td>
+<input type="checkbox" name="delete[]" value=<?php echo "'{$row['id']}'"; ?> />
+</td>
 </tr>
 <?php
 $count++;
@@ -82,6 +110,7 @@ $count++;
 ?>
 </tbody>
 </table>
+</form>
 
 <a href="visits.php">Search visits</a>
 
