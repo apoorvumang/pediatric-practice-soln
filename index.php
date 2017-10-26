@@ -80,6 +80,96 @@ if($_SESSION['name']){
 
 	echo "<h3>Welcome {$_SESSION['name']}!</h3><br />";
 	?>
+<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="js/cloudinary-jquery-file-upload.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#scan-pr").click(function(e) {
+    e.preventDefault()
+    console.log("scanning!")
+    $(".spinner").show()
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8899/scan/test",
+      success: function(data) {
+        console.log("success got scan")
+        // console.log(data)
+        $("#scanned_img").attr("src", 'data:image/jpg;base64,'+data);
+        $(".spinner").hide()
+        $("#save-pr").show()
+        // alert('ok');
+      },
+      error: function(data) {
+        console.log("error: ")
+        console.log(data)
+        $(".spinner").hide()
+      }
+    });
+  })
+})
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $.cloudinary.config({ cloud_name: 'dukqf8fvc', secure: true});
+  $('.upload_field').unsigned_cloudinary_upload("uornhdlu", 
+    { cloud_name: 'dukqf8fvc', tags: 'browser_uploads' }, 
+    { multiple: true }
+    ).bind('cloudinarydone', function(e, data) {
+      if (e) {
+        console.log(e)
+      }
+      console.log(data);
+      console.log("upload done!")
+      $(".spinner").hide()
+      $.ajax({
+        type: 'POST',
+        url: 'add-picture-prescription.php',
+        data: {
+          visit_id: 3138,
+          url: data.result.url,
+        },
+        dataType: 'text',
+        success: function(result) {
+          console.log(result);
+          // location.reload()
+        },
+        error: function(data) {
+          alert('error in reaching server: ' + data)
+        }
+      })
+    }).bind('cloudinaryprogress', function(e, data) { 
+  // console.log(data)
+  value = Math.round((data.loaded * 100.0) / data.total) + '%'
+  console.log("value = " + value)
+  $('.progress_bar').css('width', value); 
+});
+    $("#save-pr").click(function(e) {
+      $(".spinner").show()
+      console.log("save clicked")
+      e.preventDefault()
+      var data = $("#scanned_img").attr("src")
+      $('.cloudinary_fileupload').fileupload('option', 'formData').file = data;
+      $('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
+    })
+  })
+</script>
+
+
+
+<form>
+<input type="hidden" name="file" class="upload_field">
+</form>
+
+<a id="scan-pr" class="btn btn-outline-primary mr-2" href="#" role="button">Scan Prescription</a>
+<img class = 'spinner' src="images/ellipsis.svg" style="display: inline; display: none; width: 28px; height: 28px">
+<a id="save-pr" class="btn btn-outline-primary pull-right" href="#" style="display: none" role="button">Save</a>
+<img src="" id="scanned_img" class="w-100">
+
 <p><strong>Use the above links to navigate.</strong></p>
 <?php
 	include('footer.php');
