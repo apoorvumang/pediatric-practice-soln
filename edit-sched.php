@@ -41,7 +41,7 @@ $(document).ready(function() {
     $(".spinner").show()
     $.ajax({
       type: "GET",
-      url: "http://localhost:8899/scan/test",
+      url: "http://localhost:8899/scan",
       success: function(data) {
         console.log("success got scan")
         // console.log(data)
