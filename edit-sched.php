@@ -111,11 +111,7 @@ $(document).ready(function() {
   })
 </script>
 
-
-
-<form>
 <input type="hidden" name="file" class="upload_field">
-</form>
 <?
 if($_POST['vac_date']) {
 	$err = array();
