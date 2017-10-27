@@ -27,6 +27,95 @@
         // });
 
 </script>
+<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="js/cloudinary-jquery-file-upload.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $(".scan-pr").click(function(e) {
+    e.preventDefault()
+    console.log("scanning!")
+    $(".spinner").show()
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8899/scan/test",
+      success: function(data) {
+        console.log("success got scan")
+        // console.log(data)
+        $("#scanned_img").attr("src", 'data:image/jpg;base64,'+data);
+        $(".spinner").hide()
+        $(".scan-save").show()
+        // alert('ok');
+      },
+      error: function(data) {
+        console.log("error: ")
+        console.log(data)
+        $(".spinner").hide()
+      }
+    });
+  })
+})
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $.cloudinary.config({ cloud_name: 'dukqf8fvc', secure: true});
+  $('.upload_field').unsigned_cloudinary_upload("uornhdlu",
+    { cloud_name: 'dukqf8fvc', tags: 'browser_uploads' },
+    { multiple: true }
+    ).bind('cloudinarydone', function(e, data) {
+      if (e) {
+        console.log(e)
+      }
+      console.log(data);
+      console.log("upload done!")
+      $(".spinner").hide()
+			var visitID = $("#visitIDForPrescriptionScan").text();
+      $.ajax({
+        type: 'POST',
+        url: 'add-picture-prescription.php',
+        data: {
+          visit_id: visitID,
+          url: data.result.url,
+        },
+        dataType: 'text',
+        success: function(result) {
+          console.log(result);
+					alert('Prescription uploaded!');
+          // location.reload()
+        },
+        error: function(data) {
+          alert('error in reaching server: ' + data)
+        }
+      })
+    }).bind('cloudinaryprogress', function(e, data) {
+  // console.log(data)
+  value = Math.round((data.loaded * 100.0) / data.total) + '%'
+  console.log("value = " + value)
+  $('.progress_bar').css('width', value);
+});
+    $(".scan-save").click(function(e) {
+      $(".spinner").show()
+      console.log("save clicked")
+      e.preventDefault()
+			var visitID = $(this).attr('class').split(" ").pop();
+			console.log("visit id = ", visitID);
+			$("#visitIDForPrescriptionScan").text(visitID);
+      var data = $("#scanned_img").attr("src")
+      $('.cloudinary_fileupload').fileupload('option', 'formData').file = data;
+      $('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
+    })
+  })
+</script>
+
+
+
+<form>
+<input type="hidden" name="file" class="upload_field">
+</form>
 <?
 if($_POST['vac_date']) {
 	$err = array();
@@ -668,6 +757,8 @@ if($_POST['vac_date']) {
 						</form>
 
 						<h4> Previous visits </h4>
+						<img src="" id="scanned_img" class="w-100" width=150 height=200>
+						<div id="visitIDForPrescriptionScan" style="display: none;"></div>
 						<form id="previousvisits" role="form" action="" method="post">
 							<div class="pagination-page"></div>
 							<table border="1" width="540px">
@@ -679,8 +770,8 @@ if($_POST['vac_date']) {
 										<th>Height       (cm)</th>
 										<th>Weight      (kg)</th>
 										<th>Note</th>
-                    <th>Prescription</th>
                     <th>Invoice</th>
+                    <th>Prescription</th>
 										<th>Delete</th>
 									</tr>
 									<tbody id="visits_section">
@@ -713,7 +804,14 @@ if($_POST['vac_date']) {
                       if($row['image_url']) {
                         echo "<a href='{$row['image_url']}'>See presc</a>";
                       } else {
-                        echo '-';
+
+                      	?>
+
+                      	<a class="scan-pr btn btn-outline-primary mr-2" href="#" role="button">Scan Prescription</a>
+												<img class = 'spinner' src="images/ellipsis.svg" style="display: inline; display: none; width: 28px; height: 28px">
+												<a class=<?php echo "\"scan-save btn btn-outline-primary pull-right {$row['id']}\""?> href="#" style="display: none" role="button" >Save</a>
+
+                      	<?php
                       }
                       ?></td>
 
