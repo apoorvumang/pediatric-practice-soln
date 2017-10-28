@@ -753,7 +753,8 @@ if($_POST['vac_date']) {
 						</form>
 
 						<h4> Previous visits </h4>
-						<img src="" id="scanned_img" class="w-100" width=150 height=200>
+						<img src="" id="scanned_img" width=180 height=250>
+						<button class="scan-pr">Scan Prescription</button>
 						<div id="visitIDForPrescriptionScan" style="display: none;"></div>
 						<form id="previousvisits" role="form" action="" method="post">
 							<div class="pagination-page"></div>
@@ -803,9 +804,9 @@ if($_POST['vac_date']) {
 
                       	?>
 
-                      	<a class="scan-pr btn btn-outline-primary mr-2" href="#" role="button">Scan Prescription</a>
+
 												<img class = 'spinner' src="images/ellipsis.svg" style="display: inline; display: none; width: 28px; height: 28px">
-												<a class=<?php echo "\"scan-save btn btn-outline-primary pull-right {$row['id']}\""?> href="#" style="display: none" role="button" >Save</a>
+												<button class=<?php echo "\"scan-save {$row['id']}\""?> style="display: none">Save</button>
 
                       	<?php
                       }
