@@ -800,7 +800,7 @@ if($_POST['vac_date']) {
 											<td><?php
                       if($row['image_url']) {
                         echo "<a href='{$row['image_url']}'>See presc</a>";
-                      } else {
+                      }
 
                       	?>
 
@@ -809,7 +809,7 @@ if($_POST['vac_date']) {
 												<button class=<?php echo "\"scan-save {$row['id']}\""?> style="display: none">Save</button>
 
                       	<?php
-                      }
+                      
                       ?></td>
 
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
