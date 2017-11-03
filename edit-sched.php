@@ -755,6 +755,13 @@ if($_POST['vac_date']) {
 						<h4> Previous visits </h4>
 						<img src="" id="scanned_img" width=180 height=250>
 						<button class="scan-pr">Scan Prescription</button>
+						<br>
+
+					  <p style="font-size: 30px;color:Tomato;">
+							<strong>
+								<a href=<?php echo "\"plotly.php?id={$_GET['id']}\"" ;?>>Click to see growth chart (height)</a>
+							</strong>
+						</p>
 						<div id="visitIDForPrescriptionScan" style="display: none;"></div>
 						<form id="previousvisits" role="form" action="" method="post">
 							<div class="pagination-page"></div>
@@ -809,7 +816,7 @@ if($_POST['vac_date']) {
 												<button class=<?php echo "\"scan-save {$row['id']}\""?> style="display: none">Save</button>
 
                       	<?php
-                      
+
                       ?></td>
 
 											<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
