@@ -805,9 +805,15 @@ if($_POST['vac_date']) {
                       }
                       ?></td>
 											<td><?php
-                      if($row['image_url']) {
-                        echo "<a href='{$row['image_url']}'>See presc</a>";
-                      }
+
+					  $visit_id = $row['id'];
+					  $query = "SELECT * FROM prescriptions WHERE visit_id = '{$visit_id};'";
+					  $prescriptionResult = mysqli_query($link, $query);
+					  $i = 1;
+					  while($prescription = mysqli_fetch_assoc($prescriptionResult)) {
+					  	echo "<a href='{$prescription['url']}'>See presc {$i}</a><br>";	
+					  	$i++;
+					  }
 
                       	?>
 

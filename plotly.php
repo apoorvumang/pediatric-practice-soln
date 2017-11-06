@@ -13,7 +13,7 @@ include('header_db_link.php');
  <body>
 
   <?php
-  if(!$_GET['id']) {
+  if(!$_GET['id']||!$_GET['type']) {
     echo "You can't access this page directly!";
     exit(0);
   }
@@ -35,9 +35,15 @@ include('header_db_link.php');
 
 
   if($patient['sex'] == "M") {
-    include('male2-20years_plotly.js');
+    if($_GET['type']=="height")
+      include('male2-20years_plotly.js');
+    else
+      include('male2-20yearsBMI_plotly.js');
   } else {
-    include('female2-20years_plotly.js');
+    if($_GET['type']=="height")
+      include('female2-20years_plotly.js');
+    else
+      include('female2-20yearsBMI_plotly.js');
   }
 
   ?>
