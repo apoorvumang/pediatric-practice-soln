@@ -759,7 +759,7 @@ if($_POST['vac_date']) {
 
 					  <p style="font-size: 30px;color:Tomato;">
 							<strong>
-								<a href=<?php echo "\"plotly.php?id={$_GET['id']}\"" ;?>>Click to see growth chart (height)</a>
+								<a href=<?php echo "\"plotly.php?id={$_GET['id']}&type=height\"" ;?>>Click to see growth chart (height)</a>
 							</strong>
 						</p>
 						<div id="visitIDForPrescriptionScan" style="display: none;"></div>
@@ -811,7 +811,7 @@ if($_POST['vac_date']) {
 					  $prescriptionResult = mysqli_query($link, $query);
 					  $i = 1;
 					  while($prescription = mysqli_fetch_assoc($prescriptionResult)) {
-					  	echo "<a href='{$prescription['url']}'>See presc {$i}</a><br>";	
+					  	echo "<a href='{$prescription['url']}'>See presc {$i}</a><br>";
 					  	$i++;
 					  }
 
