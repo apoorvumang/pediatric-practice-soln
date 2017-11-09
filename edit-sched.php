@@ -265,12 +265,17 @@ if($_POST['vac_date']) {
 			echo $err_total;
 		}
 	} else if($_POST['sendsms']) {
+
+		$message = $_POST['message'];
+		$headers = 'MIME-Version: 1.0' . "\r\n";
+		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
+		$headers .= "From: ".$dr_name." <".$dr_email.">\r\n";
 		if($_POST['phone'])
-			mail($dr_email_sms, $_POST['phone'], $_POST['message']);
+			mail($dr_email_sms, $_POST['phone'], $message, $headers);
 		else
 			echo "Problem sending SMS to phone number 1 <br>";
 		if($_POST['phone2'])
-			mail($dr_email_sms, $_POST['phone2'], $_POST['message']);
+			mail($dr_email_sms, $_POST['phone2'], $message, $headers);
 		echo "SMS sent! <br>";
 	} else if($_POST['save_dues']) {
 		foreach ($_POST['due_paid_date'] as $key => $value) {
