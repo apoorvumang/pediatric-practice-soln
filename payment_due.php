@@ -21,11 +21,13 @@ if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
 			$message = $_POST['customsms'];
 		}
-
+		$headers = 'MIME-Version: 1.0' . "\r\n";
+		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
+		$headers .= "From: ".$dr_name." <".$dr_email.">\r\n";
 		if($row['phone'])
-			mail($dr_email_sms, $row['phone'], $message);
+			mail($dr_email_sms, $row['phone'], $message, $headers);
 		if($row['phone2'])
-			mail($dr_email_sms, $row['phone2'], $message);
+			mail($dr_email_sms, $row['phone2'], $message, $headers);
 		echo "SMS sent to {$row['pname']} <br>";
 	}
 }
