@@ -64,7 +64,19 @@ include('header_db_link.php');
      $length = 0;
      while($visit = mysqli_fetch_assoc($result)) {
        if($visit['height']) {
-         $yList = $yList."'{$visit['height']}',";
+         if($_GET['type'] == "height") {
+           $yList = $yList."'{$visit['height']}',";
+         } else {
+           if($visit['weight']) {
+             $weight = $visit['weight'];
+             $height = $visit['height']/100.0;
+             $BMI = $weight/($height*$height);
+             $yList = $yList."'{$BMI}',";
+           } else {
+             continue;
+           }
+         }
+
          $y[]= $visit['height'];
          $from = new DateTime($patient['dob']);
          $to   = new DateTime($visit['date']);
@@ -107,8 +119,13 @@ include('header_db_link.php');
       if($sex == "F") {
         $displaySex = "Females";
       }
+      if($_GET['type'] == "height") {
+        $displayType = "Stature (cm)";
+      } else {
+        $displayType = "BMI";
+      }
      ?>
-     title: <?php echo "'Stature for age ({$displaySex} 2-20 years)'"; ?>,
+     title: <?php echo "'{$displayType} for age ({$displaySex} 2-20 years)'"; ?>,
      xaxis: {
        autorange: true,
        range: [1.9800317253, 20],
@@ -118,7 +135,7 @@ include('header_db_link.php');
      yaxis: {
        autorange: true,
        range: [74.7409238889, 194.517846111],
-       title: 'Stature (cms)',
+       title: '{$displayType}',
        type: 'linear'
      }
    };
