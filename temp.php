@@ -49,5 +49,19 @@ function generate_vaccine_schedule()
 	}
 }
 
-generate_vaccine_schedule();
+//generate_vaccine_schedule();
+
+$query = "SELECT id, dob FROM patients WHERE 1";
+$result = mysqli_query($link, $query);
+$i = 0;
+while($patient = mysqli_fetch_assoc($result)) {
+  $query = "UPDATE vac_schedule vs SET vs.date=DATE_ADD((SELECT vss.date FROM (select * from vac_schedule) AS vss WHERE vss.p_id={$patient['id']} AND vss.v_id=73), INTERVAL 420 DAY) WHERE vs.p_id = {$patient['id']} AND vs.v_id = 74 AND vs.given='N'";
+  if(mysqli_query($link, $query)) {
+    $i++;
+  }
+}
+
+echo "Fixed for {$i} patients!";
+
+
 ?>
