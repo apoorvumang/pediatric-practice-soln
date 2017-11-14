@@ -767,6 +767,11 @@ if($_POST['vac_date']) {
 								<a href=<?php echo "\"plotly.php?id={$_GET['id']}&type=height\"" ;?>>Click to see growth chart (height)</a>
 							</strong>
 						</p>
+						<p style="font-size: 30px;color:Tomato;">
+							<strong>
+								<a href=<?php echo "\"plotly.php?id={$_GET['id']}&type=BMI\"" ;?>>Click to see growth chart (BMI)</a>
+							</strong>
+						</p>
 						<div id="visitIDForPrescriptionScan" style="display: none;"></div>
 						<form id="previousvisits" role="form" action="" method="post">
 							<div class="pagination-page"></div>

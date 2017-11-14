@@ -135,7 +135,7 @@ include('header_db_link.php');
      yaxis: {
        autorange: true,
        range: [74.7409238889, 194.517846111],
-       title: '{$displayType}',
+       title:  <?php echo "'{$displayType}'"; ?>,
        type: 'linear'
      }
    };
