@@ -783,6 +783,7 @@ if($_POST['vac_date']) {
 										<th>Date</th>
 										<th>Height       (cm)</th>
 										<th>Weight      (kg)</th>
+										<th>BMI</th>
 										<th>Note</th>
                     <th>Invoice</th>
                     <th>Prescription</th>
@@ -804,7 +805,16 @@ if($_POST['vac_date']) {
 											<td style="text-align:center;vertical-align: middle;"><?php echo date('j M Y',strtotime($row['date']))?> </td>
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
 											<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
-											<td><textarea name="change_note[]" cols="30" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
+											<td>
+											<?php
+												$height = $row['height']/100.0;
+												$weight = $row['weight'];
+												$height_squared = $height*$height;
+												$bmi = $weight/$height_squared;
+												echo round($bmi,1);
+											?>
+											</td>
+											<td><textarea name="change_note[]" cols="24" rows="2"><?php echo "{$row['note']}";?></textarea> </td>
 
 
 											<td><?php
