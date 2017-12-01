@@ -764,12 +764,12 @@ if($_POST['vac_date']) {
 
 					  <p style="font-size: 30px;color:Tomato;">
 							<strong>
-								<a href=<?php echo "\"plotly.php?id={$_GET['id']}&type=height\"" ;?>>Click to see growth chart (height)</a>
+								<a href=<?php echo "\"plotly.php?id={$_GET['id']}&type=height\"" ;?> target="_blank">Click to see growth chart (height)</a>
 							</strong>
 						</p>
 						<p style="font-size: 30px;color:Tomato;">
 							<strong>
-								<a href=<?php echo "\"plotly.php?id={$_GET['id']}&type=BMI\"" ;?>>Click to see growth chart (BMI)</a>
+								<a href=<?php echo "\"plotly.php?id={$_GET['id']}&type=BMI\"" ;?> target="_blank">Click to see growth chart (BMI)</a>
 							</strong>
 						</p>
 						<div id="visitIDForPrescriptionScan" style="display: none;"></div>
