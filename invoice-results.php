@@ -103,12 +103,12 @@ while($row = mysqli_fetch_assoc($result))
 </td>
 <td>
 <?php
-  $row['descriptions'] = str_replace("*", ",", $row['descriptions']);
+  $row['descriptions'] = str_replace("*", ", ", $row['descriptions']);
   echo $row['descriptions']; ?>
 </td>
 <td>
 <?php
- $row['amounts'] = str_replace("*", ",", $row['amounts']);
+ $row['amounts'] = str_replace("*", ", ", $row['amounts']);
  echo $row['amounts']; ?>
 </td>
 <td>
