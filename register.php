@@ -81,6 +81,39 @@ $( function() {
 	});
 } );
 
+$( function() {
+  var placesOfBirth = [
+		<?php
+			$query = "SELECT DISTINCT place_of_birth FROM patients WHERE 1";
+			$result = mysqli_query($link, $query);
+			while($row = mysqli_fetch_assoc($result)) {
+				$pob = $row['place_of_birth'];
+				echo "\"{$pob}\",\n";
+			}
+		?>
+  ];
+  $( "#place_of_birth" ).autocomplete({
+    source: placesOfBirth
+  });
+} );
+
+
+$( function() {
+  var obstetricians = [
+		<?php
+			$query = "SELECT DISTINCT obstetrician FROM patients WHERE 1";
+			$result = mysqli_query($link, $query);
+			while($row = mysqli_fetch_assoc($result)) {
+				$obstetrician = $row['obstetrician'];
+				echo "\"{$obstetrician}\",\n";
+			}
+		?>
+  ];
+  $( "#obstetrician" ).autocomplete({
+    source: obstetricians
+  });
+} );
+
 </script>
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">

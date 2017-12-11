@@ -91,6 +91,40 @@ function set_item(item) {
 	// hide proposition list
 	$('#sibling_autocomplet_list').hide();
 }
+
+$( function() {
+  var placesOfBirth = [
+		<?php
+			$query = "SELECT DISTINCT place_of_birth FROM patients WHERE 1";
+			$result = mysqli_query($link, $query);
+			while($row = mysqli_fetch_assoc($result)) {
+				$pob = $row['place_of_birth'];
+				echo "\"{$pob}\",\n";
+			}
+		?>
+  ];
+  $( "#place_of_birth" ).autocomplete({
+    source: placesOfBirth
+  });
+} );
+
+
+$( function() {
+  var obstetricians = [
+		<?php
+			$query = "SELECT DISTINCT obstetrician FROM patients WHERE 1";
+			$result = mysqli_query($link, $query);
+			while($row = mysqli_fetch_assoc($result)) {
+				$obstetrician = $row['obstetrician'];
+				echo "\"{$obstetrician}\",\n";
+			}
+		?>
+  ];
+  $( "#obstetrician" ).autocomplete({
+    source: obstetricians
+  });
+} );
+
 </script>
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
@@ -197,7 +231,7 @@ function set_item(item) {
 		<input type="hidden" name="date_of_registration" id="date_of_registration" <?php echo "value=\"".$patient['date_of_registration']."\""; ?> />
 		<input type="text" name="doregistration_show" id="doregistration_show" <?php echo "value=\"".date('d/m/Y',strtotime($patient['date_of_registration']))."\""; ?> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-		<input type="checkbox" name="active" id="active" value="1" <?php if($patient['active']) echo "checked=\"true\""; ?>/> 
+		<input type="checkbox" name="active" id="active" value="1" <?php if($patient['active']) echo "checked=\"true\""; ?>/>
 		<label for="active">Active</label>
 	</p>
 
@@ -210,7 +244,7 @@ function set_item(item) {
 	</p>
 	<p>
 		<label>Current siblings:&nbsp;&nbsp;</label>
-		
+
 		<ul style=" list-style-type: none;">
 		<?php
 			while($sibling = mysqli_fetch_assoc($siblings_result))

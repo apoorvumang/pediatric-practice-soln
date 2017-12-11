@@ -7,7 +7,7 @@ if($_POST['patient_id']) {
   $p_id = $_POST['patient_id'];
   $patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name from patients where id={$p_id}"));
   $patient_name = $patient['name'];
-  $query = "SELECT v.name as vac_name, vs.date as date FROM vaccines v, vac_schedule vs WHERE vs.p_id={$p_id} AND v.id = vs.v_id AND vs.given='N'";
+  $query = "SELECT v.name as vac_name, vs.date as date FROM vaccines v, vac_schedule vs WHERE vs.p_id={$p_id} AND v.id = vs.v_id AND vs.given='N' ORDER BY vs.date";
   ?>
   <h3>Schedule for <?php echo $patient_name; ?></h3>
   <table style="margin: 0px 0px 0px 0px;border:none;"><tbody>
