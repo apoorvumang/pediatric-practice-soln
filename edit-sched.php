@@ -107,7 +107,22 @@ $(document).ready(function() {
       var data = $("#scanned_img").attr("src")
       $('.cloudinary_fileupload').fileupload('option', 'formData').file = data;
       $('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
-    })
+    });
+
+		$("#uploadFromDisk").click(function(e) {
+			console.log("upload from disk clicked");
+			e.preventDefault();
+			var visitID = $("#visitIDForPrescriptionUploadFromFile").val();
+			if(!visitID) {
+				alert("Please enter visit ID!");
+				return;
+			}
+			console.log("visit id = ", visitID);
+			$("#visitIDForPrescriptionScan").text(visitID);
+			var data = $("#scanned_img").attr("src")
+			$('.cloudinary_fileupload').fileupload('option', 'formData').file = data;
+			$('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
+    });
   })
 </script>
 
@@ -772,6 +787,39 @@ if($_POST['vac_date']) {
 								<a href=<?php echo "\"plotly.php?id={$_GET['id']}&type=BMI\"" ;?> target="_blank">Click to see growth chart (BMI)</a>
 							</strong>
 						</p>
+
+<form>
+<h4>Upload prescription scan from file</h4>
+
+<label for="visitIDForPrescriptionUploadFromFile">Visit ID </label><input type="text" name="visitIDForPrescriptionUploadFromFile" id="visitIDForPrescriptionUploadFromFile">
+<input type="file" id="files" name="files[]" />
+<button id="uploadFromDisk">Upload file</button>
+<script>
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+    // Loop through the FileList and render image files as thumbnails.
+    for (var i = 0, f; f = files[i]; i++) {
+      // Only process image files.
+      if (!f.type.match('image.*')) {
+        continue;
+      }
+      var reader = new FileReader();
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+          // Render thumbnail.
+					$("#scanned_img").attr("src", e.target.result);
+        };
+      })(f);
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(f);
+    }
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
+</form>
+
 						<div id="visitIDForPrescriptionScan" style="display: none;"></div>
 						<form id="previousvisits" role="form" action="" method="post">
 							<div class="pagination-page"></div>
