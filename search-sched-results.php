@@ -206,9 +206,9 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 		if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
 			if($row['phone'])
-				$result = $smsGateway->sendMessageToNumber($row['phone'], $message, $deviceID);
+				$smsResult = $smsGateway->sendMessageToNumber($row['phone'], $message, $deviceID);
 			if($row['phone2'])
-				$result = $smsGateway->sendMessageToNumber($row['phone2'], $message, $deviceID);
+				$smsResult = $smsGateway->sendMessageToNumber($row['phone2'], $message, $deviceID);
 			echo "SMS sent to {$row['pname']} <br>";
 		}
 

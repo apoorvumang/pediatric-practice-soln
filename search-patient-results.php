@@ -1,4 +1,4 @@
-<?php include('header.php'); 
+<?php include('header.php');
 
 include "smsGateway.php";
 $smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
