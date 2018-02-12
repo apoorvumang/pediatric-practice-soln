@@ -282,10 +282,10 @@ if($_POST['vac_date']) {
 	} else if($_POST['sendsms']) {
 
 		$message = $_POST['message'];
-		$headers = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
-		$headers .= "To: SMS Gateway"." <".$dr_email_sms.">\r\n";
-		$headers .= "From: ".$dr_name." <".$dr_email.">\r\n";
+		$headers = 'MIME-Version: 1.0' . "\n";
+		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\n";
+		$headers .= "To: SMS Gateway"." <".$dr_email_sms.">\n";
+		$headers .= "From: ".$dr_name." <".$dr_email.">\n";
 		if($_POST['phone'])
 			mail($dr_email_sms, "ets: ".$_POST['phone'], $message, $headers);
 		else
