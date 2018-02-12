@@ -281,18 +281,33 @@ if($_POST['vac_date']) {
 		}
 	} else if($_POST['sendsms']) {
 
+		// $message = $_POST['message'];
+		// $headers = 'MIME-Version: 1.0' . "\n";
+		// $headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\n";
+		// $headers .= "To: SMS Gateway"." <".$dr_email_sms.">\n";
+		// $headers .= "From: ".$dr_name." <".$dr_email.">\n";
+		// if($_POST['phone'])
+		// 	mail($dr_email_sms, "ets: ".$_POST['phone'], $message, $headers);
+		// else
+		// 	echo "Problem sending SMS to phone number 1 <br>";
+		// if($_POST['phone2'])
+		// 	mail($dr_email_sms, "ets: ".$_POST['phone2'], $message, $headers);
+
+
+		include "smsGateway.php";
+		$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
+
+		$deviceID = 78587;
 		$message = $_POST['message'];
-		$headers = 'MIME-Version: 1.0' . "\n";
-		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\n";
-		$headers .= "To: SMS Gateway"." <".$dr_email_sms.">\n";
-		$headers .= "From: ".$dr_name." <".$dr_email.">\n";
+
 		if($_POST['phone'])
-			mail($dr_email_sms, "ets: ".$_POST['phone'], $message, $headers);
+			$result = $smsGateway->sendMessageToNumber($_POST['phone'], $message, $deviceID);
 		else
-			echo "Problem sending SMS to phone number 1 <br>";
+			echo 'Problem sending SMS to phone number 1! <br>';
 		if($_POST['phone2'])
-			mail($dr_email_sms, "ets: ".$_POST['phone2'], $message, $headers);
+			$result = $smsGateway->sendMessageToNumber($_POST['phone2'], $message, $deviceID);
 		echo "SMS sent! <br>";
+		
 	} else if($_POST['save_dues']) {
 		foreach ($_POST['due_paid_date'] as $key => $value) {
 			if($value != 'nil') {

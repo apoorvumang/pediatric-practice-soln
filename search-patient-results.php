@@ -112,14 +112,15 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
 			$message = $_POST['customsms'];
 		}
+		include "smsGateway.php";
+		$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
+
+		$deviceID = 78587;
 		
-		$headers = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
-		$headers .= "From: ".$dr_name." <".$dr_email.">\r\n";
 		if($patient['phone'])
-			mail($dr_email_sms, "ets: ".$patient['phone'], $message, $headers);
+			$result = $smsGateway->sendMessageToNumber($patient['phone'], $message, $deviceID);
 		if($patient['phone2'])
-			mail($dr_email_sms, "ets: ".$patient['phone2'], $message, $headers);
+			$result = $smsGateway->sendMessageToNumber($patient['phone2'], $message, $deviceID);
 		echo "SMS sent to {$patient['first_name']} <br>";
 	}
 }
