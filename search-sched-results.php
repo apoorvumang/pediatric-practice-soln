@@ -2,6 +2,11 @@
 //What needs to be done on this page:
 // List out all schedules for a particular date, in a form.
 // The dates *only* can be edited. Give a link for the patient also.
+
+include "smsGateway.php";
+$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
+
+$deviceID = 78587;
 ?>
 
 <h3>Search Results</h3>
@@ -200,11 +205,6 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 
 		if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
-			include "smsGateway.php";
-			$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
-
-			$deviceID = 78587;
-
 			if($row['phone'])
 				$result = $smsGateway->sendMessageToNumber($row['phone'], $message, $deviceID);
 			if($row['phone2'])

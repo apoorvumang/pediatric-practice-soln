@@ -1,4 +1,9 @@
 <?php include('header.php');
+
+include "smsGateway.php";
+$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
+
+$deviceID = 78587;
 ?>
 <script>
         // $(document).ready(function() {
@@ -293,11 +298,6 @@ if($_POST['vac_date']) {
 		// if($_POST['phone2'])
 		// 	mail($dr_email_sms, "ets: ".$_POST['phone2'], $message, $headers);
 
-
-		include "smsGateway.php";
-		$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
-
-		$deviceID = 78587;
 		$message = $_POST['message'];
 
 		if($_POST['phone'])
@@ -307,7 +307,7 @@ if($_POST['vac_date']) {
 		if($_POST['phone2'])
 			$result = $smsGateway->sendMessageToNumber($_POST['phone2'], $message, $deviceID);
 		echo "SMS sent! <br>";
-		
+
 	} else if($_POST['save_dues']) {
 		foreach ($_POST['due_paid_date'] as $key => $value) {
 			if($value != 'nil') {
