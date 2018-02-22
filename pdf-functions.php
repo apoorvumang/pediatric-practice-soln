@@ -14,11 +14,13 @@ class PDF extends FPDF
 
 	private function printVacDates($dateArray, $idArray, $fill, $w)
 	{
+		$countNotSetDates = 0;
 		foreach ($idArray as $key => $id)
 		{
 			if(!isset($dateArray[$id]))
 			{
-				$this->Cell($w,8,'','LRB',0,'C',$fill);
+				$countNotSetDates++;
+				// $this->Cell($w,8,'','LRB',0,'C',$fill);
 				continue;
 			}
 			if($dateArray[$id]!='0000-00-00')
@@ -30,8 +32,8 @@ class PDF extends FPDF
 				$this->Cell($w,8,'Given','LRB',0,'C',$fill);
 			}
 		}
-		for ($i=0; $i < 9-count($idArray); $i++)
-		{ 
+		for ($i=0; $i < 9-count($idArray)+$countNotSetDates; $i++)
+		{
 			$this->Cell($w,8,'','LRB',0,'C',$fill);
 		}
 	}
@@ -61,10 +63,10 @@ class PDF extends FPDF
 		{
 			$dateArray[$record['v_id']] = $record['date_given'];
 		}
-		$vacList = array('BCG', 'Hepatitis-B', 'DTwP/DTaP and OPV', 'Hib', 'IPV', 'Pneumococcal', 'Rotavirus', 'Measles', 'Influenza', 'Hepatitis-A', 'Chickenpox', 'MMR', 'Typhoid', 'Cholera', 'Meningitis', 'HPV');
+		$vacList = array('BCG', 'Hepatitis-B', 'DTwP/DTaP and OPV', 'Hib', 'IPV', 'Pneumococcal', 'Rotavirus', 'Measles', 'Influenza', 'Hepatitis-A', 'Chickenpox', 'MMR', 'Typhoid', 'Cholera', 'Meningitis', 'HPV','Tdap/Td/TT');
 		//Order of vaccine ids should be chronological according to dose
 		//ie if you have 4 doses, then put the id of first does first and last dose last
-		for ($i=0; $i < 16; $i++)
+		for ($i=0; $i < count($vacList); $i++)
 		{
 			$this->SetFont('', 'B', 12);
 			$this->Cell($w[0],8,$vacList[$i],'LRB',0,'C',$fill);
@@ -107,7 +109,7 @@ class PDF extends FPDF
 					$tempArr = array(37,38);
 					break;
 				case 12:	//Typhoid
-					$tempArr = array(46,47,48,49,50,51,64);
+					$tempArr = array(46,47,48,49,50,51,64,73,74);
 					break;
 				case 13:	//Cholera
 					$tempArr = array(59,60);
@@ -118,13 +120,16 @@ class PDF extends FPDF
 				case 15:	//HPV
 					$tempArr = array(3,4,5);
 					break;
+				case 16:	//Tdap/Td/TT
+					$tempArr = array(45,52,55,56);
+					break;
 				default:
 					# code...
 					break;
 			}
 			$this->printVacDates($dateArray, $tempArr, $fill, $w[1]);
 			$this->Ln();
-			
+
 			// $fill = !$fill;
 		}
 		// Closing line
@@ -152,11 +157,32 @@ class PDF extends FPDF
 	function Footer()
 	{
 		// Position at 1.5 cm from bottom
-		$this->SetY(-15);
+		$this->SetY(-30);
 		// Arial italic 8
-		$this->SetFont('Arial','I',8);
+		// $this->SetFont('Arial','I',8);
 		// Page number
-		$this->Cell(0,10,'drmahima.com',0,0,'C');
+		// $this->Cell(0,10,'drmahima.com',0,0,'C');
+
+		$doctor_name = 'Dr. Mahima Anurag';
+		$doctor_degree = "MBBS, MD(Pediatrics)";
+		$doctor_work = "Consultant Child Specialist and Neonatologist";
+		$doctor_regn = "DMC-3334";
+		// $this->SetFont('Arial','B',16);
+		// $this->Cell(100,15, $doctor_name);
+		// $this->Ln();
+		// $this->SetFont('Arial','',12);
+		// $this->Cell(100,15, $doctor_work.' ');
+		// $this->Cell(100,15,'Regn. No. '.$doctor_regn);
+		$this->SetFont('Arial','B',16);
+		$this->Cell(70,7,$doctor_name,'','','L');
+		$this->Ln();
+		$this->SetFont('Arial','',12);
+		$this->Cell(70,5,$doctor_degree,'','','L');
+		$this->Ln();
+		$this->Cell(70,5,$doctor_work,'','','L');
+		$this->Ln();
+		$this->Cell(70,5,$doctor_regn,'','','L');
+		$this->Image('mahima-sign.png',100,175,30);
 	}
 }
 
