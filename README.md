@@ -6,5 +6,4 @@ The main thing setting this solution apart from others is the ability to send me
 
 Demo
 ====
-1. Go to www.pedsoft-demo.com
-2. Login with username ```demo``` password ```demo```
+No demo available atm :(
