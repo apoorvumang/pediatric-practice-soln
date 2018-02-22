@@ -20,7 +20,6 @@ class PDF extends FPDF
 			if(!isset($dateArray[$id]))
 			{
 				$countNotSetDates++;
-				// $this->Cell($w,8,'','LRB',0,'C',$fill);
 				continue;
 			}
 			if($dateArray[$id]!='0000-00-00')
@@ -156,23 +155,13 @@ class PDF extends FPDF
 	// Page footer
 	function Footer()
 	{
-		// Position at 1.5 cm from bottom
+		// Position at 3.0 cm from bottom
 		$this->SetY(-30);
-		// Arial italic 8
-		// $this->SetFont('Arial','I',8);
-		// Page number
-		// $this->Cell(0,10,'drmahima.com',0,0,'C');
 
 		$doctor_name = 'Dr. Mahima Anurag';
 		$doctor_degree = "MBBS, MD(Pediatrics)";
 		$doctor_work = "Consultant Child Specialist and Neonatologist";
 		$doctor_regn = "DMC-3334";
-		// $this->SetFont('Arial','B',16);
-		// $this->Cell(100,15, $doctor_name);
-		// $this->Ln();
-		// $this->SetFont('Arial','',12);
-		// $this->Cell(100,15, $doctor_work.' ');
-		// $this->Cell(100,15,'Regn. No. '.$doctor_regn);
 		$this->SetFont('Arial','B',16);
 		$this->Cell(70,7,$doctor_name,'','','L');
 		$this->Ln();
