@@ -38,7 +38,9 @@ $( "#restTo" ).datepicker({
 <div class="body">
 
 	<h3>Medical Certificate</h3>
-  <form action="" method="post">
+  <form action="pdf-medcert.php" method="post">
+    <input type="hidden" name="patient_name" value=<?php echo "'{$patient['name']}'"; ?> />
+    <input type="hidden" name="patient_sex" value=<?php echo "'{$patient['sex']}'"; ?> />
     <p> This is to certify that <?php echo "<b>".$patient['name']."</b>"; ?>
       <?php
         //son or daughter
