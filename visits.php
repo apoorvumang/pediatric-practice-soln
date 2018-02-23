@@ -2,11 +2,11 @@
 <script>
 $(function() {
 $( "#date" ).datepicker({
-changeMonth: true,
-changeYear: true,
-yearRange: "1970:2032",
-dateFormat:"d M yy"
-});
+  changeMonth: true,
+  changeYear: true,
+  yearRange: "1970:2032",
+  dateFormat:"d M yy"
+  });
 });
 
 
