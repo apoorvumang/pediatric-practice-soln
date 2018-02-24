@@ -499,6 +499,9 @@ if($_POST['vac_date']) {
 			<p>
 				<strong><a href=<?php echo "\""."pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
 			</p>
+      <p>
+				<strong><a href=<?php echo "\""."medcert.php?id=".$patient['id']."\"" ?>>Create medical certificate</a> </strong>
+			</p>
 			<p>
 				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."&normal=1\"" ?>>Send upcoming vaccination email</a> </strong>
 			</p>

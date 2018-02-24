@@ -122,8 +122,6 @@ class PDF extends FPDF
 	function Footer()
 	{
 		$this->Ln(31);
-    // $this->SetY(-30);
-
 		$doctor_name = 'Dr. Mahima Anurag';
 		$this->SetFont('Arial','B',12);
 		$this->Cell(70,7,$doctor_name,'','','L');
