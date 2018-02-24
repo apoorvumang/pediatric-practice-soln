@@ -384,7 +384,7 @@ if($_POST['vac_date']) {
 					collapsible: true,
 					active:
 					<?php if(strcmp($_SESSION['username'], 'mahima') == 0) {
-							echo '3';
+							echo '4';
 						}
 						else {
 							echo '0';
@@ -499,9 +499,6 @@ if($_POST['vac_date']) {
 			<p>
 				<strong><a href=<?php echo "\""."pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
 			</p>
-      <p>
-				<strong><a href=<?php echo "\""."medcert.php?id=".$patient['id']."\"" ?>>Create medical certificate</a> </strong>
-			</p>
 			<p>
 				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."&normal=1\"" ?>>Send upcoming vaccination email</a> </strong>
 			</p>
@@ -595,6 +592,17 @@ if($_POST['vac_date']) {
 
 			?>
 			<div id="accordion">
+        <h3>Medical Certificates</h3>
+        <div>
+          <ul>
+          <li><p>
+    				<strong><a href=<?php echo "\""."medcert.php?id=".$patient['id']."\"" ?>>Basic medical certificate</a> </strong>
+    			</p>
+          <li><p>
+            <strong><a href=<?php echo "\""."medcert_with_fitness.php?id=".$patient['id']."\"" ?>>Medical Certificate with Fitness</a> </strong>
+          </p>
+          </ul>
+        </div>
 				<h3> Advanced details </h3>
 				<div>
 

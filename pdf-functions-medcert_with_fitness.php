@@ -72,7 +72,7 @@ class PDF extends FPDF
 		$this->Ln(35);
 		$this->SetFont('Arial','B',20);
 		// $medcert_info = $this->medcert_info;
-		$title = "Medical Certificate";
+		$title = "Medical Certificate with Fitness";
 		$w = $this->GetStringWidth($title)+6;
 		// Move to the right
 		$this->SetX((200-$w)/2);
@@ -95,6 +95,11 @@ class PDF extends FPDF
 		$restFrom = $medcert_info['restFrom'];
 		$restTo = $medcert_info['restTo'];
 		$no_of_days = $medcert_info['no_of_days'];
+    $fitFrom = $medcert_info['fitFrom'];
+    $pronoun = "She";
+    if($sex == 'M') {
+      $pronoun = "He";
+    }
 		$text = "This is to certify that ".$name." ";
 		if($sex == 'M') {
 			$text .= "son of ";
@@ -102,13 +107,9 @@ class PDF extends FPDF
 			$text .= "daughter of ";
 		}
 		$text .= $parent_name;
-		$text .= " is under my treatment from {$treatmentFrom} for {$diagnosis}.\n";
-		if($sex == 'M') {
-			$text .= "He ";
-		} else {
-			$text .= "She ";
-		}
-		$text .= "is advised rest for the duration of {$no_of_days} days from {$restFrom} to {$restTo}.";
+		$text .= " was under my treatment from {$treatmentFrom} for {$diagnosis}.\n";
+		$text .= "{$pronoun} was advised rest for the duration of {$no_of_days} days from {$restFrom} to {$restTo}.";
+    $text .= "\n{$pronoun} has now recovered well and is fit to attend school from {$fitFrom}.";
 		$this->SetFont('Arial','',12);
 		// $text=str_repeat('this is a word wrap test ',20);
 		$nb= $this->WordWrap($text,170);
@@ -126,12 +127,12 @@ class PDF extends FPDF
 		$this->SetFont('Arial','B',12);
 		$this->Cell(70,7,$doctor_name,'','','L');
 		$this->Ln();
-		$this->Image('mahima-sign.png',25,95,20);
+		$this->Image('mahima-sign.png',25,100,20);
 	}
 }
 
 
-function createMedCertPDF($medcert_info, $link) {
+function createMedCertWithFitnessPDF($medcert_info, $link) {
 	$pdf = new PDF();
 	$pdf->SetMargins(20,20,10);
 	$pdf->setVars($medcert_info);
