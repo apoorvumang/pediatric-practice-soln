@@ -69,7 +69,7 @@ class PDF extends FPDF
 	function Header()
 	{
 		// Arial bold 15
-		$this->Ln(35);
+		$this->Ln(45);
 		$this->SetFont('Arial','B',20);
 		// $medcert_info = $this->medcert_info;
 		$title = "Medical Certificate";
