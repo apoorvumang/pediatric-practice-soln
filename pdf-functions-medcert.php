@@ -126,7 +126,7 @@ class PDF extends FPDF
 		$this->SetFont('Arial','B',12);
 		$this->Cell(70,7,$doctor_name,'','','L');
 		$this->Ln();
-		$this->Image('mahima-sign.png',25,95,20);
+		$this->Image('mahima-sign.png',25,105,20);
 	}
 }
 
