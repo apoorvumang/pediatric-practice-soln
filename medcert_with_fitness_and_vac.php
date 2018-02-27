@@ -9,9 +9,17 @@
   $patient = mysqli_fetch_assoc(mysqli_query($link, $query));
   $formatted_dob = date('d-F-Y', strtotime($patient['dob']));
   $formatted_sex = "Female";
+  $pronoun = "She";
+  $prefix = "Miss";
   if($patient['sex'] == 'M') {
     $formatted_sex = "Male";
+    $pronoun = "He";
+    $prefix = "Master";
   }
+  $from = new DateTime($patient['dob']);
+  $to   = new DateTime('tomorrow');
+  $age = $from->diff($to);
+  $formatted_age = $age->y." years ".$age->m." months ".$age->d." days";
 ?>
 
 <script>
@@ -44,9 +52,12 @@ $( "#restTo" ).datepicker({
 
 	<h3>Medical Fitness Certificate</h3>
   <form action="pdf-medcert_with_fitness_and_vac.php" method="post">
-    <input type="hidden" name="patient_name" value=<?php echo "'{$patient['name']}'"; ?> />
+    <input type="hidden" name="formatted_patient_name" value=<?php echo "'".$prefix." "."{$patient['name']}'"; ?> />
     <input type="hidden" name="patient_sex" value=<?php echo "'{$patient['sex']}'"; ?> />
-    <p> This is to certify that <?php echo "<b>".$patient['name']."</b> DOB {$formatted_dob} SEX {$formatted_sex}"; ?>
+    <input type="hidden" name="formatted_dob" value=<?php echo "'{$formatted_dob}'"; ?> />
+    <input type="hidden" name="formatted_age" value=<?php echo "'{$formatted_age}'"; ?> />
+    <input type="hidden" name="first_name" value=<?php echo "'{$patient['first_name']}'"; ?> />
+    <p> This is to certify that <?php echo "<b>".$prefix." ".$patient['name']."</b> DOB {$formatted_dob} "; ?>
       <?php
         //son or daughter
         if($patient['sex'] == 'M') {
@@ -65,27 +76,47 @@ $( "#restTo" ).datepicker({
         echo "<option value='Mr. {$father_name}'>Mr. {$father_name}</option>";
       ?>
       </select>
-      is under my treatment from
-      <input type="text" name="treatmentFrom" id="treatmentFrom" placeholder="Date" style="margin-right:20px;"/>
-      for
-      <input type="text" name="diagnosis" id="diagnosis" placeholder="Diagnosis" style="margin-right:20px;margin-left:20px;"/>
+      is a healthy child of <?php echo $formatted_age ?>.
+      <br />
+      <?php echo $pronoun." "; ?>has received the following immunizations to date:
+      <br />
+      <textarea name="vaccine_list" rows=15 cols=30 ><?php
+        /*
+          For vaccine list, we will be taking the ids of the FIRST dose of each vaccine
+          and check if that has been given.
+
+          List is:
+          BCG, Hepatitis-B, DTwP/DTaP and OPV, Hib, IPV, Pneumococcal, Rotavirus, Measles, Influenza, Hepatitis-A, Chickenpox, MMR, Typhoid, Cholera, Meningitis, HPV, Tdap/Td/TT
+          IDs:
+          1,15,8,19,28,39,43,33,22,13,6,37,46,59,34,3,45
+        */
+        $vac_name_list = ["BCG", "Hepatitis-B", "DTwP/DTaP and OPV", "Hib", "IPV", "Pneumococcal", "Rotavirus", "Measles", "Influenza", "Hepatitis-A", "Chickenpox", "MMR", "Typhoid", "Cholera", "Meningitis", "HPV", "Tdap/Td/TT"];
+        $vac_id_list = [1,15,8,19,28,39,43,33,22,13,6,37,46,59,34,3,45];
+        $query = "SELECT * FROM vac_schedule WHERE p_id={$patient['id']} AND GIVEN='Y';";
+        // echo $query;
+        $result = mysqli_query($link, $query);
+        while($row = mysqli_fetch_assoc($result)) {
+          $vac_id = $row['v_id'];
+          // echo $vac_id." ";
+          $key = array_search($vac_id, $vac_id_list);
+          // echo $key;
+          if($key === FALSE) {
+            continue;
+          }
+          $vac_name = $vac_name_list[$key];
+          echo $vac_name."\n";
+        }
+        ?></textarea>
 
       <br />
       <?php
         //he or she
-        if($patient['sex']=='M') {
-          echo "He ";
-        } else {
-          echo "She ";
-        }
+        echo $pronoun." ";
       ?>
-      is advised rest for the duration of
-      <input type="text" name="no_of_days" id="no_of_days" style="width:30px" />
-      days from
-      <input type="text" name="restFrom" id="restFrom" placeholder="Date"/>
-      to
-      <input type="text" name="restTo" id="restTo" placeholder="Date"/>
-      .
+      does not suffer from any chronic or communicable disease.
+      <br />
+      <?php echo $patient['first_name']; ?> is a physically active and mentally alert child fit to participate in all school activites.
+
       <br />
       <br />
       Dr. Mahima Anurag
