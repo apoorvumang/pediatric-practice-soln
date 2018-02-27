@@ -601,6 +601,9 @@ if($_POST['vac_date']) {
           <li><p>
             <strong><a href=<?php echo "\""."medcert_with_fitness.php?id=".$patient['id']."\"" ?>>Medical Certificate with Fitness</a> </strong>
           </p>
+          <li><p>
+            <strong><a href=<?php echo "\""."medcert_with_fitness_and_vac.php?id=".$patient['id']."\"" ?>>Medical Fitness Certificate with Vaccine List</a> </strong>
+          </p>
           </ul>
         </div>
 				<h3> Advanced details </h3>
