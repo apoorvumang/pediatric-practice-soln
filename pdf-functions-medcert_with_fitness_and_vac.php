@@ -69,7 +69,7 @@ class PDF extends FPDF
 	function Header()
 	{
 		// Arial bold 15
-		$this->Ln(45);
+		$this->Ln(65);
 		$this->SetFont('Arial','B',20);
 		// $medcert_info = $this->medcert_info;
 		$title = "Medical Fitness Certificate";
@@ -146,7 +146,7 @@ class PDF extends FPDF
 
 function createMedCertWithFitnessAndVacPDF($medcert_info, $link) {
 	$pdf = new PDF();
-	$pdf->SetMargins(20,20,10);
+	$pdf->SetMargins(28,20,10);
 	$pdf->setVars($medcert_info);
 	$pdf->AddPage();
 	$pdf->body();

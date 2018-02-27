@@ -95,16 +95,14 @@ $( "#restTo" ).datepicker({
         $query = "SELECT * FROM vac_schedule WHERE p_id={$patient['id']} AND GIVEN='Y';";
         // echo $query;
         $result = mysqli_query($link, $query);
+        $patient_given_vac_list = [];
         while($row = mysqli_fetch_assoc($result)) {
-          $vac_id = $row['v_id'];
-          // echo $vac_id." ";
-          $key = array_search($vac_id, $vac_id_list);
-          // echo $key;
-          if($key === FALSE) {
-            continue;
+          $patient_given_vac_list[] = $row['v_id'];
+        }
+        foreach ($vac_id_list as $key => $vac_id) {
+          if(in_array($vac_id, $patient_given_vac_list)) {
+            echo $vac_name_list[$key]."\n";
           }
-          $vac_name = $vac_name_list[$key];
-          echo $vac_name."\n";
         }
         ?></textarea>
 
