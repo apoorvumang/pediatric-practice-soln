@@ -93,7 +93,6 @@ class PDF extends FPDF
     $formatted_dob = $medcert_info['formatted_dob'];
     $formatted_age = $medcert_info['formatted_age'];
     $pronoun = $medcert_info['$pronoun'];
-    $vaccine_list = $medcert_info['vaccine_list'];
 		$sex = $medcert_info['patient_sex'];
 		$parent_name = $medcert_info['parent_name'];
     $pronoun = "She";
@@ -109,10 +108,13 @@ class PDF extends FPDF
 		}
 		$text .= $parent_name;
 		$text .= " is a healthy child of {$formatted_age}.\n";
-		$text .= "{$pronoun} has received the following immunizations to date:\n\n";
 
-    $vac_text = $vaccine_list;
-    // $text .= $vaccine_list."\n\n";
+		$lowerCasePronoun = "she";
+		if($pronoun == "He") {
+			$lowerCasePronoun = "he";
+		}
+		$text3 = "Please find attached the list of immunizations {$lowerCasePronoun} has received till date.\n";
+
     $text2 = "\n{$pronoun} does not suffer from any chronic or communicable disease.\n";
     $text2 .= "{$first_name} is a physically active and mentally alert child fit to participate in all school activites.\n";
 		$this->SetFont('Arial','',12);
@@ -121,13 +123,12 @@ class PDF extends FPDF
 		$this->Write(5,$text);
     $this->Ln(10);
 
-
-    $nb= $this->WordWrap($vac_text,170);
-		$this->Write(5,$vac_text);
-    $this->Ln(10);
-
     $nb= $this->WordWrap($text2,170);
 		$this->Write(5,$text2);
+		$this->Ln(10);
+
+		$nb= $this->WordWrap($text3,170);
+		$this->Write(5,$text3);
 	}
 
 
