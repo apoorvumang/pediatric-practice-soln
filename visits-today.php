@@ -29,7 +29,7 @@ if($_POST['delete']) {
 <h3>Today's visits</h3>
 <?php
   $today = date('Y-m-d');
-  $result = mysqli_query($link, "SELECT n.invoice_id as invoice_id, n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname, n.height as height, n.weight as weight FROM notes n, patients p WHERE n.date='".$today."' AND n.p_id = p.id ORDER BY n.id");
+  $result = mysqli_query($link, "SELECT n.timestamp as timestamp, n.invoice_id as invoice_id, n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname, n.height as height, n.weight as weight FROM notes n, patients p WHERE n.date='".$today."' AND n.p_id = p.id ORDER BY n.timestamp DESC");
   $nrows = mysqli_num_rows($result);
 ?>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
@@ -46,6 +46,7 @@ if($_POST['delete']) {
 <th>Note</th>
 <th>Date</th>
 <th>Invoice ID</th>
+<th>Waiting Time</th>
 <th>Delete</th>
 </tr>
 <?php
@@ -99,6 +100,11 @@ if($_SESSION['type']=='doctor') {
   echo '-';
 }
 ?>
+</td>
+<td>
+  <b>
+    <time class="timeago" datetime=<?php echo "'{$row['timestamp']}'"; ?> >July 17, 2008</time>
+  </b>
 </td>
 <td>
 <input type="checkbox" name="delete[]" value=<?php echo "'{$row['id']}'"; ?> />
