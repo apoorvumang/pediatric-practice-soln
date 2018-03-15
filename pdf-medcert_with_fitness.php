@@ -15,6 +15,18 @@ error_reporting(0);
 // 	echo '<h2>Access Denied</h2>';
 // 	exit;
 // }
+
+
+
 $pdf = createMedCertWithFitnessPDF($_POST, $link);
-$pdf->Output();
+$pdf_base64 = base64_encode($pdf->Output("doc.pdf", "S"));
+if($_POST['save_pdf'] == "true") {
+  $query = "INSERT INTO medcerts(p_id, pdf) VALUES({$_POST['p_id']}, '{$pdf_base64}');";
+  $result = mysqli_query($link, $query);
+}
+$decoded_pdf = base64_decode($pdf_base64);
+header("Content-type:application/pdf");
+echo $decoded_pdf;
+
+
 ?>

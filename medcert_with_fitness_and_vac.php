@@ -52,6 +52,8 @@ $( "#restTo" ).datepicker({
 
 	<h3>Medical Fitness Certificate</h3>
   <form action="pdf-medcert_with_fitness_and_vac.php" method="post">
+    <input type="checkbox" name="save_pdf" value="true" checked /> Save certificate <br>
+    <input type="hidden" name="p_id" value=<?php echo "'{$patient['id']}'"; ?> />
     <input type="hidden" name="formatted_patient_name" value=<?php echo "'".$prefix." "."{$patient['name']}'"; ?> />
     <input type="hidden" name="patient_sex" value=<?php echo "'{$patient['sex']}'"; ?> />
     <input type="hidden" name="formatted_dob" value=<?php echo "'{$formatted_dob}'"; ?> />
@@ -78,7 +80,7 @@ $( "#restTo" ).datepicker({
       <?php echo $parents_names." "; ?>
       is a healthy child of <?php echo $formatted_age ?>.
       <br />
-      
+
       <?php
         //he or she
         echo $pronoun." ";

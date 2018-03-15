@@ -605,6 +605,18 @@ if($_POST['vac_date']) {
             <strong><a href=<?php echo "\""."medcert_with_fitness_and_vac.php?id=".$patient['id']."\"" ?>>Medical Fitness Certificate with Vaccine List</a> </strong>
           </p>
           </ul>
+					<h4>Previously generated medical certificates</h4>
+					<ul>
+						<?php
+							$query = "SELECT * FROM medcerts WHERE p_id={$_GET['id']};";
+							$result = mysqli_query($link, $query);
+							$i = 1;
+							while($row = mysqli_fetch_assoc($result)) {
+								echo "<li><a href='show_medcert.php?pdf_id={$row['id']}'>Certificate {$i}</a>";
+								$i++;
+							}
+						?>
+					</ul>
         </div>
 				<h3> Advanced details </h3>
 				<div>
