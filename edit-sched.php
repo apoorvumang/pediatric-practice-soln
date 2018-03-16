@@ -612,7 +612,8 @@ if($_POST['vac_date']) {
 							$result = mysqli_query($link, $query);
 							$i = 1;
 							while($row = mysqli_fetch_assoc($result)) {
-								echo "<li><a href='show_medcert.php?pdf_id={$row['id']}'>Certificate {$i}</a>";
+                $madeOn = date('M j Y g:i A', strtotime($row['timestamp']));
+								echo "<li><a href='show_medcert.php?pdf_id={$row['id']}'>Certificate {$i} made on {$madeOn}</a>";
 								$i++;
 							}
 						?>
