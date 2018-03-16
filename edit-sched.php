@@ -608,6 +608,7 @@ if($_POST['vac_date']) {
 					<h4>Previously generated medical certificates</h4>
 					<ul>
 						<?php
+              mysqli_query($link, "SET time_zone = '+5:30';");
 							$query = "SELECT * FROM medcerts WHERE p_id={$_GET['id']};";
 							$result = mysqli_query($link, $query);
 							$i = 1;
