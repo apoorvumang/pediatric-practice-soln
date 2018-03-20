@@ -145,7 +145,8 @@ echo $title;
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/jquery.simplePagination.js"></script>
-<script src="https://malsup.github.com/jquery.form.js"></script>
+<!-- <script src="https://malsup.github.com/jquery.form.js"></script> -->
+<script type="text/javascript" src="js/jquery.form.js"></script>
 <script type="text/javascript" src="js/jquery.timeago.js"></script>
 
 <script type="text/javascript">
