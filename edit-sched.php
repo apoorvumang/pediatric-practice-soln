@@ -488,191 +488,230 @@ if($_POST['vac_date']) {
 				<button id="submitall" class="btn btn-default" type="submit">Submit all</button>
 			</p>
 			</div>
-			<h4>Patient Information</h4>
-			<div style="float:right"> <a href= <?php echo "editpatient.php?id={$patient['id']}" ?> ><strong> Edit patient </strong> </a></div>
-			<div class='to_hide_from_employee'
-			<?php
-				if(strcmp($_SESSION['username'],'mahima') != 0) {
-					echo " style='display:none' ";
-				}
-			?> >
-			<p>
-				<strong><a href=<?php echo "\""."pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
-			</p>
-			<p>
-				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."&normal=1\"" ?>>Send upcoming vaccination email</a> </strong>
-			</p>
-			<p>
-				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send vaccination history email (print format)</a> </strong>
-			</p>
-      <p>
-				<strong><a href=<?php echo "\""."email-invoice-ui.php?id=".$patient['id']."\"" ?>>Send invoice email (pdf attachments)</a> </strong>
-			</p>
-			</div>
-			<h4>
-				<strong>ID: <?php echo $patient['id'] ?> </strong>
-			</h4>
 
-			<table style="margin: 0px 0px 0px 0px;border:none;">
-				<tr>
-					<td>
-						<p>
-							<strong>Name :</strong> <?php echo $patient['name']; ?>
-						</p>
-						<p>
-							<strong>Date of Birth :</strong> <?php echo  date('d-F-Y', strtotime($patient['dob'])); ?>
-						</p>
-						<p>
-							<strong>Age :</strong>
-							<?php
-								$from = new DateTime($patient['dob']);
-								$to   = new DateTime('tomorrow');
-								$age = $from->diff($to);
-								echo $age->y." years ".$age->m." months ".$age->d." days";
-							?>
-						</p>
-						<p>
-							<strong>Sex :</strong> <?php echo $patient['sex']; ?>
-						</p>
-					</td>
-					<td>
-						<p>
-							<strong>Father's name :</strong>
-							<?php echo $patient['father_name'];
-							if($patient['father_occ']) {
-								echo ", ".$patient['father_occ'];
-							}
-							?>
-						</p>
-						<p>
-							<strong>Mother's name :</strong>
-							<?php echo $patient['mother_name'];
-							if($patient['mother_occ']) {
-								echo ", ".$patient['mother_occ'];
-							}
-							?>
-						</p>
-						<p>
-							<strong>Phone:</strong> <?php echo $patient['phone']; ?>
-						</p>
-						<p>
-							<strong>Active :</strong> <?php if($patient['active']==1) echo "<font color=green><strong>Yes</strong></font>"; else echo "<font color=red><strong>No</strong></font>"; ?>
-						</p>
-					</td>
-				</tr>
-			</table>
+      <script type="text/javascript">
+        $(document).ready( function() {
+          $('#tab-container').easytabs();
+        });
+      </script>
 
-			<?php
-			if(!$siblings_result)
-				echo "<p><strong>Sibling: None</strong></p>";
-			else
-			{
-				while($row = mysqli_fetch_assoc($siblings_result))
-				{
-					?>
-					<p>
-						<strong>Sibling :</strong>
-						<?php
-						echo "<a href=edit-sched.php?id=".$row['s_id'].">";
+      <style>
+        /* Example Styles for Demo */
+        .etabs { margin: 0; padding: 0; }
+        .tab { display: inline-block; zoom:1; *display:inline; background: #eee; border: solid 1px #999; border-bottom: none; -moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; }
+        .tab a { font-size: 14px; line-height: 2em; display: block; padding: 0 10px; outline: none; }
+        .tab a:hover { text-decoration: underline; }
+        .tab.active { background: #fff; padding-top: 6px; position: relative; top: 1px; border-color: #666; }
+        .tab a.active { font-weight: bold; }
+        .tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }
+        .panel-container { margin-bottom: 10px; }
+        .tab-container .outer-div {border:1px solid black;}
+      </style>
 
-						$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$row['s_id']}"));
-						echo $sibling_row['name'];
-						echo "</a>";
-						?>
-					</p>
-					<p>
-						<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
-					</p>
-					<p>
-						<strong>Sibling sex:</strong> <?php echo $sibling_row['sex']; ?>
-					</p>
-					<?php
-				}
-			}
-
-			?>
-			<div id="accordion">
-        <h3>Medical Certificates</h3>
-        <div>
-          <ul>
-          <li><p>
-    				<strong><a href=<?php echo "\""."medcert.php?id=".$patient['id']."\"" ?>>Basic medical certificate</a> </strong>
+      <div id="tab-container" class="tab-container">
+        <ul class='etabs'>
+          <li class='tab'><a href="#tabs1-html">Patient information</a></li>
+          <li class='tab'><a href="#tabs1-js">Medical Certificates</a></li>
+          <li class='tab'><a href="#tabs1-css">Example CSS</a></li>
+        </ul>
+        <div id="tabs1-html" class="outer-div">
+          <h3>Patient Information</h3>
+    			<div style="float:right"> <a href= <?php echo "editpatient.php?id={$patient['id']}" ?> ><strong> Edit patient </strong> </a></div>
+    			<div class='to_hide_from_employee'
+    			<?php
+    				if(strcmp($_SESSION['username'],'mahima') != 0) {
+    					echo " style='display:none' ";
+    				}
+    			?> >
+    			<p>
+    				<strong><a href=<?php echo "\""."pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
     			</p>
-          <li><p>
-            <strong><a href=<?php echo "\""."medcert_with_fitness.php?id=".$patient['id']."\"" ?>>Medical Certificate with Fitness</a> </strong>
-          </p>
-          <li><p>
-            <strong><a href=<?php echo "\""."medcert_with_fitness_and_vac.php?id=".$patient['id']."\"" ?>>Medical Fitness Certificate with Vaccine List</a> </strong>
-          </p>
-          </ul>
-					<h4>Previously generated medical certificates</h4>
-					<ul>
-						<?php
-              mysqli_query($link, "SET time_zone = '+5:30';");
-							$query = "SELECT * FROM medcerts WHERE p_id={$_GET['id']};";
-							$result = mysqli_query($link, $query);
-							$i = 1;
-							while($row = mysqli_fetch_assoc($result)) {
-                $madeOn = date('M j Y g:i A', strtotime($row['timestamp']));
-								echo "<li><a href='show_medcert.php?pdf_id={$row['id']}'>Certificate {$i} made on {$madeOn}</a>";
-								$i++;
-							}
-						?>
-					</ul>
+    			<p>
+    				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."&normal=1\"" ?>>Send upcoming vaccination email</a> </strong>
+    			</p>
+    			<p>
+    				<strong><a href=<?php echo "\""."email.php?id=".$patient['id']."\"" ?>>Send vaccination history email (print format)</a> </strong>
+    			</p>
+          <p>
+    				<strong><a href=<?php echo "\""."email-invoice-ui.php?id=".$patient['id']."\"" ?>>Send invoice email (pdf attachments)</a> </strong>
+    			</p>
+    			</div>
+    			<h4>
+    				<strong>ID: <?php echo $patient['id'] ?> </strong>
+    			</h4>
+
+    			<table style="margin: 0px 0px 0px 0px;border:none;">
+    				<tr>
+    					<td>
+    						<p>
+    							<strong>Name :</strong> <?php echo $patient['name']; ?>
+    						</p>
+    						<p>
+    							<strong>Date of Birth :</strong> <?php echo  date('d-F-Y', strtotime($patient['dob'])); ?>
+    						</p>
+    						<p>
+    							<strong>Age :</strong>
+    							<?php
+    								$from = new DateTime($patient['dob']);
+    								$to   = new DateTime('tomorrow');
+    								$age = $from->diff($to);
+    								echo $age->y." years ".$age->m." months ".$age->d." days";
+    							?>
+    						</p>
+    						<p>
+    							<strong>Sex :</strong> <?php echo $patient['sex']; ?>
+    						</p>
+    					</td>
+    					<td>
+    						<p>
+    							<strong>Father's name :</strong>
+    							<?php echo $patient['father_name'];
+    							if($patient['father_occ']) {
+    								echo ", ".$patient['father_occ'];
+    							}
+    							?>
+    						</p>
+    						<p>
+    							<strong>Mother's name :</strong>
+    							<?php echo $patient['mother_name'];
+    							if($patient['mother_occ']) {
+    								echo ", ".$patient['mother_occ'];
+    							}
+    							?>
+    						</p>
+    						<p>
+    							<strong>Phone:</strong> <?php echo $patient['phone']; ?>
+    						</p>
+    						<p>
+    							<strong>Active :</strong> <?php if($patient['active']==1) echo "<font color=green><strong>Yes</strong></font>"; else echo "<font color=red><strong>No</strong></font>"; ?>
+    						</p>
+    					</td>
+    				</tr>
+    			</table>
+
+    			<?php
+    			if(!$siblings_result)
+    				echo "<p><strong>Sibling: None</strong></p>";
+    			else
+    			{
+    				while($row = mysqli_fetch_assoc($siblings_result))
+    				{
+    					?>
+    					<p>
+    						<strong>Sibling :</strong>
+    						<?php
+    						echo "<a href=edit-sched.php?id=".$row['s_id'].">";
+
+    						$sibling_row = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob,sex FROM patients WHERE id={$row['s_id']}"));
+    						echo $sibling_row['name'];
+    						echo "</a>";
+    						?>
+    					</p>
+    					<p>
+    						<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
+    					</p>
+    					<p>
+    						<strong>Sibling sex:</strong> <?php echo $sibling_row['sex']; ?>
+    					</p>
+    					<?php
+    				}
+    			}
+
+    			?>
+
+          <h3> Advanced details </h3>
+  				<div>
+
+  					<p>
+  						<strong><em>Email :</em></strong> <?php echo $patient['email']; ?>
+  					</p>
+
+  					<p>
+  						<strong><em>Email 2:</em></strong> <?php echo $patient['email2']; ?>
+  					</p>
+
+  					<p>
+  						<strong>Birth Weight :</strong> <?php echo $patient['birth_weight']." grams"; ?>
+  					</p>
+
+  					<p>
+  						<strong>Birth Time :</strong> <?php echo $patient['born_at']; ?>
+  					</p>
+
+  					<p>
+  						<strong>Head Circumference :</strong> <?php echo $patient['head_circum']; ?> cm
+  					</p>
+
+  					<p>
+  						<strong>Length :</strong> <?php echo $patient['length']; ?> cm
+  					</p>
+
+  					<p>
+  						<strong>Mode of Delivery :</strong> <?php echo $patient['mode_of_delivery']; ?>
+  					</p>
+
+  					<p>
+  						<strong>Gestation :</strong> <?php echo $patient['gestation']; ?>
+  					</p>
+  					<p>
+  						<strong>Address :</strong> <?php echo $patient['address']; ?>
+  					</p>
+
+  					<p>
+  						<strong>Phone 2:</strong> <?php echo $patient['phone2']; ?>
+  					</p>
+
+  					<p>
+  						<strong>Obstetrician :</strong> <?php echo $patient['obstetrician']; ?>
+  					</p>
+  					<p>
+  						<strong>Place of Birth :</strong> <?php echo $patient['place_of_birth']; ?>
+  					</p>
+  					<p>
+  						<strong>Date of Registration :</strong> <?php echo date('d-F-Y', strtotime($patient['date_of_registration'])); ?>
+  					</p>
+
+  				</div>
         </div>
-				<h3> Advanced details </h3>
-				<div>
+        <div id="tabs1-js" class="outer-div">
+          <h3>Medical Certificates</h3>
+          <div>
+            <ul>
+            <li><p>
+      				<strong><a href=<?php echo "\""."medcert.php?id=".$patient['id']."\"" ?>>Basic medical certificate</a> </strong>
+      			</p>
+            <li><p>
+              <strong><a href=<?php echo "\""."medcert_with_fitness.php?id=".$patient['id']."\"" ?>>Medical Certificate with Fitness</a> </strong>
+            </p>
+            <li><p>
+              <strong><a href=<?php echo "\""."medcert_with_fitness_and_vac.php?id=".$patient['id']."\"" ?>>Medical Fitness Certificate with Vaccine List</a> </strong>
+            </p>
+            </ul>
+  					<h4>Previously generated medical certificates</h4>
+  					<ul>
+  						<?php
+                mysqli_query($link, "SET time_zone = '+5:30';");
+  							$query = "SELECT * FROM medcerts WHERE p_id={$_GET['id']};";
+  							$result = mysqli_query($link, $query);
+  							$i = 1;
+  							while($row = mysqli_fetch_assoc($result)) {
+                  $madeOn = date('M j Y g:i A', strtotime($row['timestamp']));
+  								echo "<li><a href='show_medcert.php?pdf_id={$row['id']}'>Certificate {$i} made on {$madeOn}</a>";
+  								$i++;
+  							}
+  						?>
+  					</ul>
+          </div>
+        </div>
+        <div id="tabs1-css" class="outer-div">
+          <h2>CSS Styles for these tabs</h2>
+          <!-- content -->
+        </div>
+      </div>
 
-					<p>
-						<strong><em>Email :</em></strong> <?php echo $patient['email']; ?>
-					</p>
+			<div id="accordion">
 
-					<p>
-						<strong><em>Email 2:</em></strong> <?php echo $patient['email2']; ?>
-					</p>
 
-					<p>
-						<strong>Birth Weight :</strong> <?php echo $patient['birth_weight']." grams"; ?>
-					</p>
-
-					<p>
-						<strong>Birth Time :</strong> <?php echo $patient['born_at']; ?>
-					</p>
-
-					<p>
-						<strong>Head Circumference :</strong> <?php echo $patient['head_circum']; ?> cm
-					</p>
-
-					<p>
-						<strong>Length :</strong> <?php echo $patient['length']; ?> cm
-					</p>
-
-					<p>
-						<strong>Mode of Delivery :</strong> <?php echo $patient['mode_of_delivery']; ?>
-					</p>
-
-					<p>
-						<strong>Gestation :</strong> <?php echo $patient['gestation']; ?>
-					</p>
-					<p>
-						<strong>Address :</strong> <?php echo $patient['address']; ?>
-					</p>
-
-					<p>
-						<strong>Phone 2:</strong> <?php echo $patient['phone2']; ?>
-					</p>
-
-					<p>
-						<strong>Obstetrician :</strong> <?php echo $patient['obstetrician']; ?>
-					</p>
-					<p>
-						<strong>Place of Birth :</strong> <?php echo $patient['place_of_birth']; ?>
-					</p>
-					<p>
-						<strong>Date of Registration :</strong> <?php echo date('d-F-Y', strtotime($patient['date_of_registration'])); ?>
-					</p>
-
-				</div>
 				<h3 class='to_hide_from_employee'
 				<?php
 					if(strcmp($_SESSION['username'],'mahima') != 0) {

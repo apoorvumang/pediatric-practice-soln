@@ -148,6 +148,8 @@ echo $title;
 <!-- <script src="https://malsup.github.com/jquery.form.js"></script> -->
 <script type="text/javascript" src="js/jquery.form.js"></script>
 <script type="text/javascript" src="js/jquery.timeago.js"></script>
+<script type="text/javascript" src="js/jquery.hashchange.min.js"></script>
+<script type="text/javascript" src="js/jquery.easytabs.js"></script>
 
 <script type="text/javascript">
 
