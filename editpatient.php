@@ -104,7 +104,9 @@ $( function() {
 		?>
   ];
   $( "#place_of_birth" ).autocomplete({
-    source: placesOfBirth
+    source: placesOfBirth,
+		delay: 700,
+		minLength: 3
   });
 } );
 
