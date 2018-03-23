@@ -500,6 +500,11 @@ if($_POST['vac_date']) {
 				<button id="submitall" class="btn btn-default" type="submit">Submit all</button>
 			</p>
 			</div>
+      <h3>
+        <?php
+          echo $patient['id'].": ".$patient['name'];
+        ?>
+      </h3>
 
       <script type="text/javascript">
         $(document).ready( function() {
