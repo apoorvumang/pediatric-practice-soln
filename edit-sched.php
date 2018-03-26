@@ -976,6 +976,9 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
         </div>
         <div id="schedule-tab" class="outer-div to_hide_from_employee">
           <h3>Vaccination Schedule</h3>
+          <p>
+    				<strong><a href=<?php echo "\""."pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
+    			</p>
           <form id="myform" action="" method="post" style="width:800px;background:none;border:none;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px">
 						<input type="hidden" name="p_id" value=<?php echo $patient['id'] ?> />
 						<input type="submit" name="submit" value="Save Changes" />

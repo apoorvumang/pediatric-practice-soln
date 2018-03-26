@@ -88,7 +88,12 @@ $( "#restTo" ).datepicker({
       does not suffer from any chronic or communicable disease.
       <br />
       <?php echo $patient['first_name']; ?> is a physically active and mentally alert child fit to participate in all school activites.
-
+      <?php
+        $lowerCasePronoun = "she";
+        if($pronoun=="He")
+          $lowerCasePronoun = "he";
+        echo "<br><br>Please find attached the list of immunizations {$lowerCasePronoun} has received till date.\n";
+      ?>
       <br />
       <br />
       Dr. Mahima Anurag
