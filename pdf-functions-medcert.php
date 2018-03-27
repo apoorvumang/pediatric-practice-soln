@@ -69,7 +69,11 @@ class PDF extends FPDF
 	function Header()
 	{
 		// Arial bold 15
+		$medcert_info = $this->medcert_info;
 		$this->Ln(65);
+		$this->SetFont('Arial','',12);
+		$this->Write(5,$medcert_info['date']);
+		$this->Ln(10);
 		$this->SetFont('Arial','B',20);
 		// $medcert_info = $this->medcert_info;
 		$title = "Medical Certificate";
@@ -126,7 +130,7 @@ class PDF extends FPDF
 		$this->SetFont('Arial','B',12);
 		$this->Cell(70,7,$doctor_name,'','','L');
 		$this->Ln();
-		$this->Image('mahima-sign.png',32,125,20);
+		$this->Image('mahima-sign.png',32,135,20);
 	}
 }
 

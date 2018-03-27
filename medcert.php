@@ -34,6 +34,14 @@ $( "#restTo" ).datepicker({
   dateFormat:"d M yy"
   });
 });
+$(function() {
+$( "#date" ).datepicker({
+  changeMonth: true,
+  changeYear: true,
+  yearRange: "1970:2032",
+  dateFormat:"d M yy"
+  });
+});
 </script>
 <div class="body">
 
@@ -43,6 +51,7 @@ $( "#restTo" ).datepicker({
     <input type="hidden" name="p_id" value=<?php echo "'{$patient['id']}'"; ?> />
     <input type="hidden" name="patient_sex" value=<?php echo "'{$patient['sex']}'"; ?> />
     <input type="checkbox" name="save_pdf" value="true" checked /> Save certificate <br>
+    Date: <input type="text" name="date" style="width:80px" id="date" value=<?php echo "\"".date('j M Y')."\"";?>/>
     <p> This is to certify that <?php echo "<b>".$patient['name']."</b>"; ?>
       <?php
         //son or daughter

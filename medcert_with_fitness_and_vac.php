@@ -47,12 +47,21 @@ $( "#restTo" ).datepicker({
   dateFormat:"d M yy"
   });
 });
+$(function() {
+$( "#date" ).datepicker({
+  changeMonth: true,
+  changeYear: true,
+  yearRange: "1970:2032",
+  dateFormat:"d M yy"
+  });
+});
 </script>
 <div class="body">
 
 	<h3>Medical Fitness Certificate</h3>
   <form action="pdf-medcert_with_fitness_and_vac.php" method="post">
     <input type="checkbox" name="save_pdf" value="true" checked /> Save certificate <br>
+    Date: <input type="text" name="date" style="width:80px" id="date" value=<?php echo "\"".date('j M Y')."\"";?>/>
     <input type="hidden" name="p_id" value=<?php echo "'{$patient['id']}'"; ?> />
     <input type="hidden" name="formatted_patient_name" value=<?php echo "'".$prefix." "."{$patient['name']}'"; ?> />
     <input type="hidden" name="patient_sex" value=<?php echo "'{$patient['sex']}'"; ?> />
