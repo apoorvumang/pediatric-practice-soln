@@ -2,7 +2,7 @@
 include "smsGateway.php";
 $smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
 
-$deviceID = 78587;
+$deviceID = 84200;
 if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 {
 	$queryPart1 = "SELECT p.id as pid, p.name as pname, sum(pd.amount) as total_amount, group_concat(pd.comment order by pd.comment asc separator ',') as comment, p.phone as phone, p.phone2 as phone2 FROM patients p, payment_due pd WHERE  p.id = pd.p_id AND pd.id in(";

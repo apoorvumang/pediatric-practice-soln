@@ -2,7 +2,7 @@
 include "smsGateway.php";
 $smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
 
-$deviceID = 78587;
+$deviceID = 84213;
 $number = '7891947877';
 $message = 'Hello World!';
 

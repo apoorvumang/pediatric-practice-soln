@@ -6,7 +6,7 @@
 include "smsGateway.php";
 $smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
 
-$deviceID = 78587;
+$deviceID = 84200;
 ?>
 
 <h3>Search Results</h3>
