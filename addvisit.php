@@ -82,12 +82,12 @@ function set_item(item) {
   <br>
   <br>
   <label for="height">Height (in cms):&nbsp;&nbsp;&nbsp;&nbsp;</label>
-    <input type="number" step="any" name="height" id="height" width="40px"/>
+    <input type="text" name="height" id="height" width="40px"/>
     <span>&nbsp;&nbsp;&nbsp;cm </span>
   <br>
   <br>
   <label for="weight">Weight (in kg):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-    <input type="number" step="any" name="weight" id="weight" width="40px"/>
+    <input type="text" name="weight" id="weight" width="40px"/>
     <span>&nbsp;&nbsp;&nbsp;kg </span>
   <br>
   <br>
