@@ -1,9 +1,20 @@
 <?php
-function schedule($patient, $vaccine)
+//optional is when you need to add a vaccine to schedule as directly given
+function schedule($patient, $vaccine, $vaccine_is_given_date = "0")
 {
 	global $link;
 	if(!(($vaccine['sex']=='B')||($vaccine['sex']==$patient['sex'])))	//Checking if sex is correct
 		return 1;
+
+		if($vaccine_is_given_date != "0") {
+			if(!mysqli_query($link, "INSERT INTO vac_schedule(p_id, v_id, date, date_given, given) VALUES({$patient['id']}, {$vaccine['id']}, '{$vaccine_is_given_date}', '{$vaccine_is_given_date}', 'Y')"))
+			{
+				return -1;
+			}
+			else
+				return 1;
+		}
+
 	$temp_nofdays = "+".$vaccine['no_of_days']." days";
 
 	if($vaccine['dependent']==0)	//If dependent on birth
@@ -71,7 +82,8 @@ function generate_patient_schedule($patient_id)
 	global $link;
 	mysqli_query($link, "DELETE FROM vac_schedule WHERE p_id = {$patient_id}");
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$patient_id}"));
-	$result = mysqli_query($link, "SELECT * FROM vaccines WHERE 1 ORDER BY dependent ASC");	//Those with lower dep come first (very important!)
+	// optional vaccines should not be added in generated schedule
+	$result = mysqli_query($link, "SELECT * FROM vaccines WHERE optional = 'N' ORDER BY dependent ASC");	//Those with lower dep come first (very important!)
 	while($vaccine = mysqli_fetch_assoc($result))	//Select vaccines one by one from vaccines table
 	{
 		if(schedule($patient, $vaccine)==-1)
@@ -98,7 +110,7 @@ function regen_patient_schedule_tuesday($patient_id)
 	// add to vac_sched
 	$err = "";
 	global $link;
-	$vacs_not_given = mysqli_query($link, "SELECT v.id as id, v.name as name, v.no_of_days as no_of_days, v.dependent as dependent, v.sex as sex, v.lower_limit as lower_limit, v.upper_limit as upper_limit FROM vac_schedule vs, vaccines v WHERE vs.v_id = v.id AND vs.p_id = {$patient_id} AND vs.given = 'N' ORDER BY dependent ASC");
+	$vacs_not_given = mysqli_query($link, "SELECT v.optional as optional, v.id as id, v.name as name, v.no_of_days as no_of_days, v.dependent as dependent, v.sex as sex, v.lower_limit as lower_limit, v.upper_limit as upper_limit FROM vac_schedule vs, vaccines v WHERE vs.v_id = v.id AND vs.p_id = {$patient_id} AND vs.given = 'N' AND v.optional = 'N' ORDER BY dependent ASC");
 
 	mysqli_query($link, "DELETE FROM vac_schedule WHERE p_id = {$patient_id} AND given = 'N'");
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$patient_id}"));

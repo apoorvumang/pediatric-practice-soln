@@ -1,6 +1,8 @@
 <?php include('header.php');
 
 include "smsGateway.php";
+include_once "gen-sched-func.php";
+
 $smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
 
 $deviceID = 84200;
@@ -145,7 +147,28 @@ $(document).ready(function() {
 
 <input type="hidden" name="file" class="upload_field">
 <?php
-if($_POST['vac_date']) {
+if($_POST['optional_vac_submit']=='1') {
+  $base_vac_id = $_POST['optional_vac_id'];
+  $date_vac = $_POST['optional_vac_date'];
+  $date_vac = date('Y-m-d', strtotime($date_vac));
+  $patient_id = $_POST['p_id'];
+  //now add this vaccine with this date
+  $patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$patient_id}"));
+  $vaccine = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM vaccines WHERE id = {$base_vac_id}"));
+  $base_vaccine_name = $vaccine['name'];
+  $result = schedule($patient, $vaccine, $date_vac);
+  //then schedule all of its dependents
+  $vaccine_group = $vaccine['vaccine_group'];
+  //important to order in increasing dependency (assumption is dose number increases with id)
+  //also base vac to be excluded
+  $query = "SELECT * FROM vaccines WHERE vaccine_group = {$vaccine_group} AND dependent != 0 ORDER BY dependent ASC";
+  $result = mysqli_query($link, $query);
+  while($vaccine = mysqli_fetch_assoc($result)) {
+    $x = schedule($patient, $vaccine);
+  }
+  echo "Added {$base_vaccine_name}";
+}
+else if($_POST['vac_date']) {
 	$err = array();
 
 	foreach ($_POST['delete_vac'] as $key => $value) {
@@ -470,6 +493,22 @@ if($_POST['vac_date']) {
 
 				<?php
 				}
+
+        // LOL max hardcoding again
+        for ($i=0; $i < 100; $i++) { ?>
+
+				$(function() {
+					$( <?php echo "\"#optional_vac_date".$i."\""; ?> ).datepicker({
+						changeMonth: true,
+						changeYear: true,
+						yearRange: "1970:2032",
+						dateFormat:"d M yy"
+					});
+				});
+
+				<?php
+				}
+
 				unset($temp_result);
 				unset($temp_nrows);
 				?>
@@ -976,6 +1015,71 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
         </div>
         <div id="schedule-tab" class="outer-div to_hide_from_employee">
           <h3>Vaccination Schedule</h3>
+          <h4>Add optional vaccines :</h4>
+          <?php
+            //get list of optional vaccines that depend on 0. ie their first dose
+            //then check if these are in patient schedule already. if so, ignore them
+            $query = "SELECT id, name FROM vaccines WHERE optional = 'Y' AND dependent = 0";
+            $result_optional_vaccines = mysqli_query($link, $query);
+            $optional_vaccines = [];
+            while($vac = mysqli_fetch_assoc($result_optional_vaccines)) {
+              $optional_vaccines[] = $vac;
+            }
+            $query = "SELECT v.name, v.id FROM vac_schedule vs, vaccines v WHERE vs.v_id = v.id AND vs.p_id = {$patient['id']} AND v.optional = 'Y' AND v.dependent = 0";
+            $result_optional_vaccines_patient_schedule = mysqli_query($link, $query);
+            $optional_vaccines_patient_schedule = [];
+            while($vac = mysqli_fetch_assoc($result_optional_vaccines_patient_schedule)) {
+              $optional_vaccines_patient_schedule[] = $vac;
+            }
+            $vac_list = [];
+            foreach ($optional_vaccines as $key => $value) {
+              if(!in_array($value, $optional_vaccines_patient_schedule)) {
+                $vac_list[] = $value;
+              }
+            }
+
+            //$vac_list is the list of optional vaccines not yet given
+
+            //show this list along with a date field. filling the date field and submitting form
+            //should add the first dose with schedule and given as that date
+            //and then add all its dependents one by one.
+
+          ?>
+            <table style="margin:0px 0px 0px 0px;">
+							<tbody>
+								<tr>
+									<th>Vaccine</th>
+									<th>Given Date</th>
+                  <th>Submit</th>
+								</tr>
+              <?php
+                $count = 0;
+                foreach ($vac_list as $key => $vac) {
+                  $count++;
+              ?>
+              <tr>
+                <form action="" method="post" style="width:800px;background:none;border:none;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px">
+                  <input type="hidden" name="p_id" value=<?php echo $patient['id']; ?> />
+                  <input type="hidden" name="optional_vac_submit" value="1" />
+                  <input type="hidden" name="optional_vac_id" value=<?php echo $vac['id']; ?>  />
+                  <?php
+                    echo "<td>";
+                    echo $vac['name'];
+                    echo "</td>";
+                  ?>
+                <td>
+            			<input type="text" name="optional_vac_date" style="width:80px" <?php echo "id=\"optional_vac_date".$count."\""; ?> value=<?php echo "\"".date('j M Y',strtotime("now"))."\"";?>/>
+                </td>
+                <td>
+                  <input type="submit">
+                </td>
+              </form>
+              </tr>
+              <?php
+                }
+              ?>
+              </tbody>
+            </table>
           <p>
     				<strong><a href=<?php echo "\""."pdf.php?id=".$patient['id']."\"" ?>>View schedule in print format</a> </strong>
     			</p>
