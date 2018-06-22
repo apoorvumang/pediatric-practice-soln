@@ -23,7 +23,7 @@ $deviceID = 84200;
           if(strcmp($_SESSION['username'],'mahima') != 0) {
   					?>
             $(".to_hide_from_employee").hide();
-            <?
+            <?php
   				}
           ?>
 
