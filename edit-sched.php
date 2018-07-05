@@ -147,7 +147,16 @@ $(document).ready(function() {
 
 <input type="hidden" name="file" class="upload_field">
 <?php
-if($_POST['optional_vac_submit']=='1') {
+if($_POST['delete_presc']=='1') {
+	$id = $_POST['presc_id'];
+	$query = "DELETE FROM prescriptions WHERE id={$id};";
+	$result = mysqli_query($link, $query);
+	if($result) {
+		echo "Deleted prescription! (db id {$id})";
+	} else {
+		echo "Error deleting prescription!";
+	}
+} else if($_POST['optional_vac_submit']=='1') {
   $base_vac_id = $_POST['optional_vac_id'];
   $date_vac = $_POST['optional_vac_date'];
   $date_vac = date('Y-m-d', strtotime($date_vac));
@@ -981,8 +990,17 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
           $query = "SELECT * FROM prescriptions WHERE visit_id = '{$visit_id};'";
           $prescriptionResult = mysqli_query($link, $query);
           $i = 1;
+					$date_for_presc = date('j M Y',strtotime($row['date']));
           while($prescription = mysqli_fetch_assoc($prescriptionResult)) {
-            echo "<a href='{$prescription['url']}'>See presc {$i}</a><br>";
+
+            echo "<a href='{$prescription['url']}'>Presc {$i}</a><br>";
+						?>
+						<form action="" method="POST" style="margin:0px;width:0px;border:0px;color:white">
+							<input type="hidden" name = "presc_id" value=<?php echo "\"{$prescription['id']}\""?> />
+							<input type="hidden" name = "delete_presc" value = "1" />
+							<button type="submit" value="Delete" onclick="return confirm(<?php echo "'Delete Presc {$i} of {$date_for_presc}?'";?>);">Delete</button>
+						</form>
+						<?php
             $i++;
           }
 
