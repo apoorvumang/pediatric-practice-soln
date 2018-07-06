@@ -1,13 +1,13 @@
 <?php
-//optional is when you need to add a vaccine to schedule as directly given
-function schedule($patient, $vaccine, $vaccine_is_given_date = "0")
+//optional is when you need to add a vaccine to schedule with a certain date (but vaccine is added as not given)
+function schedule($patient, $vaccine, $vaccine_is_scheduled_date = "0")
 {
 	global $link;
 	if(!(($vaccine['sex']=='B')||($vaccine['sex']==$patient['sex'])))	//Checking if sex is correct
 		return 1;
 
-		if($vaccine_is_given_date != "0") {
-			if(!mysqli_query($link, "INSERT INTO vac_schedule(p_id, v_id, date, date_given, given) VALUES({$patient['id']}, {$vaccine['id']}, '{$vaccine_is_given_date}', '{$vaccine_is_given_date}', 'Y')"))
+		if($vaccine_is_scheduled_date != "0") {
+			if(!mysqli_query($link, "INSERT INTO vac_schedule(p_id, v_id, date) VALUES({$patient['id']}, {$vaccine['id']}, '{$vaccine_is_scheduled_date}')"))
 			{
 				return -1;
 			}
