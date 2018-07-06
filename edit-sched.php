@@ -147,16 +147,7 @@ $(document).ready(function() {
 
 <input type="hidden" name="file" class="upload_field">
 <?php
-if($_POST['delete_presc']=='1') {
-	$id = $_POST['presc_id'];
-	$query = "DELETE FROM prescriptions WHERE id={$id};";
-	$result = mysqli_query($link, $query);
-	if($result) {
-		echo "Deleted prescription! (db id {$id})";
-	} else {
-		echo "Error deleting prescription!";
-	}
-} else if($_POST['optional_vac_submit']=='1') {
+if($_POST['optional_vac_submit']=='1') {
   $base_vac_id = $_POST['optional_vac_id'];
   $date_vac = $_POST['optional_vac_date'];
   $date_vac = date('Y-m-d', strtotime($date_vac));
@@ -368,6 +359,15 @@ else if($_POST['vac_date']) {
 		{
 			implode($err_total, $err);
 			echo $err_total;
+		}
+	} else if($_POST['delete_presc']=='1') {
+		$id = $_POST['presc_id'];
+		$query = "DELETE FROM prescriptions WHERE id={$id};";
+		$result = mysqli_query($link, $query);
+		if($result) {
+			echo "Deleted prescription! (db id {$id})";
+		} else {
+			echo "Error deleting prescription!";
 		}
 	}
 	if($_GET['id'])
