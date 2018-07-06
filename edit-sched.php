@@ -1067,7 +1067,7 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
 							<tbody>
 								<tr>
 									<th>Vaccine</th>
-									<th>Given Date</th>
+									<th>Scheduled Date</th>
                   <th>Submit</th>
 								</tr>
               <?php
