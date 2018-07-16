@@ -73,14 +73,25 @@ class PDF extends FPDF
 			$length += 2;
 		}
 		$this->Image('mahima-sign.png',145,85 +$length*6.5,40);
+		$serialNo = 1;
 		for($i = 0; $i < sizeof($descriptions); $i++) {
-			$this->Cell(15,7,$i+1,'LR','','C',$fill);
-			if($descriptions[$i]!="CONSULTATION" && $descriptions[$i] != "Medical Certificate") {
+
+			if($descriptions[$i]!="CONSULTATION" && $descriptions[$i] != "Medical Certificate" && $descriptions[$i] != "CONSULTATION AND INOCULATION" && $descriptions[$i] != "File Charges") {
 				if(strpos($descriptions[$i], "xx") === False)
 					$descriptions[$i].=" Vaccination";
 				$descriptions[$i]= rtrim($descriptions[$i], 'xx');
+				$descriptions[$i] = "- ".$descriptions[$i]; //bullet point for vaccinations
+				$this->Cell(15,7,'','LR','','C',$fill);
+			} else {
+				// serial no. should only show for consultation, medcert etc, not for any vaccinations
+				$this->Cell(15,7,$serialNo,'LR','','C',$fill);
+				$serialNo++;
 			}
 			$this->Cell(120,7,"  ".$descriptions[$i],'LR','','L',$fill);
+			//if consultation and inoculation then amount column should show blank (not 0)
+			if($descriptions[$i] == "CONSULTATION AND INOCULATION") {
+				$amounts[$i] = "";
+			}
 			$this->Cell(30,7,$amounts[$i]."  ",'LR','','R',$fill);
 			$this->Ln();
 			$total += intval($amounts[$i]);
