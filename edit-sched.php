@@ -992,19 +992,36 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
           $i = 1;
 					$date_for_presc = date('j M Y',strtotime($row['date']));
           while($prescription = mysqli_fetch_assoc($prescriptionResult)) {
+            $prescriptionId = $prescription['id'];
+            $dialogId = "dialog".$prescriptionId;
+            $openerId = "opener".$prescriptionId;
+?>
+<!-- modal/dialog for showing prescription image on same page-->
+<script>
+  $( function() {
+    $( <?php echo "\"#{$dialogId}\""; ?> ).dialog({
+      autoOpen: false,
+      width: 500,
+      height: 700
+    });
 
-            echo "<a href='{$prescription['url']}'>Presc {$i}</a><br>";
-						?>
-						<form action="" method="POST" style="margin:0px;width:0px;border:0px;color:white">
-							<input type="hidden" name = "presc_id" value=<?php echo "\"{$prescription['id']}\""?> />
-							<input type="hidden" name = "delete_presc" value = "1" />
-							<button type="submit" value="Delete" onclick="return confirm(<?php echo "'Delete Presc {$i} of {$date_for_presc}?'";?>);">Delete</button>
-						</form>
-						<?php
+    $( <?php echo "\"#{$openerId}\""; ?> ).on( "click", function() {
+      $( <?php echo "\"#{$dialogId}\""; ?> ).dialog( "open" );
+    });
+  } );
+</script>
+
+  <div id=<?php echo "\"{$dialogId}\""; ?> title=<?php echo "\"{$date_for_presc}, #{$i}\""; ?>>
+  <img src=<?php echo "\"{$prescription['url']}\"" ?> width=450/>
+  </div>
+
+<button id=<?php echo "\"{$openerId}\"" ?> type="button"><?php echo "Prescription {$i}" ?></button>
+
+
+<?php
             $i++;
           }
-
-                      ?>
+?>
 
 
                       <img class = 'spinner' src="images/ellipsis.svg" style="display: inline; display: none; width: 28px; height: 28px">
