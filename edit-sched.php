@@ -931,6 +931,21 @@ function handleFileSelect(evt) {
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 </script>
 </form>
+<!-- script for deleting prescription images -->
+<script>
+  function deletePrescription(prescriptionId) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        alert(this.responseText);
+        // document.getElementById("demo").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "delete-prescription-ajax.php?id=" + prescriptionId, true);
+    xhttp.send();
+  }
+</script>
+<!-- script for deleting prescription images -->
 
           <div id="visitIDForPrescriptionScan" style="display: none;"></div>
           <form id="previousvisits" role="form" action="" method="post">
@@ -1012,7 +1027,8 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
 </script>
 
   <div id=<?php echo "\"{$dialogId}\""; ?> title=<?php echo "\"{$date_for_presc}, #{$i}\""; ?>>
-  <img src=<?php echo "\"{$prescription['url']}\"" ?> width=450/>
+    <button type="button" onclick=<?php echo "\"deletePrescription({$prescriptionId})\""; ?>>Delete</button>
+    <img src=<?php echo "\"{$prescription['url']}\"" ?> width=450/>
   </div>
 
 <button id=<?php echo "\"{$openerId}\"" ?> type="button"><?php echo "Prescription {$i}" ?></button>
