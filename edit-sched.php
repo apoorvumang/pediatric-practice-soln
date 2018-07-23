@@ -934,6 +934,10 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
 <!-- script for deleting prescription images -->
 <script>
   function deletePrescription(prescriptionId) {
+    var result = confirm("Are you sure you want to delete this prescription?");
+    if(!result) {
+      return false;
+    }
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
