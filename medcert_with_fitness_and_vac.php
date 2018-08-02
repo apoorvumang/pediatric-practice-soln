@@ -87,7 +87,32 @@ $( "#date" ).datepicker({
       ?>
       <input type="hidden" name="parent_name"  value=<?php echo "'{$parents_names}'"; ?> />
       <?php echo $parents_names." "; ?>
-      is a healthy child of <?php echo $formatted_age ?>.
+      is a healthy
+      <?php
+        //child replacement
+        // less than 18 - boy/girl
+        // otherwise male/female
+
+        $child_replacement = "";
+        if($age->y < 18) {
+          if($pronoun == "she") {
+            $child_replacement = "girl";
+          } else {
+            $child_replacement = "boy";
+          }
+        } else {
+          if($pronoun == "she") {
+            $child_replacement = "female";
+          } else {
+            $child_replacement = "male";
+          }
+        }
+
+        echo $child_replacement;
+
+      ?>
+
+       of <?php echo $formatted_age ?>.
       <br />
 
       <?php
@@ -99,21 +124,7 @@ $( "#date" ).datepicker({
       <?php echo $patient['first_name']; ?> is a physically active and mentally alert
       <?php
         //child
-        // less than 18 - boy/girl
-        // otherwise male/female
-        if($age->y < 18) {
-          if($pronoun == "she") {
-            echo "girl";
-          } else {
-            echo "boy";
-          }
-        } else {
-          if($pronoun == "she") {
-            echo "female";
-          } else {
-            echo "male";
-          }
-        }
+        echo $child_replacement;
       ?>
       fit to participate in all school activites.
       <?php
