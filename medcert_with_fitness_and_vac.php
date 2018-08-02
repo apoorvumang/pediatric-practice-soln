@@ -96,7 +96,26 @@ $( "#date" ).datepicker({
       ?>
       does not suffer from any chronic or communicable disease.
       <br />
-      <?php echo $patient['first_name']; ?> is a physically active and mentally alert child fit to participate in all school activites.
+      <?php echo $patient['first_name']; ?> is a physically active and mentally alert
+      <?php
+        //child
+        // less than 18 - boy/girl
+        // otherwise male/female
+        if($age->y < 18) {
+          if($pronoun == "she") {
+            echo "girl";
+          } else {
+            echo "boy";
+          }
+        } else {
+          if($pronoun == "she") {
+            echo "female";
+          } else {
+            echo "male";
+          }
+        }
+      ?>
+      fit to participate in all school activites.
       <?php
         $lowerCasePronoun = "she";
         if($pronoun=="He")
