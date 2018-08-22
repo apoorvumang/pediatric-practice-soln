@@ -7,3 +7,12 @@ The main thing setting this solution apart from others is the ability to send me
 Demo
 ====
 No demo available at this time :(
+
+Steps for installing on new machine
+===================================
+
+1. Download both databases - drmahima_com and drmahima_com_db_root
+
+2. Create connect.php in root directory, set parameters according to local settings (ie username and password)
+
+3. Modify doctors table in drmahima_com_db_root and set the correct db_user and db_pass for all entries. This should be the same as the local mysql user and password.
