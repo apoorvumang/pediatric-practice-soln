@@ -60,7 +60,8 @@ function setNoOfDays() {
   var restTo = new Date(date2);
   var timeDiff = Math.abs(restTo.getTime() - restFrom.getTime());
   var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-  $("#no_of_days").val(diffDays);
+  //need to include both start and end days, so adding 1
+  $("#no_of_days").val(diffDays + 1);
 }
 
 </script>

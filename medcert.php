@@ -42,6 +42,20 @@ $( "#date" ).datepicker({
   dateFormat:"d M yy"
   });
 });
+
+function setNoOfDays() {
+  var date1 = $("#restFrom").val();
+  var date2 = $("#restTo").val();
+  if(date1 == "" || date2 == "")
+    return;
+  var restFrom = new Date(date1);
+  var restTo = new Date(date2);
+  var timeDiff = Math.abs(restTo.getTime() - restFrom.getTime());
+  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  //need to include both start and end days, so adding 1
+  $("#no_of_days").val(diffDays + 1);
+}
+
 </script>
 <div class="body">
 
@@ -88,9 +102,9 @@ $( "#date" ).datepicker({
       is advised rest for the duration of
       <input type="text" name="no_of_days" id="no_of_days" style="width:30px" />
       days from
-      <input type="text" name="restFrom" id="restFrom" placeholder="Date"/>
+      <input type="text" name="restFrom" id="restFrom" placeholder="Date" onchange="setNoOfDays()"/>
       to
-      <input type="text" name="restTo" id="restTo" placeholder="Date"/>
+      <input type="text" name="restTo" id="restTo" placeholder="Date" onchange="setNoOfDays()"/>
       .
       <br />
       <br />
