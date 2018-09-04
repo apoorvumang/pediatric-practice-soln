@@ -13,6 +13,10 @@ if($_GET['specificdate']) {
   echo $_GET['date'];
 } else if($_GET['dateRange']) {
   echo $_GET['dateFrom']." to ".$_GET['dateTo'];
+} else if($_GET['patientID']) {
+  $query = "SELECT name FROM patients WHERE id = {$_GET['p_id']}";
+  $row = mysqli_fetch_assoc(mysqli_query($link, $query));
+  echo "Invoices for {$row['name']}";
 }
  ?></h4>
 <p style="font-size:16px;" id="amountTotalsByType">Nothing here!</p>
@@ -37,7 +41,7 @@ if($_POST['delete']) {
     echo "Unable to delete invoices";
   }
 }
-if($_GET['specificdate'] || $_GET['dateRange'])  //If some submit button clicked
+if($_GET['specificdate'] || $_GET['dateRange'] || $_GET['patientID'])  //If some submit button clicked
 {
   $date = date('Y-m-d', strtotime($_GET['date']));
   $dateFrom = date('Y-m-d', strtotime($_GET['dateFrom']));
@@ -51,8 +55,10 @@ if($_GET['specificdate'] || $_GET['dateRange'])  //If some submit button clicked
   }
   if($_GET['specificdate']) {
     $query = "SELECT i.discount as discount, i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.date='".$date."' AND i.p_id = p.id {$doctor_query} ORDER BY i.id";
-  } else {
+  } else if($_GET['dateRange']){
     $query = "SELECT i.discount as discount, i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.date>='".$dateFrom."' AND i.date<='{$dateTo}' AND i.p_id = p.id {$doctor_query} ORDER BY i.id";
+  } else if($_GET['patientID']) {
+    $query = "SELECT i.discount as discount, i.invoice_id as invoice_id, i.id, i.p_id as pid, i.date as date, i.mode as mode, p.name as pname, i.descriptions as descriptions, i.amounts as amounts, i.doctor as doctor FROM invoice i, patients p WHERE i.p_id = p.id AND p.id = {$_GET['p_id']} {$doctor_query} ORDER BY i.id";
   }
 
   $result = mysqli_query($link, $query);

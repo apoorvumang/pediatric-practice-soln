@@ -51,5 +51,10 @@ dateFormat:"d M yy"
 <label for="dateTo">To : &nbsp;&nbsp;&nbsp;&nbsp;</label>
 <input type="text" name="dateTo" id="dateTo" style="margin-right:40px;"/>
 <input type="submit" name="dateRange" value="Go" />
+
+<br>
+<label for="p_id">Show invoices for patient ID : &nbsp;&nbsp;&nbsp;&nbsp;</label>
+<input type="text" name="p_id" id="p_id" style="margin-right:40px;"/>
+<input type="submit" name="patientID" value="Go" />
 </form>
 <?php include('footer.php'); ?>
