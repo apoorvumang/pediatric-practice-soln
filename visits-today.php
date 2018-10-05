@@ -4,23 +4,40 @@
 ?>
 
 <?php
-if($_POST['delete']) {
-  $deleteArray = $_POST['delete'];
-  $query1 = "DELETE from notes WHERE id in (";
-  $idList = "";
-  $arrLength = sizeof($deleteArray);
-  foreach ($deleteArray as $key => $value) {
-    $idList = $idList.$value;
-    if($key != $arrLength - 1) {
-      $idList = $idList.",";
+if($_POST['save_changes']) {
+
+  if($_POST['note_id']) {
+    foreach ($_POST['note_id'] as $key => $value) {
+      $weight = $_POST['change_weight'][$key];
+      $height = $_POST['change_height'][$key];
+      $query = "UPDATE notes SET weight='{$weight}', height='{$height}' WHERE id = ".$value;
+      if(!mysqli_query($link, $query))
+        $err[] = "Error while updating visits {$value}";
     }
   }
-  $query = $query1.$idList.");";
-  echo $query;
-  if(mysqli_query($link, $query)) {
-    echo 'Deletion successful!';
-  } else {
-    echo 'Error in deleting visits';
+
+  if($err) {
+    echo $err;
+  }
+
+  if($_POST['delete']) {
+    $deleteArray = $_POST['delete'];
+    $query1 = "DELETE from notes WHERE id in (";
+    $idList = "";
+    $arrLength = sizeof($deleteArray);
+    foreach ($deleteArray as $key => $value) {
+      $idList = $idList.$value;
+      if($key != $arrLength - 1) {
+        $idList = $idList.",";
+      }
+    }
+    $query = $query1.$idList.");";
+    echo $query;
+    if(mysqli_query($link, $query)) {
+      echo 'Deletion successful!';
+    } else {
+      echo 'Error in deleting visits';
+    }
   }
 }
 
@@ -34,15 +51,16 @@ if($_POST['delete']) {
   $nrows = mysqli_num_rows($result);
 ?>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
-<input type="submit" value="Delete">
+<input type="submit" value="Save">
+<input type="hidden" name="save_changes" value="1">
 <table>
 <tbody>
 <tr>
 <th>Visit ID</th>
 <th>Patient ID</th>
 <th>Patient</th>
-<th>Height</th>
-<th>Weight</th>
+<th>Height (cm)</th>
+<th>Weight (kg)</th>
 <th>BMI</th>
 <th>Note</th>
 <th>Date</th>
@@ -56,6 +74,7 @@ while($row = mysqli_fetch_assoc($result))
 {
 
 ?>
+<input type="hidden" name="note_id[]" value=<?php echo "\"".$row['id']."\"" ?> />
 <tr>
 <td>
 <?php echo "v".$row['id'];?>
@@ -66,12 +85,19 @@ while($row = mysqli_fetch_assoc($result))
 <td>
 <a href= <?php echo "\"edit-sched.php?id={$row['pid']}\""; ?> ><?php echo $row['pname']; ?></a>
 </td>
+
+<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_height[]" value = <?php  echo "'{$row['height']}'";?> >  </td>
+<td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
+
+<!-- 
 <td>
 <?php echo $row['height']." cm"; ?>
 </td>
 <td>
 <?php echo $row['weight']." kg"; ?>
 </td>
+
+ -->
 <td>
 <?php
   $height = $row['height']/100.0;

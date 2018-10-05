@@ -301,7 +301,7 @@ else if($_POST['vac_date']) {
 				$height = $_POST['change_height'][$key];
 				$query = "UPDATE notes SET note = '".$_POST['change_note'][$key]."', weight='{$weight}', height='{$height}' WHERE id = ".$value;
 				if(!mysqli_query($link, $query))
-					$err[] = "Error while updating vists";
+					$err[] = "Error while updating visits";
 			}
 		}
 
