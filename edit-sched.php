@@ -845,7 +845,7 @@ else if($_POST['vac_date']) {
               <br />
               <?php
                 $message = "Address: C-14 Community Centre Naraina Vihar\n"
-                ."Phone: 9717585207, 25774759\n"
+                ."Phone: 9717585207, 49873421\n"
                 ."Timings: Mon to Sat 10.30am to 1.30pm, 6.00 to 8.30pm, \n"
                 ."Dr.Mahima";
                 echo "<textarea name=\"message\" id = \"message\" rows=4 cols=80>".$message."</textarea>";
