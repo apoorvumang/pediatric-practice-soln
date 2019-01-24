@@ -47,7 +47,7 @@ class PDF extends FPDF
 		$this->SetLineWidth(.3);
 		$this->SetFont('','B');
 		// Header
-		$w = array(52, 25,25,25,25,25,25,25,25,25);
+		$w = array(52, 22,22,22,22,22,22,22,22,22);
 		for($i=0;$i<count($header);$i++)
 			$this->Cell($w[$i],8,$header[$i],1,0,'C',true);
 		$this->Ln();
@@ -69,7 +69,7 @@ class PDF extends FPDF
 		{
 			$this->SetFont('', 'B', 12);
 			$this->Cell($w[0],8,$vacList[$i],'LRB',0,'C',$fill);
-			$this->SetFont('', '', 11);
+			$this->SetFont('', '', 10);
 			switch ($i) {
 				case 0:	//BCG
 					$tempArr = array(1);
@@ -179,6 +179,7 @@ function createPrintSchedulePDF($id, $link) {
 	$vac_sched = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id='$id' AND given='Y'");
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob FROM patients WHERE id='$id'"));
 	$pdf = new PDF();
+	$pdf->SetMargins(20,10);
 	$pdf->setVars($patient, $vac_sched);
 	// Column headings
 	$header = array('Vaccine', 'Dose 1', 'Dose 2', 'Dose 3', 'Dose 4', 'Dose 5', 'Dose 6', 'Dose 7', 'Dose 8', 'Dose 9');
