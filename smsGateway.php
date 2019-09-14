@@ -5,7 +5,7 @@ class SmsGateway {
       $message = addslashes($message);
       $curl = curl_init();
       curl_setopt_array($curl, array(
-       CURLOPT_URL => "http://fcm.googleapis.com/fcm/send",
+       CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
        CURLOPT_RETURNTRANSFER => true,
        CURLOPT_ENCODING => "",
        CURLOPT_MAXREDIRS => 10,
