@@ -176,6 +176,7 @@ $(document).on("change", "#discount", function() {
       <option value='CASH'>Cash</option>
       <option value='CARD'>Card</option>
       <option value='PAYTM'>PayTM</option>
+      <option value='UPI'>UPI</option>
     </select>
   </p>
   <p>
