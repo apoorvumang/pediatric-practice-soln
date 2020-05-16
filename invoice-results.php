@@ -85,6 +85,7 @@ $count = 0;
 $cash = 0;
 $card = 0;
 $paytm = 0;
+$upi = 0;
 while($row = mysqli_fetch_assoc($result))
 {
 ?>
@@ -135,6 +136,8 @@ while($row = mysqli_fetch_assoc($result))
     $card += $grandTotal;
   } else if($row['mode'] == "PAYTM") {
     $paytm += $grandTotal;
+  } else if($row['mode'] == "UPI") {
+    $upi += $grandTotal;
   }
   ?>
 </td>
@@ -146,7 +149,7 @@ while($row = mysqli_fetch_assoc($result))
 $count++;
 }
 
-$totalDisplay = "CASH: ".$cash.".00<br>CARD: ".$card.".00<br>PAYTM: ".$paytm.".00<br>FINAL AMOUNT: ".($cash + $card + $paytm).".00";
+$totalDisplay = "CASH: ".$cash.".00<br>CARD: ".$card.".00<br>PAYTM: ".$paytm.".00<br>UPI: ".$upi.".00<br>FINAL AMOUNT: ".($cash + $card + $paytm + $upi).".00";
 
 ?>
 </tbody>
