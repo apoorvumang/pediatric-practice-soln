@@ -145,6 +145,7 @@ echo $title;
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 <script type="text/javascript" src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/jquery.simplePagination.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <!-- <script src="https://malsup.github.com/jquery.form.js"></script> -->
 <script type="text/javascript" src="js/jquery.form.js"></script>
 <script type="text/javascript" src="js/jquery.timeago.js"></script>
@@ -208,6 +209,7 @@ function countMessages(e)
 </script>
 </head>
 <body>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <!--header -->
 <div id="header-wrap" style="height:60px;"><div id="header">
 
@@ -231,7 +233,8 @@ function countMessages(e)
       <li <?php if($currentFile=="visits-today.php") { ?> id="current" <?php }?>><a href="visits-today.php">Visits</a></li>
       <?php } ?>
 			<?php if($_SESSION['type']=='doctor') { ?>
-			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Appointment Search</a></li>
+			<li <?php if($currentFile=="search-sched.php") { ?> id="current" <?php }?>><a href="search-sched.php">Vaccination appt</a></li>
+			<li <?php if($currentFile=="search-appt.php") { ?> id="current" <?php }?>><a href="search-appt.php">Consultation appt</a></li>
 
 			<li <?php if($currentFile=="payment_due.php") { ?> id="current" <?php }?>><a href="payment_due.php">Payment Due</a></li>
       <li <?php if($currentFile=="search-invoice.php") { ?> id="current" <?php }?>><a href="search-invoice.php">Search invoice</a></li>

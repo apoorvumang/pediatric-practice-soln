@@ -16,8 +16,25 @@ $deviceID = 84200;
         //     });
         // });
 
+		 $(document).ready(function() {
+			$('input.timepicker').timepicker({
+				timeFormat: 'h:mm p',
+				interval: 30,
+				minTime: '8',
+				maxTime: '11:00pm',
+				defaultTime: '12',
+				startTime: '8:00',
+				dynamic: false,
+				dropdown: true,
+				scrollbar: true
+			});
 
-				$(document).ready(function() {
+			$('input.datepicker').datepicker({
+				changeMonth: true,
+				changeYear: false,
+				yearRange: "1970:2032",
+				dateFormat:"d M yy"
+			});
           // hiding tabs if username is not mahima
           <?php
           if(strcmp($_SESSION['username'],'mahima') != 0) {
@@ -269,6 +286,37 @@ else if($_POST['vac_date']) {
 			implode($err_total, $err);
 			echo $err_total;
 		}
+	} else if ($_POST['appointment_date']) {
+		
+		$value = date('Y-m-d', strtotime($_POST['appointment_date']));
+		$query = "INSERT INTO appointments (p_id, date, time, comment) VALUES ({$_GET['id']}, '{$value}', '{$_POST['time']}', '{$_POST['comment']}');";
+		if(!mysqli_query($link, $query))
+			$err[] = "Unknown error";
+		if(!$err)
+		{
+			echo "Changes saved successfully!";
+		}
+		else
+		{
+			implode($err_total, $err);
+			echo $err_total;
+		}
+	} else if ($_POST['delete_appt']) {
+		foreach ($_POST['delete'] as $key => $value) {
+			$query = "DELETE from appointments WHERE id = {$value};";
+			if(!mysqli_query($link, $query))
+				$err[] = "Error while deleting vists";
+		}
+		if(!$err)
+		{
+			echo "Updated/deleted visits successfully!";
+		}
+		else
+		{
+			implode($err_total, $err);
+			echo $err_total;
+		}
+
 	} else if ($_POST['visit_date']) {
 		$value = date('Y-m-d', strtotime($_POST['visit_date']));
 		$height = $_POST['height'];
@@ -468,6 +516,7 @@ else if($_POST['vac_date']) {
 			});
 
 
+
 			<?php for ($i=0; $i < $temp_nrows; $i++) { ?>
 
 				$(function() {
@@ -578,6 +627,7 @@ else if($_POST['vac_date']) {
           <li class='tab'><a href="#patient-info-tab">Patient information</a></li>
           <li class='tab to_hide_from_employee'><a href="#medcert-tab">Medical Certificates</a></li>
           <li class='tab to_hide_from_employee'><a href="#due-payment-tab">Due payments</a></li>
+		  <li class='tab to_hide_from_employee'><a href="#appointments-tab">Appointments</a></li>
           <li class='tab to_hide_from_employee'><a href="#send-sms-tab">Send SMS</a></li>
           <li class='tab to_hide_from_employee'><a href="#visits-tab">Visits</a></li>
           <li class='tab to_hide_from_employee'><a href="#schedule-tab">Vaccination Schedule</a></li>
@@ -674,6 +724,9 @@ else if($_POST['vac_date']) {
     						echo $sibling_row['name'];
     						echo "</a>";
     						?>
+    					</p>
+						<p>
+    						<strong>Sibling ID:</strong> <?php echo $row['s_id']; ?>
     					</p>
     					<p>
     						<strong>Sibling dob:</strong> <?php echo date('d-F-Y', strtotime($sibling_row['dob'])); ?>
@@ -837,6 +890,64 @@ else if($_POST['vac_date']) {
             </form>
         </div>
 
+		<div id="appointments-tab" class="outer-div to_hide_from_employee">
+          <h3>Consultation Appointments</h3>
+		  <h4>Add appointment</h4>
+          <form id="addappointments" role="form" action="" method="post">
+		  	<div class="form-group">
+              <label for="appointment_date">Date:</label>
+              <!-- <input type="text" class="form-control" id="due_date" name="due_date"> -->
+              <input type="text" name="appointment_date" class="datepicker" style="width:80px" id="appointment_date" value=<?php echo "\"".date('j M Y')."\"";?>/>
+            </div>
+            <div class="form-group">
+              <label for="appointment_time">Time:</label>
+              <input type="text" class="form-control timepicker" id="appointment_time" name="time">
+            </div>
+            <div class="form-group">
+              <label for="appointment_comment">Comment:</label>
+              <input type="textbox" id="appointment_comment" name="comment" style="width:400px"> </label>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+
+
+		  <h4> Previous appointments </h4>
+          <form id="previousappointments" role="form" action="" method="post">
+            <table border="1">
+              <tr>
+                <th>S.No.</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Comment</th>
+				<th>Delete</th>
+              </tr>
+              <?php
+              $result = mysqli_query($link, "SELECT * FROM appointments WHERE p_id = {$_GET['id']} ORDER BY date;");
+              $i=1;
+              $total = 0;
+              $count = 0;
+              while($row = mysqli_fetch_assoc($result)) {
+                $count++;
+                ?>
+                <tr>
+                  <td><?php echo "{$i}"; $i += 1; ?>  </td>
+                  <td><?php echo date('j M Y',strtotime($row['date']))?> </td>
+				  <td><?php echo "{$row['time']}";?> </td>
+                  <td><?php echo $row['comment']?> </td>
+				  <td>
+				    <input type="checkbox" name="delete[]" value=<?php echo "'{$row['id']}'"; ?> />
+				  </td>
+                </tr>
+                <?php } ?>
+              </table>
+			  <input type="hidden" name="delete_appt" value="1">
+			  <input type="submit" value="Delete Appointment(s)">
+            </form>
+
+
+		</div>
+		
+		
         <div id="send-sms-tab" class="outer-div to_hide_from_employee">
           <h3>Send SMS</h3>
           <form id="sendsms" role="form" method="post" action="">
