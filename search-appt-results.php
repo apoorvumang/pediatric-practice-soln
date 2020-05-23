@@ -107,7 +107,7 @@ $count++;
 } else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])) {
 	foreach ($_POST['send_sms_id'] as $key => $value)
 	{
-        $query = "SELECT phone, phone2, first_name, a.date as date, a.time as time FROM patients p, appointments a WHERE a.id={$value} AND a.p_id = p.id";
+        $query = "SELECT p.phone, p.phone2, p.first_name, a.date as date, a.time as time FROM patients p, appointments a WHERE a.id={$value} AND a.p_id = p.id";
         $row = mysqli_fetch_assoc(mysqli_query($link, $query));
         $date = date('j M Y',strtotime($row['date']));
         if(isset($_POST['sendautosms']))
@@ -118,11 +118,11 @@ $count++;
         {
             $message = $_POST['customsms'];
         }
-        if($patient['phone'])
-            $result = $smsGateway->sendMessageToNumber($patient['phone'], $message, $deviceID);
-        if($patient['phone2'])
-            $result = $smsGateway->sendMessageToNumber($patient['phone2'], $message, $deviceID);
-        echo "SMS sent to {$patient['first_name']} <br>";
+        if(row['phone'])
+            $result = $smsGateway->sendMessageToNumber(row['phone'], $message, $deviceID);
+        if(row['phone2'])
+            $result = $smsGateway->sendMessageToNumber(row['phone2'], $message, $deviceID);
+        echo "SMS sent to {$row['first_name']} <br>";
 	}
 }
 else
