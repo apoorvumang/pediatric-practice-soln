@@ -1,6 +1,6 @@
 <?php include('header.php');
 include "smsGateway.php";
-$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
+$smsGateway = new SmsGateway();
 $deviceID = 84200;
 ?>
 
@@ -119,9 +119,9 @@ $count++;
             $message = $_POST['customsms'];
         }
         if(row['phone'])
-            $result = $smsGateway->sendMessageToNumber(row['phone'], $message, $deviceID);
+            $result = $smsGateway->sendMessageToNumber($row['phone'], $message, $deviceID);
         if(row['phone2'])
-            $result = $smsGateway->sendMessageToNumber(row['phone2'], $message, $deviceID);
+            $result = $smsGateway->sendMessageToNumber($row['phone2'], $message, $deviceID);
         echo "SMS sent to {$row['first_name']} <br>";
 	}
 }
