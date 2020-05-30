@@ -1,7 +1,6 @@
 <?php include('header.php');
 include "smsGateway.php";
 $smsGateway = new SmsGateway();
-$deviceID = 84200;
 ?>
 
 <h3>Appointment Search Results</h3>
