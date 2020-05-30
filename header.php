@@ -227,7 +227,8 @@ function countMessages(e)
 			<?php } ?>
 			<?php if($_SESSION['type']=='employee') { ?>
 			<li <?php if($currentFile=="addvisit.php") { ?> id="current" <?php }?>><a href="addvisit.php">Add Patient Visit</a></li>
-      <li <?php if($currentFile=="patient-vaccination-appointment-employee.php") { ?> id="current" <?php }?>><a href="patient-vaccination-appointment-employee.php">Search for vaccination appointment</a></li>
+			<li <?php if($currentFile=="patient-vaccination-appointment-employee.php") { ?> id="current" <?php }?>><a href="patient-vaccination-appointment-employee.php">Vaccination appt</a></li>
+			<li <?php if($currentFile=="patient-consultation-appointment-employee.php") { ?> id="current" <?php }?>><a href="patient-consultation-appointment-employee.php">Consultation appt</a></li>
 			<?php } ?>
       <?php if($_SESSION['name']) { ?>
       <li <?php if($currentFile=="visits-today.php") { ?> id="current" <?php }?>><a href="visits-today.php">Visits</a></li>
