@@ -11,7 +11,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 	{
 		$_POST['date'] = date('Y-m-d', strtotime($_POST['date']));
         $_POST['date'] = mysqli_real_escape_string($link, $_POST['date']);
-        $query = "SELECT a.id as aid, p.id as pid, p.name as pname, a.date as date, a.time as time, TIME(a.time) as time_converted, a.comment as comment, p.phone as phone, p.phone2 as phone2 FROM patients p, appointments a WHERE a.date ='{$_POST['date']}' AND p.id = a.p_id ORDER BY date, time_converted";
+        $query = "SELECT a.id as aid, p.id as pid, p.name as pname, a.date as date, a.time as time, STR_TO_DATE(a.time, '%l:%i %p' ) as time_converted, a.comment as comment, p.phone as phone, p.phone2 as phone2 FROM patients p, appointments a WHERE a.date ='{$_POST['date']}' AND p.id = a.p_id ORDER BY date, time_converted";
         
         $result = mysqli_query($link, $query);
 		$nrows = mysqli_num_rows($result);
