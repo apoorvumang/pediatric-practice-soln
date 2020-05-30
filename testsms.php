@@ -19,6 +19,6 @@ include "smsGateway.php";
 $message= "Dear mahima\n hello hello\n fsadfsf";
 
 $smsGateway = new SmsGateway();
-$smsGateway->sendMessageToNumber("7891947877", $message);
+$smsGateway->sendMessageToNumber("7891947877", $message, "d");
 
 ?>
