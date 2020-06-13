@@ -32,7 +32,7 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 <th>Patient</th>
 <th>Date</th>
 <th>Time</th>
-<th>Phone</th>
+<th>Comment</th>
 </tr>
 <?php
 $count = 0;
@@ -53,7 +53,7 @@ while($row = mysqli_fetch_assoc($result))
 <?php echo $row['time']; ?>
 </td>
 <td>
-<?php echo $row['phone']; ?>
+<?php echo $row['comment']; ?>
 </td>
 </tr>
 <?php

@@ -58,7 +58,7 @@ $(function() {
 <th>Patient</th>
 <th>Date</th>
 <th>Time</th>
-<th>Phone</th>
+<th>Comment</th>
 <th>Send SMS</th>
 </tr>
 <?php
@@ -80,7 +80,7 @@ while($row = mysqli_fetch_assoc($result))
 <?php echo $row['time']; ?>
 </td>
 <td>
-<?php echo $row['phone']; ?>
+<?php echo $row['comment']; ?>
 </td>
 <td>
 <input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['aid']}\""; ?> phoneCount= <?php if($row['phone2']) echo "2"; else echo "1"; ?>>
