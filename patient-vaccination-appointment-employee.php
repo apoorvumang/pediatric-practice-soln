@@ -19,7 +19,7 @@ $(function() {
 </script>
 <?php
 
-if($_POST['patient_id'] || $_GET['patient_id'] ) {
+if($_POST['patient_id'] || $_GET['patient_id']) {
   $p_id = 0;
   if($_POST['patient_id']) {
     $p_id = $_POST['patient_id'];
@@ -49,16 +49,40 @@ if($_POST['patient_id'] || $_GET['patient_id'] ) {
       echo "</tr>";
     }
     echo "</tbody></table>";
-} elseif($_POST['date_from']) {
-  $_POST['date_from'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['date_from'])));
-  $_POST['date_to'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['date_to'])));
-  $query = "SELECT p.id as p_id, p.name as patient_name, v.name as vac_name, vs.date as date, vs.v_id as v_id FROM vaccines v, vac_schedule vs, patients p WHERE p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' AND vs.date >= '{$_POST['date_from']}' AND vs.date <= '{$_POST['date_to']}' ORDER BY p.id, vs.date;";
-  $result = mysqli_query($link, $query);
-  $nrows = mysqli_num_rows($result);
-  $fromDate = $_POST['date_from'];
-  $toDate = $_POST['date_to'];
+} elseif($_POST['date_from'] || $_POST['patient_phone'] || $_POST['patient_name']) {
+  if($_POST['date_from']) {
+    $_POST['date_from'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['date_from'])));
+    $_POST['date_to'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['date_to'])));
+    $query = "SELECT p.id as p_id, p.name as patient_name, v.name as vac_name, vs.date as date, vs.v_id as v_id FROM vaccines v, vac_schedule vs, patients p WHERE p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' AND vs.date >= '{$_POST['date_from']}' AND vs.date <= '{$_POST['date_to']}' ORDER BY p.id, vs.date;";
+    $result = mysqli_query($link, $query);
+    $nrows = mysqli_num_rows($result);
+    $fromDate = $_POST['date_from'];
+    $toDate = $_POST['date_to'];
+    ?>
+    <h3>Schedule for dates <?php echo date('d-F-Y', strtotime($fromDate))." to ".date('d-F-Y', strtotime($toDate)); ?></h3>
+    <?php
+  }
+  if ($_POST['patient_phone']) {
+    $phone = mysqli_real_escape_string($link, $_POST['patient_phone']);
+    $query = "SELECT p.id as p_id, p.name as patient_name, v.name as vac_name, vs.date as date, vs.v_id as v_id from vaccines v, vac_schedule vs, patients p where (p.phone like '%{$phone}' or p.phone2 like '%{$phone}') and p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' ORDER BY p.id, vs.date;";
+    $result = mysqli_query($link, $query);
+    $nrows = mysqli_num_rows($result);
+
+    ?>
+    <h3>Schedule for phone <?php echo $phone; ?></h3>
+    <?php
+  } 
+  if ($_POST['patient_name']) {
+    $name = mysqli_real_escape_string($link, $_POST['patient_name']);
+    $query = "SELECT p.id as p_id, p.name as patient_name, v.name as vac_name, vs.date as date, vs.v_id as v_id from vaccines v, vac_schedule vs, patients p where p.name like '%{$name}%' and p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' ORDER BY p.id, vs.date;";
+    $result = mysqli_query($link, $query);
+    $nrows = mysqli_num_rows($result);
+    ?>
+    <h3>Schedule for patient names matching <?php echo $name; ?></h3>
+    <?php
+  }
   ?>
-  <h3>Schedule for dates <?php echo date('d-F-Y', strtotime($fromDate))." to ".date('d-F-Y', strtotime($toDate)); ?></h3>
+  
   <table style="margin: 0px 0px 0px 0px;border:none;"><tbody>
     <tr>
       <th>Patient</th>
@@ -95,6 +119,21 @@ if($_POST['patient_id'] || $_GET['patient_id'] ) {
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
 <label for='patient_id'>Patient ID:&nbsp;&nbsp;&nbsp;&nbsp;</label>
 <input type="text" name="patient_id" id="patient_id" style="width:100px" />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<input type='submit' value='Go'>
+</form>
+
+<form action="" method="post" enctype="multipart/form-data" style="width:auto">
+<label for='patient_name'>Patient Name:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+<input type="text" name="patient_name" id="patient_name" style="width:100px" />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<input type='submit' value='Go'>
+</form>
+
+
+<form action="" method="post" enctype="multipart/form-data" style="width:auto">
+<label for='patient_id'>Patient Phone Number:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+<input type="number" name="patient_phone" id="patient_phone" style="width:100px" />
 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type='submit' value='Go'>
 </form>
