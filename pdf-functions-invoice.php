@@ -75,8 +75,16 @@ class PDF extends FPDF
 		$this->Image('mahima-sign.png',145,85 +$length*6.5,40);
 		$serialNo = 1;
 		for($i = 0; $i < sizeof($descriptions); $i++) {
-
-			if($descriptions[$i]!="CONSULTATION" && $descriptions[$i] != "Medical Certificate" && $descriptions[$i] != "CONSULTATION AND INOCULATION" && $descriptions[$i] != "File Charges") {
+			$non_vaccine_entries = array("CONSULTATION",  "Medical Certificate", "CONSULTATION AND INOCULATION", "File Charges", 
+										 "Tele-consultation", "Registration/File Charges", "INOCULATION CHARGES", "Other");
+			$is_vaccine = TRUE;
+			foreach($non_vaccine_entries as $value) {
+				if($descriptions[$i]==$value) {
+					$is_vaccine = FALSE;
+					break;
+				}
+			}
+			if($is_vaccine == TRUE) {
 				if(strpos($descriptions[$i], "xx") === False)
 					$descriptions[$i].=" Vaccination";
 				$descriptions[$i]= rtrim($descriptions[$i], 'xx');
