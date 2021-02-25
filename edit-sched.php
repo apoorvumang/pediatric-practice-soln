@@ -156,6 +156,7 @@ $(document).ready(function() {
 			console.log("visit id = ", visitID);
 			$("#visitIDForPrescriptionScan").text(visitID);
 			var data = $("#scanned_img").attr("src")
+			console.log(data);
 			$('.cloudinary_fileupload').fileupload('option', 'formData').file = data;
 			$('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
     });
@@ -1023,9 +1024,10 @@ function handleFileSelect(evt) {
   // Loop through the FileList and render image files as thumbnails.
   for (var i = 0, f; f = files[i]; i++) {
     // Only process image files.
-    if (!f.type.match('image.*')) {
-      continue;
-    }
+	// removing this for uploading pdf
+    // if (!f.type.match('image.*')) {
+    //   continue;
+    // }
     var reader = new FileReader();
     // Closure to capture the file information.
     reader.onload = (function(theFile) {
@@ -1123,8 +1125,14 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
 					$date_for_presc = date('j M Y',strtotime($row['date']));
           while($prescription = mysqli_fetch_assoc($prescriptionResult)) {
             $prescriptionId = $prescription['id'];
+			$prescriptionUrl = $prescription['url'];
             $dialogId = "dialog".$prescriptionId;
             $openerId = "opener".$prescriptionId;
+			if(strpos($prescriptionUrl, '.pdf') != false) {
+				$s = "<a href={$prescriptionUrl}>Document {$i}</a>";
+				echo $s;
+			} else {
+			
 ?>
 <!-- modal/dialog for showing prescription image on same page-->
 <script>
@@ -1150,6 +1158,7 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
 
 
 <?php
+}
             $i++;
           }
 ?>
