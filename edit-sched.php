@@ -232,12 +232,6 @@ else if($_POST['vac_date']) {
 				}
 			}
 		}
-		else
-		{
-			if($value!=$_POST['vac_given_date_hidden'][$key])	//if value changed
-			if(!mysqli_query($link, "UPDATE vac_schedule SET date_given='', given='N' WHERE id={$_POST['vac_sched_id'][$key]}"))
-					$err[] = "Unknown error";	//set given date to null, set given to N
-			}
 		}
 		foreach ($_POST['vac_date'] as $key => $value) {
 		//if changed
@@ -257,12 +251,24 @@ else if($_POST['vac_date']) {
 			}
 		}
 		foreach ($_POST['given'] as $key => $value) {
-			if($value=='Y')
-			{
-				if(!mysqli_query($link, "UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_sched_id'][$key]}"))
-					$err[] = "Unknown error";
+			//if changed
+				// echo $value.$_POST['vac_given_hidden'][$key];
+				// echo '<br>';
+				if($value!=$_POST['vac_given_hidden'][$key])
+				{
+					if($value=='Y')
+					{	
+						if(!mysqli_query($link, "UPDATE vac_schedule SET given='Y' WHERE id={$_POST['vac_sched_id'][$key]}"))
+							$err[] = "Unknown error";
+					} else if($value=='N') 
+					{
+						$query = "UPDATE vac_schedule SET date_given=NULL, given='N' WHERE id={$_POST['vac_sched_id'][$key]}";
+						if(!mysqli_query($link, $query))
+							$err[] = "Unknown error";	//set given date to null, set given to N
+					}
+				}
+				
 			}
-		}
 		if(!$err)
 		{
 			echo "Changes saved successfully!";
@@ -1321,6 +1327,7 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
 			<option value='Y' <?php if($row['given']=='Y') echo "selected"; ?> >Y</option>
 			<option value='N' <?php if($row['given']=='N') echo "selected"; ?> >N</option>
 		</select>
+		<input type="hidden" name="vac_given_hidden[]" value=<?php echo "\"".$row['given']."\"";?>>
 		<?php
 		echo "</td>";
 		echo "<td>";
