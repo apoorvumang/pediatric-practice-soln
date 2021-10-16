@@ -10,7 +10,7 @@ $deviceID = 84200;
 <h3>Search Results</h3>
 <?php
 
-if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||$_POST['specificid']||$_POST['id_range']||$_POST['dobrange'])	//If some submit button clicked
+if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||$_POST['specificid']||$_POST['id_range']||$_POST['dobrange']||$_POST['phone_number'])	//If some submit button clicked
 {
 	if($_POST['specificdob'])
 	{
@@ -30,6 +30,13 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 	{
 		$_POST['name'] = mysqli_real_escape_string($link, $_POST['name']);
 		$result = mysqli_query($link, "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE name LIKE '%{$_POST['name']}%' ORDER BY name");
+		$nrows = mysqli_num_rows($result);
+	}
+	else if($_POST['phone_number'])
+	{
+		$phone = mysqli_real_escape_string($link, $_POST['phone']);
+		$query = "SELECT name, sex, id, phone, phone2, dob, active FROM patients WHERE phone LIKE '%{$phone}' or phone2 LIKE '%{$phone}'";
+		$result = mysqli_query($link, $query);
 		$nrows = mysqli_num_rows($result);
 	}
 	else if($_POST['specificid'])

@@ -74,4 +74,10 @@ $(function() {
 	<input type="text" name="name" id="name" style="margin-right:40px;"/>
 	<input type="submit" name="specificname" value="Go" />
 </form>
+<form action="search-patient-results.php" method="post" enctype="multipart/form-data" style="width:auto" name="7">
+	<label for="phone">Phone: &nbsp;&nbsp;&nbsp;&nbsp;</label>
+	<input type="text" name="phone" id="phone" style="margin-right:30px;"/>
+	<input type="submit" name="phone_number" value="Go" />
+</form>
+
 <?php include('footer.php'); ?>

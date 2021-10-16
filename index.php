@@ -1,6 +1,5 @@
 <?php
-
-
+ 
 //session_name('tzLogin');
 //require 'connect.php';
 include('header.php');
