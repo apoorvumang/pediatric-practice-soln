@@ -1,4 +1,4 @@
-# mummy-software
+# Pediatric Practice Management
 This is a php + mysql solution for pediatric practice management. It started with the aim to enable paperless vaccination management for
 pediatricians along with providing certain benefits for the patient (such as vaccination reminders, personalized schedule). It now includes other parts of practice management such as invoicing, medical certificates, payment reminders.
 
