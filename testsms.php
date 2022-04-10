@@ -16,9 +16,9 @@ include "smsGateway.php";
 // curl_setopt_array($curl, array(
 //     CURLOPT_RETURNTRANSFER => 1,
 
-$message= "Dear mahima\n hello hello\n fsadfsf";
+// $message= "Dear mahima\n hello hello\n fsadfsf";
 
-$smsGateway = new SmsGateway();
-$smsGateway->sendMessageToNumber("7891947877", $message, "d");
+// $smsGateway = new SmsGateway();
+// $smsGateway->sendMessageToNumber("7891947877", $message, "d");
 
 ?>

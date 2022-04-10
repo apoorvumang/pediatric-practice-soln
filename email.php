@@ -1,7 +1,8 @@
 <?php include('header.php');
 include_once('fpdf/fpdf.php');
 include_once('pdf-functions.php');
-require 'PHPMailer/PHPMailerAutoload.php';
+require_once 'PHPMailer/PHPMailerAutoload.php';
+include_once('email-smtp-auth.php');
 if($_GET['id'])
 {
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT * FROM patients WHERE id = {$_GET['id']}"));
@@ -29,20 +30,26 @@ if($_GET['id'])
 		$message = $message."</table><br>";
 		$message .= "Regards<br>".$dr_name;
 
-		$headers = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
-		$headers .= "From: ".$dr_name." <".$dr_email.">\r\n";
-		if(mail($patient['email'], $subject, $message, $headers)) {
-			echo 'success';
-		}
+		$email = PHPMailerWithSMTP();
+		$email->Subject = $subject;
+		$email->Body = $message;
+
+		$email->AddAddress( $patient['email'] );
 		if($patient['email2'])
-			mail($patient['email2'], $subject, $message, $headers);	
+			$email->AddAddress($patient['email2']);
+
+		if($email->Send()) {
+			echo 'Email sent successfully';
+		}
+		else {
+			echo 'Error in sending email';
+		}
 	}
 	else
 	{
 		$pdf = createPrintSchedulePDF($patient['id'], $link);
 
-	    $email = new PHPMailer();
+		$email = PHPMailerWithSMTP();
 		$email->From      = $dr_email;
 		$email->FromName  = $dr_name;
 		$email->Subject   = 'Vaccination history';

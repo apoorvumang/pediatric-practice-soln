@@ -1,8 +1,8 @@
 <?php include('header.php');
 include_once('fpdf/fpdf.php');
 include_once('pdf-functions-invoice.php');
-require 'PHPMailer/PHPMailerAutoload.php';
-
+require_once 'PHPMailer/PHPMailerAutoload.php';
+include_once('email-smtp-auth.php');
 // var_dump($_POST);
 // exit;
 if($_POST['invoice_number'])
@@ -21,7 +21,7 @@ if($_POST['invoice_number'])
 
 
 
-  $email = new PHPMailer();
+	$email = PHPMailerWithSMTP();
 	$email->From      = $dr_email;
 	$email->FromName  = $dr_name;
 	$email->Subject   = 'Invoices - Dr. Mahima';
