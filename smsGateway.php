@@ -36,7 +36,7 @@ class SmsGateway {
       }
       $phone = '+91'.$to; // Phone number
       $msg = addslashes($message);  // Message
-      $device = '228711';  //  Device code
+      $device = '326657';  //  Device code
       $token = 'c3f505c5da704f489b44aec2aa7e6352';  //  Your token (secret)
 
       $data = array(
