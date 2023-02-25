@@ -11,7 +11,7 @@ function PHPMailerWithSMTP() {
     $email->Username   = 'mahima@drmahima.com';                     //SMTP username
     $email->Password   = 'vultr123';                               //SMTP password
     $email->SMTPAutoTLS = true; 							// IMPORTANT!!
-    $email->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    $email->Port       = 25;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     $email->setFrom('mahima@drmahima.com', 'Dr. Mahima');
     return $email;
 }
