@@ -85,8 +85,9 @@ function addInvoice($link, $invoiceInfo) {
   $retval = mysqli_query($link, $query);
   if($retval) {
     $invoiceId = mysqli_insert_id($link);
-    // Add invoice ID to visit_id
-    $query = "UPDATE notes SET invoice_id=".$invoiceId." WHERE id=".$visit_id;
+    // insert in new table visit_invoices, rather than updating notes table
+    // to support multiple invoices per visit
+    $query = "INSERT INTO visit_invoices (visit_id, invoice_id) VALUES ($visit_id, $invoiceId)";
     if(mysqli_query($link, $query)) {
       // Updated visit and added invoice id to it
     }

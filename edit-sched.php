@@ -328,14 +328,9 @@ else if($_POST['vac_date']) {
 		$value = date('Y-m-d', strtotime($_POST['visit_date']));
 		$height = $_POST['height'];
 		$weight = $_POST['weight'];
-    if($_POST['invoice_id']) {
-      $invoice_id = $_POST['invoice_id'];
-    } else {
-      $invoice_id = 0;
-    }
 
 		if($_POST['note'] != "" || $weight!=0 || $height!=0) {
-			$q = "INSERT INTO notes (p_id, date, note, height, weight, invoice_id) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}', '{$height}', {$weight}, {$invoice_id});";
+			$q = "INSERT INTO notes (p_id, date, note, height, weight) VALUES ({$_GET['id']}, '{$value}', '{$_POST['note']}', '{$height}', {$weight});";
 			if(!mysqli_query($link, $q))
 				$err[] = "Error adding visit";
 			if(!$err)
@@ -361,9 +356,13 @@ else if($_POST['vac_date']) {
 		}
 
 		foreach ($_POST['delete_visit'] as $key => $value) {
+			$query = "DELETE from visit_invoices WHERE visit_id = {$value};";
+			if(!mysqli_query($link, $query))
+				$err[] = "Error while deleting from visit_invoices";
+		
 			$query = "DELETE from notes WHERE id = {$value};";
 			if(!mysqli_query($link, $query))
-				$err[] = "Error while deleting vists";
+				$err[] = "Error while deleting visits";
 		}
 		if(!$err)
 		{
@@ -1090,7 +1089,7 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
                 <tbody id="visits_section">
                 <?php
                 $patient_id = $_GET['id'];
-                $q = "SELECT id, date, note, height, weight, invoice_id, image_url FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
+                $q = "SELECT id, date, note, height, weight, image_url FROM notes WHERE p_id = {$_GET['id']} ORDER BY date DESC";
                 $result = mysqli_query($link, $q);
                 $i=1;
                 $total = 0;
@@ -1126,11 +1125,16 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
 
 
                     <td><?php
-                    if($row['invoice_id']) {
-                      echo "<a href=pdf-invoice.php?id=".$row['invoice_id'].">"."Show invoice ".$row['invoice_id']."</a>";
-                    } else {
-                      echo "<a href=create-invoice.php?id={$patient_id}&visit_id=".$row['id'].">"."Create invoice</a>";
-                    }
+                    
+					$visit_id = $row['id'];
+					$invoiceQuery = "SELECT invoice_id FROM visit_invoices WHERE visit_id = '{$visit_id}';";
+					$invoiceResult = mysqli_query($link, $invoiceQuery);
+					while ($invoiceRow = mysqli_fetch_assoc($invoiceResult)) {
+						$invoiceId = $invoiceRow['invoice_id'];
+						echo "<a href=pdf-invoice.php?id=".$invoiceId."><div style='display: inline-block; padding: 5px; margin: 5px; background-color: purple; color: white;'>".$invoiceId."</div></a>";
+					}
+					echo "<a href=create-invoice.php?id={$patient_id}&visit_id=".$visit_id."><div style='display: inline-block; padding: 5px; margin: 5px; background-color: blue; color: white;'>Create invoice</div></a>";
+
                     ?></td>
                     <td><?php
 

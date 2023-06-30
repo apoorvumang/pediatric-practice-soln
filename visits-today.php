@@ -22,23 +22,24 @@ if($_POST['save_changes']) {
 
   if($_POST['delete']) {
     $deleteArray = $_POST['delete'];
-    $query1 = "DELETE from notes WHERE id in (";
-    $idList = "";
-    $arrLength = sizeof($deleteArray);
-    foreach ($deleteArray as $key => $value) {
-      $idList = $idList.$value;
-      if($key != $arrLength - 1) {
-        $idList = $idList.",";
-      }
+    $idList = implode(",", $deleteArray);
+
+    // Delete from visit_invoices table
+    $query = "DELETE from visit_invoices WHERE visit_id in ({$idList});";
+    if(!mysqli_query($link, $query)) {
+      echo 'Error in deleting from visit_invoices';
+      exit;
     }
-    $query = $query1.$idList.");";
-    echo $query;
+    
+    // Delete from notes table
+    $query = "DELETE from notes WHERE id in ({$idList});";
     if(mysqli_query($link, $query)) {
       echo 'Deletion successful!';
     } else {
       echo 'Error in deleting visits';
     }
-  }
+}
+
 }
 
 ?>
@@ -47,7 +48,7 @@ if($_POST['save_changes']) {
 <?php
   $today = date('Y-m-d');
   mysqli_query($link, "SET time_zone = '+5:30';");
-  $result = mysqli_query($link, "SELECT n.timestamp as timestamp, n.invoice_id as invoice_id, n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname, n.height as height, n.weight as weight FROM notes n, patients p WHERE n.date='".$today."' AND n.p_id = p.id ORDER BY n.timestamp DESC");
+  $result = mysqli_query($link, "SELECT n.timestamp as timestamp, n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname, n.height as height, n.weight as weight FROM notes n, patients p WHERE n.date='".$today."' AND n.p_id = p.id ORDER BY n.timestamp DESC");
   $nrows = mysqli_num_rows($result);
   echo "<h4>Number of visits today: ".$nrows."</h4>";
 ?>
@@ -126,13 +127,16 @@ if (isset($row['height'], $row['weight']) && is_numeric($row['height']) && is_nu
 <td>
 <?php
 if($_SESSION['type']=='doctor') {
-  $invoice_id = $row['invoice_id'];
-  if($invoice_id) {
-    echo "<a href='pdf-invoice.php?id={$row['invoice_id']}'> Invoice ID {$row['invoice_id']} </a>";
-  } else {
-    echo "Invoice not made!";
-    echo "<a href='create-invoice.php?id={$row['pid']}&visit_id={$row['id']}'> Click here to create invoice </a>";
-  }
+  $visit_id = $row['id'];
+  $invoiceQuery = "SELECT invoice_id FROM visit_invoices WHERE visit_id = '{$visit_id}';";
+  $invoiceResult = mysqli_query($link, $invoiceQuery);
+  if (mysqli_num_rows($invoiceResult) > 0) {
+    while ($invoiceRow = mysqli_fetch_assoc($invoiceResult)) {
+      $invoiceId = $invoiceRow['invoice_id'];
+      echo "<div style='background-color:purple;color:white;padding:5px;margin:5px;'><a href='pdf-invoice.php?id={$invoiceId}' style='color:white;'> {$invoiceId} </a></div>";
+    }
+  } 
+  echo "<div style='background-color:blue;color:white;padding:5px;margin:5px;'><a href='create-invoice.php?id={$row['pid']}&visit_id={$row['id']}' style='color:white;'>Create Invoice</a></div>";
 } else {
   echo '-';
 }

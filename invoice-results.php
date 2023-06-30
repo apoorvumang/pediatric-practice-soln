@@ -25,20 +25,20 @@ if($_POST['delete']) {
   $array = $_POST['delete'];
   $concat = "";
   foreach ($array as $key => $value) {
-    $concat = $concat.$value.",";
+      $concat = $concat.$value.",";
   }
   $concat = rtrim($concat, ",");
   $query = "DELETE from invoice where id in(".$concat.")";
   if(mysqli_query($link, $query)) {
-    echo "Succesfully deleted invoices!";
-    $query = "UPDATE notes SET invoice_id=0 WHERE invoice_id IN(".$concat.")";
-    if(mysqli_query($link, $query)) {
-      echo "Succesfully unlinked invoice_id from visit!";
-    } else {
-      echo "Error in unlinking invoice_id from visit!";
-    }
+      echo "Succesfully deleted invoices!";
+      $query = "DELETE FROM visit_invoices WHERE invoice_id IN(".$concat.")";
+      if(mysqli_query($link, $query)) {
+          echo "Succesfully unlinked invoice_id from visit!";
+      } else {
+          echo "Error in unlinking invoice_id from visit!";
+      }
   } else {
-    echo "Unable to delete invoices";
+      echo "Unable to delete invoices";
   }
 }
 if($_GET['specificdate'] || $_GET['dateRange'] || $_GET['patientID'])  //If some submit button clicked
