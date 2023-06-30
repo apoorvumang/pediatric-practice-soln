@@ -1105,11 +1105,21 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
                     <td> <input style="text-align:center;vertical-align: middle;width:40px" name="change_weight[]" value = <?php  echo "'{$row['weight']}'";?> >  </td>
                     <td>
                     <?php
-                      $height = $row['height']/100.0;
-                      $weight = $row['weight'];
-                      $height_squared = $height*$height;
-                      $bmi = $weight/$height_squared;
-                      echo round($bmi,1);
+					if (isset($row['height'], $row['weight']) && is_numeric($row['height']) && is_numeric($row['weight'])) {
+						$height = $row['height']/100.0;
+						$weight = $row['weight'];
+						
+						if ($height != 0) {
+							$height_squared = $height * $height;
+							$bmi = $weight / $height_squared;
+							echo number_format((float)$bmi, 2, '.', '');
+						} else {
+							echo "NA";
+						}
+					} else {
+						echo "NA";
+					}
+					
                     ?>
                     </td>
                     <td><textarea name="change_note[]" cols="24" rows="2"><?php echo "{$row['note']}";?></textarea> </td>

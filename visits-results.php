@@ -50,11 +50,20 @@ while($row = mysqli_fetch_assoc($result))
 </td>
 <td>
 <?php
+if (isset($row['height'], $row['weight']) && is_numeric($row['height']) && is_numeric($row['weight'])) {
   $height = $row['height']/100.0;
   $weight = $row['weight'];
-  $height_squared = $height*$height;
-  $bmi = $weight/$height_squared;
-  echo number_format((float)$bmi, 2, '.', '');;
+  
+  if ($height != 0) {
+      $height_squared = $height * $height;
+      $bmi = $weight / $height_squared;
+      echo number_format((float)$bmi, 2, '.', '');
+  } else {
+      echo "NA";
+  }
+} else {
+  echo "NA";
+}
 ?>
 </td>
 <td>

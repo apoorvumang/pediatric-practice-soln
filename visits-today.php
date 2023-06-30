@@ -49,6 +49,7 @@ if($_POST['save_changes']) {
   mysqli_query($link, "SET time_zone = '+5:30';");
   $result = mysqli_query($link, "SELECT n.timestamp as timestamp, n.invoice_id as invoice_id, n.id, n.p_id as pid, n.date as date, n.note as note, p.name as pname, n.height as height, n.weight as weight FROM notes n, patients p WHERE n.date='".$today."' AND n.p_id = p.id ORDER BY n.timestamp DESC");
   $nrows = mysqli_num_rows($result);
+  echo "<h4>Number of visits today: ".$nrows."</h4>";
 ?>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
 <input type="submit" value="Save">
@@ -100,11 +101,20 @@ while($row = mysqli_fetch_assoc($result))
  -->
 <td>
 <?php
+if (isset($row['height'], $row['weight']) && is_numeric($row['height']) && is_numeric($row['weight'])) {
   $height = $row['height']/100.0;
   $weight = $row['weight'];
-  $height_squared = $height*$height;
-  $bmi = $weight/$height_squared;
-  echo number_format((float)$bmi, 2, '.', '');;
+  
+  if ($height != 0) {
+      $height_squared = $height * $height;
+      $bmi = $weight / $height_squared;
+      echo number_format((float)$bmi, 2, '.', '');
+  } else {
+      echo "NA";
+  }
+} else {
+  echo "NA";
+}
 ?>
 </td>
 <td>
