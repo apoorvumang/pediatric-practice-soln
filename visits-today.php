@@ -133,10 +133,10 @@ if($_SESSION['type']=='doctor') {
   if (mysqli_num_rows($invoiceResult) > 0) {
     while ($invoiceRow = mysqli_fetch_assoc($invoiceResult)) {
       $invoiceId = $invoiceRow['invoice_id'];
-      echo "<div style='background-color:purple;color:white;padding:5px;margin:5px;'><a href='pdf-invoice.php?id={$invoiceId}' style='color:white;'> {$invoiceId} </a></div>";
+      echo "<a href='pdf-invoice.php?id={$invoiceId}'><div style='background-color:#2c76a6;padding:5px;margin:5px;text-align:center;color:white'> {$invoiceId} </div></a>";
     }
   } 
-  echo "<div style='background-color:blue;color:white;padding:5px;margin:5px;'><a href='create-invoice.php?id={$row['pid']}&visit_id={$row['id']}' style='color:white;'>Create Invoice</a></div>";
+  echo "<a href='create-invoice.php?id={$row['pid']}&visit_id={$row['id']}' style='color:#2c76a6; white-space: nowrap;'>Create Invoice</a>";
 } else {
   echo '-';
 }

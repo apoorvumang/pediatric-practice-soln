@@ -1131,9 +1131,9 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
 					$invoiceResult = mysqli_query($link, $invoiceQuery);
 					while ($invoiceRow = mysqli_fetch_assoc($invoiceResult)) {
 						$invoiceId = $invoiceRow['invoice_id'];
-						echo "<a href=pdf-invoice.php?id=".$invoiceId."><div style='display: inline-block; padding: 5px; margin: 5px; background-color: purple; color: white;'>".$invoiceId."</div></a>";
+						echo "<a href=pdf-invoice.php?id=".$invoiceId."><div style='background-color:#2c76a6;padding:5px;margin:5px;text-align:center;color:white'>".$invoiceId."</div></a>";
 					}
-					echo "<a href=create-invoice.php?id={$patient_id}&visit_id=".$visit_id."><div style='display: inline-block; padding: 5px; margin: 5px; background-color: blue; color: white;'>Create invoice</div></a>";
+					echo "<a href='create-invoice.php?id={$patient_id}&visit_id={$visit_id}' style='color:#2c76a6; white-space: nowrap;'><div style='display: inline-block; padding: 5px; margin: 5px;'>Create invoice</div></a>";
 
                     ?></td>
                     <td><?php
