@@ -18,4 +18,23 @@ function PHPMailerWithSMTP() {
     return $email;
 }
 
+
+
+// $email = PHPMailerWithSMTP();
+
+
+// $email->SMTPDebug = 3;
+
+// $email->Subject = 'Test email number 2';
+// $email->Body = 'This is a second test email from PHPMailer with SMTP support';
+
+// $email->AddAddress( 'apoorvumang@gmail.com' );
+// echo "hello";
+// if($email->Send()) {
+//     echo 'Email sent successfully';
+// }
+// else {
+//     echo 'Error in sending email';
+// }
+
 ?>
