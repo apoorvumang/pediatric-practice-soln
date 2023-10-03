@@ -68,6 +68,27 @@ function set_item(item) {
   $('#patient_autocomplet_list').hide();
 }
 
+$(document).ready(function() {
+  $('#submit-btn').click(function(e) {
+    e.preventDefault(); // prevent the form from submitting
+    var p_id = $('#patient_id').val(); // get the patient id
+    // make an AJAX request to get the patient's details
+    $.ajax({
+      url: 'get_patient.php', // the url of the PHP file that will fetch the patient's details
+      type: 'POST',
+      data: {p_id: p_id}, // send the patient id to the server
+      success: function(data) {
+        data = JSON.parse(data); // parse the returned json data
+        // show a confirm dialog with the patient's details
+        var confirmMessage = 'Add visit for ID: ' + data.id + ', Name: ' + data.name + ', DOB: ' + data.dob + '?';
+        if (confirm(confirmMessage)) {
+          $('form[name="1"]').submit(); // submit the form if the user clicked "OK"
+        }
+      }
+    });
+  });
+});
+
 </script>
 <h3>Add Visit</h3>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
@@ -96,6 +117,6 @@ function set_item(item) {
   <textarea name="note" rows="3" cols="50">
   </textarea>
   <br>
-<input type="submit" name="addvisit" value="Go" />
+  <input type="submit" name="addvisit" id="submit-btn" value="Go" />
 </form>
 <?php include('footer.php'); ?>
