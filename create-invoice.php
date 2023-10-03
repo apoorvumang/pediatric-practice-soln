@@ -157,7 +157,7 @@ $(document).on("change", "#discount", function() {
 
 </script>
 <h4>Create Invoice for <?php echo $patientName; ?></h4>
-<form onsubmit="return confirm('Create invoice?');" action="" method="post" enctype="multipart/form-data" style="width:auto" >
+<form onsubmit="return confirm('Create invoice with total amount: ' + document.getElementById('totalAmount').value + ' and mode of payment: ' + document.getElementById('mode').value + '?');" action="" method="post" enctype="multipart/form-data" style="width:auto" >
   <input type="hidden" name="p_id" value=<?php echo "'".$_GET['id']."'"; ?> />
   <input type="hidden" name="visit_id" value=<?php echo "'".$_GET['visit_id']."'"; ?> />
   <p>
