@@ -192,7 +192,7 @@ $(document).ready(function() {
     // Fetch the presigned URL
     $.get('get-presigned-url-upload.php', { filename: filename }, function(response) {
         var presignedUrl = response.url;
-        
+		console.log("presigned url = ", presignedUrl);
         // Perform the upload
         $.ajax({
             type: 'PUT',
@@ -208,6 +208,7 @@ $(document).ready(function() {
                 alert('Prescription uploaded!');
             },
             error: function() {
+				console.log('Upload error');
                 alert('Upload error');
             }
         });
