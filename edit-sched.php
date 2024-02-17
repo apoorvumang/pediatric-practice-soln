@@ -145,21 +145,74 @@ $(document).ready(function() {
       $('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
     });
 
-		$("#uploadFromDisk").click(function(e) {
-			console.log("upload from disk clicked");
-			e.preventDefault();
-			var visitID = $("#visitIDForPrescriptionUploadFromFile").val();
-			if(!visitID) {
-				alert("Please enter visit ID!");
-				return;
-			}
-			console.log("visit id = ", visitID);
-			$("#visitIDForPrescriptionScan").text(visitID);
-			var data = $("#scanned_img").attr("src")
-			console.log(data);
-			$('.cloudinary_fileupload').fileupload('option', 'formData').file = data;
-			$('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
-    });
+	// 	$("#uploadFromDisk").click(function(e) {
+	// 		console.log("upload from disk clicked");
+	// 		e.preventDefault();
+	// 		var visitID = $("#visitIDForPrescriptionUploadFromFile").val();
+	// 		if(!visitID) {
+	// 			alert("Please enter visit ID!");
+	// 			return;
+	// 		}
+	// 		console.log("visit id = ", visitID);
+	// 		$("#visitIDForPrescriptionScan").text(visitID);
+	// 		var data = $("#scanned_img").attr("src")
+	// 		console.log(data);
+	// 		$('.cloudinary_fileupload').fileupload('option', 'formData').file = data;
+	// 		$('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
+    // });
+
+	$("#uploadFromDisk").click(function(e) {
+    e.preventDefault();
+    
+    var visitID = $("#visitIDForPrescriptionUploadFromFile").val();
+    if(!visitID) {
+        alert("Please enter visit ID!");
+        return;
+    }
+    console.log("visit id = ", visitID);
+    
+    var dataURL = $("#scanned_img").attr("src");
+    var mimeTypeMatch = dataURL.match(/^data:(.*?);base64,/);
+    if (!mimeTypeMatch) {
+        alert("Could not determine file type.");
+        return;
+    }
+    
+    var mimeType = mimeTypeMatch[1];
+    var base64Data = dataURL.replace(/^data:.*?;base64,/, "");
+    var fileContent = atob(base64Data);
+    var byteArray = new Uint8Array(fileContent.length);
+    for (var i = 0; i < fileContent.length; i++) {
+        byteArray[i] = fileContent.charCodeAt(i);
+    }
+    var blob = new Blob([byteArray], {type: mimeType});
+    
+    var filename = "prescription_" + visitID + "." + mimeType.split('/')[1]; // Assuming you want to construct the filename like this
+
+    // Fetch the presigned URL
+    $.get('get-presigned-url-upload.php', { filename: filename }, function(response) {
+        var presignedUrl = response.url;
+        
+        // Perform the upload
+        $.ajax({
+            type: 'PUT',
+            url: presignedUrl,
+            // Important: Include the content type in the headers
+            headers: {
+                'content-type': mimeType,
+            },
+            processData: false,
+            data: blob,
+            success: function() {
+                console.log('Upload successful');
+                alert('Prescription uploaded!');
+            },
+            error: function() {
+                alert('Upload error');
+            }
+        });
+    }, 'json');
+});
   })
 </script>
 
