@@ -189,6 +189,7 @@ $(document).ready(function() {
     
     var filename = "prescription_" + visitID + "." + mimeType.split('/')[1]; // Assuming you want to construct the filename like this
 
+	console.log("filename = ", filename);
     // Fetch the presigned URL
     $.get('get-presigned-url-upload.php', { filename: filename }, function(response) {
         var presignedUrl = response.url;
