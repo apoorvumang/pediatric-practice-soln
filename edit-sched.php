@@ -98,6 +98,72 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 $(document).ready(function() {
+
+	function uploadDataToVisitID(visitID, data) {
+		if(!visitID) {
+			alert("Please enter visit ID!");
+			return;
+		}
+		console.log("visit id = ", visitID);
+
+		var mimeTypeMatch = data.match(/^data:(.*?);base64,/);
+		if (!mimeTypeMatch) {
+			alert("Could not determine file type.");
+			return;
+		}
+
+		var mimeType = mimeTypeMatch[1];
+		var base64Data = data.replace(/^data:.*?;base64,/, "");
+		
+		var filename = "prescription_" + visitID + "." + mimeType.split('/')[1];
+
+		console.log("filename = ", filename);
+
+		$.ajax({
+			type: 'POST',
+			url: 'upload-file-via-backend.php',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				filename: filename,
+				fileContent: base64Data,
+				mimeType: mimeType
+			}),
+			success: function(response) {
+				if (response.url) {
+					console.log('Upload successful', response.url);
+
+					$.ajax({
+						type: 'POST',
+						url: 'add-picture-prescription.php',
+						data: {
+						visit_id: visitID,
+						url: response.url,
+						},
+						dataType: 'text',
+						success: function(result) {
+						console.log(result);
+									alert('Prescription uploaded!');
+						// location.reload()
+						},
+						error: function(data) {
+						alert('error in reaching server: ' + data)
+						}
+					})
+				
+				} else if (response.error) {
+					console.log('Upload error', response.error);
+					alert('Upload error: ' + response.error);
+				}
+			},
+			error: function(xhr, status, error) {
+				console.log('Upload failed', xhr.responseText);
+				alert('Upload failed: ' + xhr.responseText);
+			}
+		});
+	}
+
+
+
   $.cloudinary.config({ cloud_name: 'dukqf8fvc', secure: true});
   $('.upload_field').unsigned_cloudinary_upload("uornhdlu",
     { cloud_name: 'dukqf8fvc', tags: 'browser_uploads' },
@@ -140,81 +206,19 @@ $(document).ready(function() {
 			var visitID = $(this).attr('class').split(" ").pop();
 			console.log("visit id = ", visitID);
 			$("#visitIDForPrescriptionScan").text(visitID);
-      var data = $("#scanned_img").attr("src")
-      $('.cloudinary_fileupload').fileupload('option', 'formData').file = data;
-      $('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
+      var dataURL = $("#scanned_img").attr("src");
+      uploadDataToVisitID(visitID, dataURL);
     });
 
-	// 	$("#uploadFromDisk").click(function(e) {
-	// 		console.log("upload from disk clicked");
-	// 		e.preventDefault();
-	// 		var visitID = $("#visitIDForPrescriptionUploadFromFile").val();
-	// 		if(!visitID) {
-	// 			alert("Please enter visit ID!");
-	// 			return;
-	// 		}
-	// 		console.log("visit id = ", visitID);
-	// 		$("#visitIDForPrescriptionScan").text(visitID);
-	// 		var data = $("#scanned_img").attr("src")
-	// 		console.log(data);
-	// 		$('.cloudinary_fileupload').fileupload('option', 'formData').file = data;
-	// 		$('.cloudinary_fileupload').fileupload('add', { files: [ data ]});
-    // });
-
 	$("#uploadFromDisk").click(function(e) {
-    e.preventDefault();
-    
-    var visitID = $("#visitIDForPrescriptionUploadFromFile").val();
-    if(!visitID) {
-        alert("Please enter visit ID!");
-        return;
-    }
-    console.log("visit id = ", visitID);
-    
-    var dataURL = $("#scanned_img").attr("src");
-    var mimeTypeMatch = dataURL.match(/^data:(.*?);base64,/);
-    if (!mimeTypeMatch) {
-        alert("Could not determine file type.");
-        return;
-    }
-    
-    var mimeType = mimeTypeMatch[1];
-    var base64Data = dataURL.replace(/^data:.*?;base64,/, "");
-    var fileContent = atob(base64Data);
-    var byteArray = new Uint8Array(fileContent.length);
-    for (var i = 0; i < fileContent.length; i++) {
-        byteArray[i] = fileContent.charCodeAt(i);
-    }
-    var blob = new Blob([byteArray], {type: mimeType});
-    
-    var filename = "prescription_" + visitID + "." + mimeType.split('/')[1]; // Assuming you want to construct the filename like this
-
-	console.log("filename = ", filename);
-    // Fetch the presigned URL
-    $.get('get-presigned-url-upload.php', { filename: filename }, function(response) {
-        var presignedUrl = response.url;
-		console.log("presigned url = ", presignedUrl);
-        // Perform the upload
-        $.ajax({
-            type: 'PUT',
-            url: presignedUrl,
-            // Important: Include the content type in the headers
-            headers: {
-                'content-type': mimeType,
-            },
-            processData: false,
-            data: blob,
-            success: function() {
-                console.log('Upload successful');
-                alert('Prescription uploaded!');
-            },
-            error: function() {
-				console.log('Upload error');
-                alert('Upload error');
-            }
-        });
-    }, 'json');
-});
+		e.preventDefault();
+		
+		var visitID = $("#visitIDForPrescriptionUploadFromFile").val();
+		var dataURL = $("#scanned_img").attr("src");
+		
+		uploadDataToVisitID(visitID, dataURL);
+	});
+	
   })
 </script>
 
