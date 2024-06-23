@@ -1,6 +1,8 @@
 <?php include('header.php');
 
 include "smsGateway.php";
+include 'send_message_twilio.php';
+
 $smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
 
 $deviceID = 84200;
@@ -118,20 +120,46 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 	foreach ($_POST['send_sms_id'] as $key => $value)
 	{
 		$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT phone, phone2, first_name FROM patients WHERE id={$value}"));
-		if(isset($_POST['sendautosms']))
-		{
-			$message = "Dear {$patient['first_name']} \nWishing you a very very Happy Birthday!\n" .$dr_name."\n".$dr_phone;
-		}
-		else if(isset($_POST['sendcustomsms']))
-		{
-			$message = $_POST['customsms'];
-		}
 
-		if($patient['phone'])
-			$result = $smsGateway->sendMessageToNumber($patient['phone'], $message, $deviceID);
-		if($patient['phone2'])
-			$result = $smsGateway->sendMessageToNumber($patient['phone2'], $message, $deviceID);
-		echo "SMS sent to {$patient['first_name']} <br>";
+		if ($use_twilio)
+		{
+			if(isset($_POST['sendautosms'])) {
+				$data = [
+					'name' => $patient['first_name'],
+				];
+				$phone = $patient['phone'];
+				$phone2 = $patient['phone2'];
+				$templateName = 'birthday';
+
+				if($phone)
+					$message = sendMessageTwilio($phone, $templateName, $data);
+				if($phone2)
+					$message = sendMessageTwilio($phone2, $templateName, $data);
+
+					echo "Twilio Whatsapp birthday msg sent to {$patient['first_name']} <br>";
+			} else if(isset($_POST['sendcustomsms'])) {
+				echo "Custom SMS not supported for Twilio Whatsapp <br>";
+			}
+
+		}
+		else
+		{
+			if(isset($_POST['sendautosms']))
+			{
+				$message = "Dear {$patient['first_name']} \nWishing you a very very Happy Birthday!\n" .$dr_name."\n".$dr_phone;
+			}
+			else if(isset($_POST['sendcustomsms']))
+			{
+				$message = $_POST['customsms'];
+			}
+
+			if($patient['phone'])
+				$result = $smsGateway->sendMessageToNumber($patient['phone'], $message, $deviceID);
+			if($patient['phone2'])
+				$result = $smsGateway->sendMessageToNumber($patient['phone2'], $message, $deviceID);
+
+			echo "SMS sent to {$patient['first_name']} <br>";
+		}
 	}
 }
 else
