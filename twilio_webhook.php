@@ -77,5 +77,7 @@ function generateBotResponse($conversationHistory) {
     $lastMessage = end($conversationHistory);
 
     $response = 'Thank you for your message. This number does not support incoming messages - please contact **Dr. Mahima\'s clinic at +91 9717585207**.';
+
+    return $response;
     // return "You said: '" . $lastMessage['body'] . "'. How can I help you with that?";
 }
