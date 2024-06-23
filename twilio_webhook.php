@@ -53,9 +53,6 @@ foreach ($messages as $record) {
     ];
 }
 
-// Reverse the array to get chronological order
-$conversationHistory = array_reverse($conversationHistory);
-
 // Generate bot response
 $botResponse = generateBotResponse($conversationHistory);
 
