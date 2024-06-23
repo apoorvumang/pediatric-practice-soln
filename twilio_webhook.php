@@ -61,8 +61,6 @@ $message = $twilio->conversations->v1->conversations($conversationSid)
                                      ->messages
                                      ->create([
                                          'body' => $botResponse,
-                                        //  'author' => $botIdentifier,
-                                        //  'attributes' => json_encode(['isBot' => true])
                                      ]);
 
 // Log the bot's response
@@ -77,5 +75,7 @@ function generateBotResponse($conversationHistory) {
     // Implement your bot logic here
     // This is a placeholder implementation
     $lastMessage = end($conversationHistory);
-    return "You said: '" . $lastMessage['body'] . "'. How can I help you with that?";
+
+    $response = 'Thank you for your message. This number does not support incoming messages - please contact **Dr. Mahima\'s clinic at +91 9717585207**.';
+    // return "You said: '" . $lastMessage['body'] . "'. How can I help you with that?";
 }
