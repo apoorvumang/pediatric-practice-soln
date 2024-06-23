@@ -4,6 +4,7 @@
 // The dates *only* can be edited. Give a link for the patient also.
 
 include "smsGateway.php";
+include 'send_message_twilio.php';
 $smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
 
 $deviceID = 84200;
@@ -187,14 +188,30 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 	while ($row = mysqli_fetch_assoc($result))
 	{
 		$row['vaccines'] = str_replace("PNEUMOCOCCAL", "PCV", $row['vaccines']);
+		// initialize $templateName to blank, $msg_data to blank dictionary
+
+		$templateName = '';
+		$msg_data = [];
+
 		if(isset($_POST['sendautosms'])||isset($_POST['sendemail']))
 		{
 			if(strtotime($row['date']) < strtotime("now"))	//If date has passed
 			{
+				$templateName = 'vaccine_reminder_nodate';
+				$msg_data = [
+					'name' => $row['pname'],
+					'vaccine' => $row['vaccines']
+				];
 				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination\n" .$dr_name."\n".$dr_phone;
 			}
 			else
 			{
+				$templateName = 'vaccine_reminder';
+				$msg_data = [
+					'name' => $row['pname'],
+					'vaccine' => $row['vaccines'],
+					'date' => date('j M Y',strtotime($row['date']))
+				];
 				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination on ".date('j M Y',strtotime($row['date']))."\n".$dr_name."\n".$dr_phone;
 			}
 		}
@@ -205,11 +222,32 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 
 		if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 		{
-			if($row['phone'])
-				$smsResult = $smsGateway->sendMessageToNumber($row['phone'], $message, $deviceID);
-			if($row['phone2'])
-				$smsResult = $smsGateway->sendMessageToNumber($row['phone2'], $message, $deviceID);
-			echo "SMS sent to {$row['pname']} <br>";
+			if ($use_twilio)
+			{
+				if(isset($_POST['sendautosms'])) {
+					$phone = $row['phone'];
+					$phone2 = $row['phone2'];
+
+					if($phone)
+						$message = sendMessageTwilio($phone, $templateName, $msg_data);
+					if($phone2)
+						$message = sendMessageTwilio($phone2, $templateName, $msg_data);
+
+					echo "Twilio Whatsapp vaccine reminder msg sent with data " . json_encode($msg_data) . " to {$row['pname']} <br>";
+				} else if(isset($_POST['sendcustomsms'])) {
+					echo "Custom SMS not supported for Twilio Whatsapp <br>";
+				}
+
+			}
+			else
+			{
+				if($row['phone'])
+					$smsResult = $smsGateway->sendMessageToNumber($row['phone'], $message, $deviceID);
+				if($row['phone2'])
+					$smsResult = $smsGateway->sendMessageToNumber($row['phone2'], $message, $deviceID);
+				echo "SMS sent to {$row['pname']} <br>";
+			}
+			
 		}
 
 		if(isset($_POST['sendemail']))
