@@ -19,7 +19,7 @@ require 'vendor/autoload.php';
 use Twilio\Rest\Client;
 
 // Load environment variables
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 // Your Twilio credentials

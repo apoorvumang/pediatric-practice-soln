@@ -6,7 +6,7 @@ use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 
 // Specify the path to your project root
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 // Read and decode the incoming JSON data
