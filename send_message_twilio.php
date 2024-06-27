@@ -7,8 +7,8 @@ use Twilio\Rest\Client;
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-$use_twilio = true;
-// $use_twilio = false; // disabled until account is verified
+// $use_twilio = true;
+$use_twilio = false; // disabled until account is verified
 
 // Global initialization of Twilio client
 $globalTwilioClient = new Client($_ENV['TWILIO_ACCOUNT_SID'], $_ENV['TWILIO_AUTH_TOKEN']);
