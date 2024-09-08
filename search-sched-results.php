@@ -58,20 +58,14 @@ if($_POST['specificdate']||$_POST['tofromdate']||$_POST['patientsearch'])	//If s
 ?>
 
 <script type="text/javascript">
-
-    <?php for ($i=0; $i < $nrows; $i++) { ?>
-
-            $(function() {
-                $( <?php echo "\"#vac_date".$i."\""; ?> ).datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    yearRange: "1970:2032",
-                    dateFormat:"d M yy"
-                });
-            });
-
-    <?php } ?>
-
+$(function() {
+    $( ".datepicker" ).datepicker({
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "1970:2032",
+        dateFormat:"d M yy"
+    });
+});
 </script>
 
 <form action="" method="post" enctype="multipart/form-data" style="width:auto">
@@ -147,7 +141,7 @@ if ($row['given']=='Y')
             <?php echo $vaccine['name']; ?>
         </td>
         <td>
-            <input type="text" name="vac_date[]" style="width:80px" <?php echo "id=\"vac_date".$count."\""; ?> value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
+            <input type="text" name="vac_date[]" style="width:80px" class="datepicker" value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
             <input type="hidden" name="vac_id[]" style="width:80px" value=<?php echo "\"{$row['id']}\""; ?> />
         </td>
         <td>N/A</td>
@@ -172,7 +166,7 @@ if ($row['given']=='Y')
 			// if($patient['active']==0)
             //     continue;
 ?>
-    <tr id="focus_blue">
+    <tr id="focus_gray">
         <td>Appointment</td>
         <td>N/A</td>
         <td>
@@ -185,7 +179,8 @@ if ($row['given']=='Y')
 			<?php echo $row['comment'];?>
 		</td>
         <td>
-            <?php echo date('j M Y',strtotime($row['date']));?>
+            <input type="text" name="appt_date[]" style="width:80px" class="datepicker" value=<?php echo "\"".date('j M Y',strtotime($row['date']))."\"";?>/>
+            <input type="hidden" name="appt_id[]" style="width:80px" value=<?php echo "\"{$row['id']}\""; ?> />
         </td>
         <td>
             <?php echo $row['time'];?>
@@ -195,7 +190,7 @@ if ($row['given']=='Y')
             <?php if($patient['phone2']) echo "<br />" . $patient['phone2']; ?>
         </td>
         <td>
-            <input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> phoneCount= <?php if($patient['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $row['p_id'];?> dataType="appointment"/>
+            <input type="checkbox" name="appt_send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> phoneCount= <?php if($patient['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $row['p_id'];?> dataType="appointment"/>
         </td>
     </tr>
 <?php
@@ -226,6 +221,16 @@ else if(isset($_POST['save']))
 			$err = 1;
 		}
 	}
+    if(isset($_POST['appt_date']))
+    {
+        foreach ($_POST['appt_date'] as $key => $value) {
+            $value = date('Y-m-d', strtotime($value));
+            if(!mysqli_query($link, "UPDATE appointments SET date='{$value}' WHERE id={$_POST['appt_id'][$key]}"))
+            {
+                $err = 1;
+            }
+        }
+    }
 	if(!$err)
 	{
 		echo "Schedule successfully updated!";
@@ -325,6 +330,59 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
 			}
 		}
 	}
+
+    // Add appointment SMS logic here
+    if (isset($_POST['appt_send_sms_id'])) {
+        $apptQueryPart1 = "SELECT p.email as email, p.id as pid, p.first_name as pname, a.comment as comment, a.date as date, p.phone as phone, p.phone2 as phone2 FROM patients p, appointments a WHERE p.id = a.p_id AND a.id in(";
+        $apptQueryPart2 = "";
+        foreach ($_POST['appt_send_sms_id'] as $key => $value) {
+            $apptQueryPart2 .= "{$value},";
+        }
+        $apptQueryPart2 .= "0";  // To avoid trailing commas in the query
+        $apptQuery = $apptQueryPart1 . $apptQueryPart2 . ")";
+
+        $apptResult = mysqli_query($link, $apptQuery);
+
+        while ($apptRow = mysqli_fetch_assoc($apptResult))
+        {
+            if (isset($_POST['sendautosms']) || isset($_POST['sendemail'])) {
+                $message = "Dear {$apptRow['pname']},\nYou have an appointment on " . date('j M Y', strtotime($apptRow['date'])) . ".\nDr. {$dr_name}\n{$dr_phone}";
+            } else {
+                $message = $_POST['customsms'];
+            }
+
+            // SMS sending
+            if (isset($_POST['sendautosms']) || isset($_POST['sendcustomsms'])) {
+                if ($use_twilio) {
+                    if ($apptRow['phone']) {
+                        sendMessageTwilio($apptRow['phone'], 'appointment_reminder', ['name' => $apptRow['pname'], 'date' => date('j M Y', strtotime($apptRow['date']))]);
+                    }
+                    if ($apptRow['phone2']) {
+                        sendMessageTwilio($apptRow['phone2'], 'appointment_reminder', ['name' => $apptRow['pname'], 'date' => date('j M Y', strtotime($apptRow['date']))]);
+                    }
+                    echo "Twilio WhatsApp appointment reminder sent to {$apptRow['pname']}<br>";
+                } else {
+                    if ($apptRow['phone']) {
+                        $smsResult = $smsGateway->sendMessageToNumber($apptRow['phone'], $message, $deviceID);
+                    }
+                    if ($apptRow['phone2']) {
+                        $smsResult = $smsGateway->sendMessageToNumber($apptRow['phone2'], $message, $deviceID);
+                    }
+                    echo "SMS sent to {$apptRow['pname']}<br>";
+                }
+            }
+
+            // Email sending
+            if (isset($_POST['sendemail'])) {
+                if ($apptRow['email']) {
+                    mail($apptRow['email'], 'Appointment Reminder - ' . $dr_name, $message, "From: " . $dr_email . "\n");
+                    echo "Email sent to {$apptRow['pname']}<br>";
+                } else {
+                    echo "Unable to send email - no email address present. Patient name: {$apptRow['pname']}<br>";
+                }
+            }
+        }
+    }
 }
 else
 {

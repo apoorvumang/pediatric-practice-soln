@@ -134,6 +134,10 @@ th, td {
 	background: #F75D59;
 	color:white;
 }
+#focus_gray {
+	background: #d4d4d4;
+	color:black;
+}
 th {
   	padding: .8em 1em;
 	background: #2C76A6;
