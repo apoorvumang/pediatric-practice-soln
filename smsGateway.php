@@ -1,5 +1,11 @@
 <?php
 
+require 'vendor/autoload.php';
+
+// Load environment variables
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
 class SmsGateway {
   // using smsgateway.me app
   // sending post request. can also use helper functions from website instead.
@@ -37,7 +43,10 @@ class SmsGateway {
       $phone = '+91'.$to; // Phone number
       $msg = addslashes($message);  // Message
       $device = '347413'; //'326657';  //  Device code
-      $token = 'c3f505c5da704f489b44aec2aa7e6352';  //  Your token (secret)
+      $token = $_ENV['SEMYSYS_TOKEN'] ?? null;  //  Your token (secret)
+      if (!$token) {
+        throw new \RuntimeException('SEMYSYS_TOKEN not configured');
+      }
 
       $data = array(
               "phone" => $phone,
