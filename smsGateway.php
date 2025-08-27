@@ -42,7 +42,7 @@ class SmsGateway {
       }
       $phone = '+91'.$to; // Phone number
       $msg = addslashes($message);  // Message
-      $device = '353613'; //'326657';  //  Device code
+      $device = '353737'; //'326657';  //  Device code
       $token = $_ENV['SEMYSYS_TOKEN'] ?? null;  //  Your token (secret)
       if (!$token) {
         throw new \RuntimeException('SEMYSYS_TOKEN not configured');
