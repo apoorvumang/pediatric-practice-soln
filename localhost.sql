@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS `patients` (
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `obstetrician` varchar(25) DEFAULT NULL,
   `place_of_birth` varchar(25) DEFAULT NULL,
+  `notes` TEXT DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1104 ;
 

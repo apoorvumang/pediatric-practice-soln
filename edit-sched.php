@@ -482,6 +482,15 @@ else if($_POST['vac_date']) {
 		} else {
 			echo "Error deleting prescription!";
 		}
+	} else if($_POST['update_patient_notes']=='1') {
+		$patient_notes = mysqli_real_escape_string($link, $_POST['patient_notes']);
+		$patient_id = $_GET['id'];
+		$query = "UPDATE patients SET notes='{$patient_notes}' WHERE id={$patient_id}";
+		if(mysqli_query($link, $query)) {
+			echo "Patient notes saved successfully!";
+		} else {
+			echo "Error saving patient notes: " . mysqli_error($link);
+		}
 	}
 	if($_GET['id'])
 	{
@@ -858,6 +867,18 @@ else if($_POST['vac_date']) {
   					</p>
 
   				</div>
+
+  				<h3>Patient Notes</h3>
+  				<form id="updatepatientnotes" role="form" action="" method="post">
+  					<div class="form-group">
+  						<label for="patient_notes">Notes (Global notes for this patient):</label>
+  						<br/>
+  						<textarea name="patient_notes" id="patient_notes" rows="6" cols="80" placeholder="Enter any notes about this patient here..."><?php echo htmlspecialchars($patient['notes']); ?></textarea>
+  					</div>
+  					<input type="hidden" name="update_patient_notes" value="1" />
+  					<button type="submit" class="btn btn-default">Save Notes</button>
+  				</form>
+
         </div>
         <div id="medcert-tab" class="outer-div to_hide_from_employee">
           <h3>Medical Certificates</h3>
