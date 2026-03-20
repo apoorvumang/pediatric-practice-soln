@@ -105,4 +105,9 @@ if($_SESSION['name']){
 					</p>
 
 			</form>
+
+<div style="margin: 20px 25px; padding: 15px; background: #EEF8FB; border: 1px solid #D4E8F0; width: 600px;">
+	<p style="margin: 0;"><strong>Are you a patient?</strong> <a href="patient-login.php">Click here to access the Patient Portal</a></p>
+</div>
+
 <?php include('footer.php');?>
