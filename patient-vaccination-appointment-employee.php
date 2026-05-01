@@ -53,7 +53,7 @@ if($_POST['patient_id'] || $_GET['patient_id']) {
   if($_POST['date_from']) {
     $_POST['date_from'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['date_from'])));
     $_POST['date_to'] = mysqli_real_escape_string($link, date('Y-m-d', strtotime($_POST['date_to'])));
-    $query = "SELECT p.id as p_id, p.name as patient_name, v.name as vac_name, vs.date as date, vs.v_id as v_id FROM vaccines v, vac_schedule vs, patients p WHERE p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' AND vs.date >= '{$_POST['date_from']}' AND vs.date <= '{$_POST['date_to']}' ORDER BY p.id, vs.date;";
+    $query = "SELECT p.id as p_id, p.name as patient_name, p.phone as phone, p.phone2 as phone2, v.name as vac_name, vs.date as date, vs.v_id as v_id FROM vaccines v, vac_schedule vs, patients p WHERE p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' AND vs.date >= '{$_POST['date_from']}' AND vs.date <= '{$_POST['date_to']}' ORDER BY p.id, vs.date;";
     $result = mysqli_query($link, $query);
     $nrows = mysqli_num_rows($result);
     $fromDate = $_POST['date_from'];
@@ -64,7 +64,7 @@ if($_POST['patient_id'] || $_GET['patient_id']) {
   }
   if ($_POST['patient_phone']) {
     $phone = mysqli_real_escape_string($link, $_POST['patient_phone']);
-    $query = "SELECT p.id as p_id, p.name as patient_name, v.name as vac_name, vs.date as date, vs.v_id as v_id from vaccines v, vac_schedule vs, patients p where (p.phone like '%{$phone}' or p.phone2 like '%{$phone}') and p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' ORDER BY p.id, vs.date;";
+    $query = "SELECT p.id as p_id, p.name as patient_name, p.phone as phone, p.phone2 as phone2, v.name as vac_name, vs.date as date, vs.v_id as v_id from vaccines v, vac_schedule vs, patients p where (p.phone like '%{$phone}' or p.phone2 like '%{$phone}') and p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' ORDER BY p.id, vs.date;";
     $result = mysqli_query($link, $query);
     $nrows = mysqli_num_rows($result);
 
@@ -74,7 +74,7 @@ if($_POST['patient_id'] || $_GET['patient_id']) {
   } 
   if ($_POST['patient_name']) {
     $name = mysqli_real_escape_string($link, $_POST['patient_name']);
-    $query = "SELECT p.id as p_id, p.name as patient_name, v.name as vac_name, vs.date as date, vs.v_id as v_id from vaccines v, vac_schedule vs, patients p where p.name like '%{$name}%' and p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' ORDER BY p.id, vs.date;";
+    $query = "SELECT p.id as p_id, p.name as patient_name, p.phone as phone, p.phone2 as phone2, v.name as vac_name, vs.date as date, vs.v_id as v_id from vaccines v, vac_schedule vs, patients p where p.name like '%{$name}%' and p.active=1 AND vs.p_id=p.id AND v.id = vs.v_id AND vs.given='N' ORDER BY p.id, vs.date;";
     $result = mysqli_query($link, $query);
     $nrows = mysqli_num_rows($result);
     ?>
@@ -86,6 +86,7 @@ if($_POST['patient_id'] || $_GET['patient_id']) {
   <table style="margin: 0px 0px 0px 0px;border:none;"><tbody>
     <tr>
       <th>Patient</th>
+      <th>Phone</th>
       <th>Vaccine</th>
       <th>Date scheduled</th>
     </tr>
@@ -104,8 +105,13 @@ if($_POST['patient_id'] || $_GET['patient_id']) {
 		}
     $p_id = $row['p_id'];
     $date = $row['date'];
+    $phone_display = htmlspecialchars($row['phone']);
+    if (!empty($row['phone2'])) {
+      $phone_display .= ' / ' . htmlspecialchars($row['phone2']);
+    }
     echo "<tr>";
     echo "<td><a href='edit-sched.php?id={$p_id}'>".$patient_name."</a></td>";
+    echo "<td>".$phone_display."</td>";
     echo "<td>".$vaccine_name."</td>";
     echo "<td>".date('d-F-Y', strtotime($date))."</td>";
     echo "</tr>";
