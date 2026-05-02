@@ -1,37 +1,42 @@
 <?php
-include('patient-header.php');
+// Process login BEFORE any HTML output so header() and setcookie() work correctly
+session_name('tzLogin');
+session_set_cookie_params(2*7*24*60*60);
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once 'connect.php';
+$patient_cookie_secret = hash_hmac('sha256', 'patient-portal', $password . $servername);
 
-// If already logged in as patient, redirect to portal
-if ($patient_logged_in) {
-    patientRedirect("patient-portal.php");
+// Already logged in
+if (isset($_SESSION['patient_id']) && isset($_SESSION['patient_db'])) {
+    header('Location: patient-portal.php');
     exit;
 }
 
-if ($_POST['patient_login']) {
-    $err = array();
+$login_errors = [];
 
-    $patient_id = trim($_POST['patient_id'] ?? '');
-    $dob = trim($_POST['dob'] ?? '');
+if (!empty($_POST['patient_login'])) {
+    $patient_id_raw = trim($_POST['patient_id'] ?? '');
+    $dob_raw        = trim($_POST['dob'] ?? '');
 
-    if (!$patient_id || !$dob) {
-        $err[] = 'Both Patient ID and Date of Birth are required.';
+    if (!$patient_id_raw || !$dob_raw) {
+        $login_errors[] = 'Both Patient ID and Date of Birth are required.';
+    }
+    if ($patient_id_raw && !is_numeric($patient_id_raw)) {
+        $login_errors[] = 'Patient ID must be a number.';
     }
 
-    if (!is_numeric($patient_id)) {
-        $err[] = 'Patient ID must be a number.';
-    }
+    if (empty($login_errors)) {
+        $patient_id_int = (int)$patient_id_raw;
+        $dob_formatted  = date('Y-m-d', strtotime($dob_raw));
 
-    if (!count($err)) {
-        $patient_id = (int)$patient_id;
-        $dob_formatted = date('Y-m-d', strtotime($dob));
-
-        if (!$dob_formatted || $dob_formatted == '1970-01-01') {
-            $err[] = 'Invalid date of birth format.';
+        if (!$dob_formatted || $dob_formatted === '1970-01-01') {
+            $login_errors[] = 'Invalid date of birth format.';
         }
     }
 
-    if (!count($err)) {
-        // Search across all doctor databases for this patient
+    if (empty($login_errors)) {
         $found = false;
         $doctors_result = mysqli_query($link_root, "SELECT username, db, db_user, db_pass FROM doctors");
 
@@ -43,47 +48,63 @@ if ($_POST['patient_login']) {
 
             $stmt = mysqli_prepare($temp_link, "SELECT id, name, dob FROM patients WHERE id = ? AND dob = ?");
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "is", $patient_id, $dob_formatted);
+                mysqli_stmt_bind_param($stmt, "is", $patient_id_int, $dob_formatted);
                 mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
+                $result  = mysqli_stmt_get_result($stmt);
                 $patient = mysqli_fetch_assoc($result);
                 mysqli_stmt_close($stmt);
 
                 if ($patient) {
-                    // Found the patient - regenerate session to prevent fixation
                     session_regenerate_id(true);
-                    $_SESSION['patient_id'] = (int)$patient['id'];
-                    $_SESSION['patient_name'] = $patient['name'];
-                    $_SESSION['patient_db'] = $doctor['db'];
-                    $_SESSION['patient_db_user'] = $doctor['db_user'];
-                    $_SESSION['patient_db_pass'] = $doctor['db_pass'];
+                    $_SESSION['patient_id']       = (int)$patient['id'];
+                    $_SESSION['patient_name']     = $patient['name'];
+                    $_SESSION['patient_db']       = $doctor['db'];
+                    $_SESSION['patient_db_user']  = $doctor['db_user'];
+                    $_SESSION['patient_db_pass']  = $doctor['db_pass'];
+
+                    if (!empty($_POST['remember_me'])) {
+                        $expires        = time() + 30 * 24 * 60 * 60;
+                        $cookie_payload = $patient_id_int . '|' . $dob_formatted . '|' . $expires;
+                        $mac            = hash_hmac('sha256', $cookie_payload, $patient_cookie_secret);
+                        setcookie('tzPatientRemember', $cookie_payload . '|' . $mac, $expires, '/', '', false, true);
+                    }
 
                     $found = true;
                     mysqli_close($temp_link);
-                    break;
+                    header('Location: patient-portal.php');
+                    exit;
                 }
             }
             mysqli_close($temp_link);
         }
 
-        if ($found) {
-            patientRedirect("patient-portal.php");
-            exit;
-        } else {
-            $err[] = 'No patient found with the given ID and Date of Birth.';
+        if (!$found) {
+            $login_errors[] = 'No patient found with the given ID and Date of Birth.';
         }
-    }
-
-    if ($err) {
-        echo '<div style="margin: 10px 25px; padding: 10px; background: #FFE0E0; border: 1px solid #FF9999; color: #CC0000;">';
-        echo implode('<br />', $err);
-        echo '</div>';
     }
 }
 ?>
+<?php include('patient-header.php'); ?>
+<script type="text/javascript">
+$(function() {
+    $("#dob").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "1950:2030",
+        dateFormat: "d M yy",
+        maxDate: new Date()
+    });
+});
+</script>
 
 <h3>Patient Login</h3>
 <p>Welcome to the patient portal. Please log in with your Patient ID and Date of Birth.</p>
+
+<?php if (!empty($login_errors)) { ?>
+<div style="margin: 10px 25px; padding: 10px; background: #FFE0E0; border: 1px solid #FF9999; color: #CC0000;">
+    <?php echo implode('<br />', array_map('htmlspecialchars', $login_errors)); ?>
+</div>
+<?php } ?>
 
 <form class="clearfix" action="" method="post" style="width:400px;">
     <h3 style="color: #2C76A6;">Patient Login</h3>
@@ -96,22 +117,16 @@ if ($_POST['patient_login']) {
         <input class="field" type="text" name="dob" id="dob" size="23" readonly />
     </p>
     <p>
+        <label style="font-weight:normal;">
+            <input type="checkbox" name="remember_me" value="1" <?php echo !empty($_POST['remember_me']) ? 'checked' : ''; ?> />
+            &nbsp;Remember me for 30 days
+        </label>
+    </p>
+    <p>
         <input type="hidden" name="patient_login" value="1" />
         <input type="submit" value="Login" class="bt_login" />
     </p>
 </form>
-
-<script>
-$(function() {
-    $("#dob").datepicker({
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "1950:2030",
-        dateFormat: "d M yy",
-        maxDate: new Date()
-    });
-});
-</script>
 
 <p style="margin: 10px 25px;"><small>Don't know your Patient ID? Please contact the clinic.</small></p>
 

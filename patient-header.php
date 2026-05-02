@@ -7,10 +7,13 @@
 
 session_name('tzLogin');
 session_set_cookie_params(2*7*24*60*60);
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 error_reporting(0);
 
-require 'connect.php';
+require_once 'connect.php';
+$patient_cookie_secret = hash_hmac('sha256', 'patient-portal', $password . $servername);
 
 // Establish DB connection for patient session
 $link = null;
@@ -24,6 +27,44 @@ if (isset($_SESSION['patient_id']) && isset($_SESSION['patient_db']) && isset($_
     }
 }
 
+// Cookie-based auto-login when session has expired
+if (!$patient_logged_in && !empty($_COOKIE['tzPatientRemember'])) {
+    $parts = explode('|', $_COOKIE['tzPatientRemember'], 4);
+    if (count($parts) === 4) {
+        list($ck_pid, $ck_dob, $ck_exp, $ck_mac) = $parts;
+        $expected = hash_hmac('sha256', $ck_pid . '|' . $ck_dob . '|' . $ck_exp, $patient_cookie_secret);
+        if (time() <= (int)$ck_exp && hash_equals($expected, $ck_mac)) {
+            $ck_pid_int = (int)$ck_pid;
+            $dr_rows = mysqli_query($link_root, "SELECT db, db_user, db_pass FROM doctors");
+            while ($dr = mysqli_fetch_assoc($dr_rows)) {
+                if (!$dr['db'] || !$dr['db_user']) continue;
+                $tl = @mysqli_connect($db_host, $dr['db_user'], $dr['db_pass'], $dr['db']);
+                if (!$tl) continue;
+                $st = mysqli_prepare($tl, "SELECT id, name FROM patients WHERE id = ? AND dob = ?");
+                if ($st) {
+                    mysqli_stmt_bind_param($st, "is", $ck_pid_int, $ck_dob);
+                    mysqli_stmt_execute($st);
+                    $ck_patient = mysqli_fetch_assoc(mysqli_stmt_get_result($st));
+                    mysqli_stmt_close($st);
+                    if ($ck_patient) {
+                        session_regenerate_id(true);
+                        $_SESSION['patient_id']      = (int)$ck_patient['id'];
+                        $_SESSION['patient_name']    = $ck_patient['name'];
+                        $_SESSION['patient_db']      = $dr['db'];
+                        $_SESSION['patient_db_user'] = $dr['db_user'];
+                        $_SESSION['patient_db_pass'] = $dr['db_pass'];
+                        $link = $tl;
+                        mysqli_query($link, "SET names UTF8");
+                        $patient_logged_in = true;
+                        break;
+                    }
+                }
+                mysqli_close($tl);
+            }
+        }
+    }
+}
+
 // Handle logout
 if (isset($_GET['logout'])) {
     unset($_SESSION['patient_id']);
@@ -31,6 +72,7 @@ if (isset($_GET['logout'])) {
     unset($_SESSION['patient_db']);
     unset($_SESSION['patient_db_user']);
     unset($_SESSION['patient_db_pass']);
+    setcookie('tzPatientRemember', '', time() - 3600, '/', '', false, true);
     // Don't destroy the whole session - doctor might be logged in too
     header('Location: patient-login.php');
     exit;
