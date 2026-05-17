@@ -27,7 +27,7 @@ if(isset($_GET['logout']))
 
 ?>
 <!DOCTYPE html>
-<link rel="shortcut icon" href="http://www.drmahima.com/favicon.ico" />
+<link rel="shortcut icon" href="/favicon.ico" />
 <head>
 <meta charset="utf8" />
 

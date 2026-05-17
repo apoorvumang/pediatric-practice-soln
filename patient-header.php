@@ -54,7 +54,7 @@ if ($currentFile == "patient-portal.php") {
 <!DOCTYPE html>
 <head>
 <meta charset="utf8" />
-<link rel="shortcut icon" href="http://www.drmahima.com/favicon.ico" />
+<link rel="shortcut icon" href="/favicon.ico" />
 <title><?php echo $pageTitle; ?></title>
 
 <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
