@@ -246,7 +246,7 @@ jQuery(function($) {
         <h3>Visit History</h3>
 
         <?php
-        $stmt = mysqli_prepare($link, "SELECT id, date, note, height, weight FROM notes WHERE p_id = ? ORDER BY date DESC");
+        $stmt = mysqli_prepare($link, "SELECT id, date, height, weight FROM notes WHERE p_id = ? ORDER BY date DESC");
         mysqli_stmt_bind_param($stmt, "i", $patient_id);
         mysqli_stmt_execute($stmt);
         $visits_result = mysqli_stmt_get_result($stmt);
@@ -266,7 +266,6 @@ jQuery(function($) {
                 <th>Height (cm)</th>
                 <th>Weight (kg)</th>
                 <th>BMI</th>
-                <th>Notes</th>
                 <th>Prescriptions</th>
                 <th>Invoices</th>
             </tr>
@@ -291,7 +290,6 @@ jQuery(function($) {
                     }
                     ?>
                     </td>
-                    <td><?php echo htmlspecialchars($row['note'] ?? ''); ?></td>
                     <td>
                     <?php
                     // Fetch prescriptions for this visit
