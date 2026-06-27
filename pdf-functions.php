@@ -3,12 +3,13 @@
 class PDF extends FPDF
 {
 
-	private $patient, $vac_sched;
+	private $patient, $vac_sched, $pending_vacs;
 
-	function setVars($patient, $vac_sched)
+	function setVars($patient, $vac_sched, $pending_vacs = array())
 	{
 		$this->patient = $patient;
 		$this->vac_sched = $vac_sched;
+		$this->pending_vacs = $pending_vacs;
 	}
 	// Colored table
 
@@ -135,6 +136,60 @@ class PDF extends FPDF
 		$this->Cell(array_sum($w),0,'','T');
 	}
 
+	function DueScheduleTable()
+	{
+		$pending = $this->pending_vacs;
+		if (empty($pending)) return;
+
+		$this->SetFont('Arial', 'B', 14);
+		$this->Cell(0, 10, 'Upcoming / Pending Vaccinations', 0, 1, 'L');
+		$this->SetFont('', 'B', 11);
+
+		$w = array(15, 80, 45, 40);
+		$headers = array('S.No.', 'Vaccine', 'Scheduled Date', 'Status');
+		for ($i = 0; $i < count($headers); $i++) {
+			$this->Cell($w[$i], 8, $headers[$i], 1, 0, 'C', false);
+		}
+		$this->Ln();
+
+		$this->SetFont('', '', 10);
+		$today = date('Y-m-d');
+		$sno = 1;
+		foreach ($pending as $row) {
+			$sched_date = $row['date'];
+			$date_display = ($sched_date != '0000-00-00') ? date('d M Y', strtotime($sched_date)) : 'TBD';
+
+			$status = 'Scheduled';
+			if ($sched_date != '0000-00-00' && $sched_date < $today) {
+				$status = 'Overdue';
+			} elseif ($sched_date != '0000-00-00' && strtotime($sched_date) <= strtotime('+30 days')) {
+				$status = 'Due Soon';
+			}
+
+			$this->Cell($w[0], 7, $sno++, 1, 0, 'C');
+			$this->Cell($w[1], 7, $row['vaccine_name'], 1, 0, 'L');
+			$this->Cell($w[2], 7, $date_display, 1, 0, 'C');
+
+			if ($status == 'Overdue') {
+				$this->SetTextColor(180, 0, 0);
+				$this->SetFont('', 'B', 10);
+			} elseif ($status == 'Due Soon') {
+				$this->SetTextColor(180, 130, 0);
+				$this->SetFont('', 'B', 10);
+			}
+			$this->Cell($w[3], 7, $status, 1, 0, 'C');
+			$this->SetTextColor(0);
+			$this->SetFont('', '', 10);
+			$this->Ln();
+		}
+
+		$this->Ln(5);
+
+		$this->SetFont('Arial', 'B', 14);
+		$this->Cell(0, 10, 'Completed Vaccinations', 0, 1, 'L');
+		$this->SetFont('Arial', '', 14);
+	}
+
 	function Header()
 	{
 		// Arial bold 15
@@ -175,19 +230,37 @@ class PDF extends FPDF
 	}
 }
 
-function createPrintSchedulePDF($id, $link) {
+function createPrintSchedulePDF($id, $link, $include_pending = false) {
 	$vac_sched = mysqli_query($link, "SELECT * FROM vac_schedule WHERE p_id='$id' AND given='Y'");
 	$patient = mysqli_fetch_assoc(mysqli_query($link, "SELECT name,dob FROM patients WHERE id='$id'"));
+
+	$pending_vacs = array();
+	if ($include_pending) {
+		$pending_q = mysqli_query($link,
+			"SELECT vs.date, v.name as vaccine_name
+			 FROM vac_schedule vs
+			 JOIN vaccines v ON vs.v_id = v.id
+			 WHERE vs.p_id='$id' AND vs.given != 'Y'
+			 ORDER BY vs.date ASC");
+		while ($row = mysqli_fetch_assoc($pending_q)) {
+			$pending_vacs[] = $row;
+		}
+	}
+
 	$pdf = new PDF();
 	$pdf->SetMargins(20,10);
-	$pdf->setVars($patient, $vac_sched);
-	// Column headings
+	$pdf->setVars($patient, $vac_sched, $pending_vacs);
+
+	if ($include_pending && !empty($pending_vacs)) {
+		$pdf->SetFont('Arial','',14);
+		$pdf->AddPage('P');
+		$pdf->DueScheduleTable();
+	}
+
 	$header = array('Vaccine', 'Dose 1', 'Dose 2', 'Dose 3', 'Dose 4', 'Dose 5', 'Dose 6', 'Dose 7', 'Dose 8', 'Dose 9');
-	// Data loading
 	$pdf->SetFont('Arial','',14);
 	$pdf->AddPage('L');
 	$pdf->FancyTable($header);
-	// $pdf->Output();
 	return $pdf;
 }
 

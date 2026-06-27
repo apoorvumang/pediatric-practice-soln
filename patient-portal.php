@@ -72,7 +72,7 @@ jQuery(function($) {
     <div id="vaccination-tab" class="outer-div">
         <h3>Vaccination Schedule</h3>
         <p>
-            <strong><a href="<?php echo "patient-pdf-schedule.php?id={$patient_id}"; ?>" target="_blank">View/Print complete vaccination record (PDF)</a></strong>
+            <strong><a href="<?php echo "patient-pdf-schedule.php?id={$patient_id}"; ?>" target="_blank">Download Complete Vaccination Schedule - Due & Completed (PDF)</a></strong>
         </p>
 
         <?php

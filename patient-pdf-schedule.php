@@ -34,7 +34,7 @@ if ($requested_id !== $patient_id) {
 include_once('fpdf/fpdf.php');
 require('pdf-functions.php');
 
-$pdf = createPrintSchedulePDF($patient_id, $link);
+$pdf = createPrintSchedulePDF($patient_id, $link, true);
 $pdf->Output();
 
 mysqli_close($link);
