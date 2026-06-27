@@ -49,18 +49,9 @@ if ($ref !== 'refs/heads/master') {
 
 $log = '/tmp/deploy-' . date('Y-m-d_H-i-s') . '.log';
 
-$commands = [
-    'cd ' . __DIR__,
-    'git fetch origin master 2>&1',
-    'git reset --hard origin/master 2>&1',
-    'composer install --no-dev --no-interaction 2>&1',
-];
-
-$output = '';
-foreach ($commands as $command) {
-    $output .= "$ {$command}\n";
-    $output .= shell_exec($command) . "\n";
-}
+$dir = __DIR__;
+$command = "cd {$dir} && git fetch origin master 2>&1 && git reset --hard origin/master 2>&1 && composer install --no-dev --no-interaction 2>&1";
+$output = shell_exec($command);
 
 file_put_contents($log, $output);
 
