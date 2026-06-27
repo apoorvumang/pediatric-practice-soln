@@ -142,7 +142,7 @@ class PDF extends FPDF
 		if (empty($pending)) return;
 
 		$this->SetFont('Arial', 'B', 14);
-		$this->Cell(0, 10, 'Upcoming / Pending Vaccinations', 0, 1, 'L');
+		$this->Cell(0, 10, 'Upcoming / Due Vaccinations', 0, 1, 'L');
 		$this->SetFont('', 'B', 11);
 
 		$w = array(15, 80, 45, 40);
