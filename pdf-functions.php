@@ -142,7 +142,7 @@ class PDF extends FPDF
 		if (empty($pending)) return;
 
 		$this->SetFont('Arial', 'B', 14);
-		$this->Cell(0, 10, 'Upcoming / Due Vaccinations', 0, 1, 'L');
+		$this->Cell(0, 10, 'Upcoming / Pending Vaccinations', 0, 1, 'L');
 		$this->SetFont('', 'B', 11);
 
 		$w = array(15, 80, 45, 40);
@@ -198,8 +198,7 @@ class PDF extends FPDF
 		$title = $patient['name'].'        DOB: '.date('d M Y', strtotime($patient['dob']));
 		$w = $this->GetStringWidth($title)+6;
 		// Move to the right
-		$pageW = $this->w / $this->k;
-		$this->SetX(($pageW-$w)/2);
+		$this->SetX(($this->w-$w)/2);
 		// Thickness of frame (1 mm)
 		$this->SetLineWidth(1);
 		// Title

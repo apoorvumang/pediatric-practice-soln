@@ -6,7 +6,7 @@
  * Secured via GitHub's HMAC-SHA256 webhook signature verification.
  *
  * Setup:
- * 1. Add DEPLOY_SECRET=<your-secret> to .env
+ * 1. Add DEPLOY_SECRET=<your-secret> to /var/www/.env
  * 2. Add a webhook in GitHub repo settings:
  *    - URL: https://drmahima.com/deploy.php
  *    - Content type: application/json
@@ -47,13 +47,21 @@ if ($ref !== 'refs/heads/master') {
     exit('Not master branch, skipping');
 }
 
+$dir = escapeshellarg(__DIR__);
+$command = "cd {$dir} && git pull origin master 2>&1";
+
+$output = [];
+$returnCode = 0;
+exec($command, $output, $returnCode);
+$result = implode("\n", $output);
+
 $log = '/tmp/deploy-' . date('Y-m-d_H-i-s') . '.log';
+file_put_contents($log, "Command: {$command}\nReturn code: {$returnCode}\nOutput:\n{$result}\n");
 
-$dir = __DIR__;
-$command = "cd {$dir} && git fetch origin master 2>&1 && git reset --hard origin/master 2>&1 && composer install --no-dev --no-interaction 2>&1";
-$output = shell_exec($command);
-
-file_put_contents($log, $output);
-
-http_response_code(200);
-echo "Deployed successfully\n";
+if ($returnCode !== 0) {
+    http_response_code(500);
+    echo "Deploy failed (exit {$returnCode}):\n{$result}\n";
+} else {
+    http_response_code(200);
+    echo "Deployed:\n{$result}\n";
+}
