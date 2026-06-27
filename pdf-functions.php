@@ -210,6 +210,8 @@ class PDF extends FPDF
 	// Page footer
 	function Footer()
 	{
+		if ($this->CurOrientation == 'P') return;
+
 		// Position at 3.0 cm from bottom
 		$this->SetY(-30);
 
@@ -226,8 +228,7 @@ class PDF extends FPDF
 		$this->Cell(70,5,$doctor_work,'','','L');
 		$this->Ln();
 		$this->Cell(70,5,$doctor_regn,'','','L');
-		$signY = $this->GetY() - 20;
-		$this->Image('mahima-sign.png',100,$signY,30);
+		$this->Image('mahima-sign.png',100,175,30);
 	}
 }
 
