@@ -48,7 +48,7 @@ if ($ref !== 'refs/heads/master') {
 }
 
 $dir = escapeshellarg(__DIR__);
-$command = "cd {$dir} && git pull origin master 2>&1";
+$command = "cd {$dir} && git -c safe.directory={$dir} pull origin master 2>&1";
 
 $output = [];
 $returnCode = 0;
