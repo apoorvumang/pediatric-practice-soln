@@ -226,7 +226,8 @@ class PDF extends FPDF
 		$this->Cell(70,5,$doctor_work,'','','L');
 		$this->Ln();
 		$this->Cell(70,5,$doctor_regn,'','','L');
-		$this->Image('mahima-sign.png',100,175,30);
+		$signY = $this->GetY() - 20;
+		$this->Image('mahima-sign.png',100,$signY,30);
 	}
 }
 
