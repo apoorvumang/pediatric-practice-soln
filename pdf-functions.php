@@ -198,7 +198,8 @@ class PDF extends FPDF
 		$title = $patient['name'].'        DOB: '.date('d M Y', strtotime($patient['dob']));
 		$w = $this->GetStringWidth($title)+6;
 		// Move to the right
-		$this->SetX((297-$w)/2);
+		$pageW = $this->w / $this->k;
+		$this->SetX(($pageW-$w)/2);
 		// Thickness of frame (1 mm)
 		$this->SetLineWidth(1);
 		// Title
