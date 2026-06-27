@@ -1,51 +1,68 @@
 <?php
-	/**
-	 * GIT DEPLOYMENT SCRIPT
-	 *
-	 * Used for automatically deploying websites via github or bitbucket, more deets here:
-	 *
-	 *		https://gist.github.com/1809044
-	 */
+/**
+ * GitHub Webhook Deployment Script
+ *
+ * Automatically pulls latest code when a push to master is detected.
+ * Secured via GitHub's HMAC-SHA256 webhook signature verification.
+ *
+ * Setup:
+ * 1. Add DEPLOY_SECRET=<your-secret> to .env
+ * 2. Add a webhook in GitHub repo settings:
+ *    - URL: https://drmahima.com/deploy.php
+ *    - Content type: application/json
+ *    - Secret: same value as DEPLOY_SECRET
+ *    - Events: Just the push event
+ */
 
-	// The commands
-	$commands = array(
-		'echo $PWD',
-		'whoami',
-		'git pull',
-		'git status',
-		'git submodule sync',
-		'git submodule update',
-		'git submodule status',
-	);
+require __DIR__ . '/vendor/autoload.php';
 
-	// Run the commands for output
-	$output = '';
-	foreach($commands AS $command){
-		// Run it
-		$tmp = shell_exec($command);
-		// Output
-		$output .= "<span style=\"color: #6BE234;\">\$</span> <span style=\"color: #729FCF;\">{$command}\n</span>";
-		$output .= htmlentities(trim($tmp)) . "\n";
-	}
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-	// Make it pretty for manual user access (and why not?)
-?>
+$secret = $_ENV['DEPLOY_SECRET'] ?? '';
+if (empty($secret)) {
+    http_response_code(500);
+    exit('Deploy secret not configured');
+}
 
-<!DOCTYPE HTML>
-<html lang="en-US">
-<head>
-	<meta charset="UTF-8">
-	<title>GIT DEPLOYMENT SCRIPT</title>
-</head>
-<body style="background-color: #000000; color: #FFFFFF; font-weight: bold; padding: 0 10px;">
-<pre>
- .  ____  .    ____________________________
- |/      \|   |                            |
-[| <span style="color: #FF0000;">&hearts;    &hearts;</span> |]  | Git Deployment Script v0.1 |
- |___==___|  /              &copy; oodavid 2012 |
-              |____________________________|
+$signature = $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ?? '';
+$payload = file_get_contents('php://input');
 
-<?php echo $output; ?>
-</pre>
-</body>
-</html>
+if (empty($signature) || empty($payload)) {
+    http_response_code(403);
+    exit('Missing signature or payload');
+}
+
+$expected = 'sha256=' . hash_hmac('sha256', $payload, $secret);
+if (!hash_equals($expected, $signature)) {
+    http_response_code(403);
+    exit('Invalid signature');
+}
+
+$data = json_decode($payload, true);
+
+$ref = $data['ref'] ?? '';
+if ($ref !== 'refs/heads/master') {
+    http_response_code(200);
+    exit('Not master branch, skipping');
+}
+
+$log = '/tmp/deploy-' . date('Y-m-d_H-i-s') . '.log';
+
+$commands = [
+    'cd ' . __DIR__,
+    'git fetch origin master 2>&1',
+    'git reset --hard origin/master 2>&1',
+    'composer install --no-dev --no-interaction 2>&1',
+];
+
+$output = '';
+foreach ($commands as $command) {
+    $output .= "$ {$command}\n";
+    $output .= shell_exec($command) . "\n";
+}
+
+file_put_contents($log, $output);
+
+http_response_code(200);
+echo "Deployed successfully\n";
