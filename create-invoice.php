@@ -2,6 +2,7 @@
 require('connect.php');
 include('header_db_link.php');
 include('header.php');
+require_once('invoice-payment-modes.php');
 
 session_name('tzLogin');
 session_start();
@@ -15,7 +16,15 @@ function addInvoice($link, $invoiceInfo) {
   if($discount == '')
     $discount = '0';
   $date = date('Y-m-d', strtotime($invoiceInfo['date']));
-  $mode = $invoiceInfo["mode"];
+  // Mode of payment. When the invoice is split across multiple modes
+  // (e.g. part cash, part UPI) build the encoded mode string from the
+  // per-mode amounts; otherwise keep the single selected mode as before.
+  if(isset($invoiceInfo['split_payment']) && is_array($invoiceInfo['split_amount'])) {
+    $builtMode = invoiceBuildModeString($invoiceInfo['split_amount']);
+    $mode = ($builtMode === '') ? $invoiceInfo["mode"] : $builtMode;
+  } else {
+    $mode = $invoiceInfo["mode"];
+  }
   $visit_id = $invoiceInfo['visit_id'];
   $length = sizeof($invoiceInfo['description']);
   for($i = 0; $i < $length; $i++) {
@@ -81,6 +90,7 @@ function addInvoice($link, $invoiceInfo) {
     $invoice_id = $doctor_header.$year."/00001";
   }
 
+  $mode = mysqli_real_escape_string($link, $mode);
   $query = "INSERT into invoice(p_id, date, mode, descriptions, amounts, invoice_id, doctor, discount) VALUES ('{$p_id}', '{$date}', '{$mode}', '{$descriptionConcat}', '{$amountConcat}', '{$invoice_id}', '{$doctor}', '{$discount}');";
   $retval = mysqli_query($link, $query);
   if($retval) {
@@ -137,6 +147,9 @@ function updateAmountTotal() {
   $("#totalBeforeDiscount").val(sum);
   sum = sum - $("#discount").val();
   $("#totalAmount").val(sum);
+  if(typeof updateSplitTotal === 'function') {
+    updateSplitTotal();
+  }
 }
 
 function setDescriptionAndAmountValues(val, id) {
@@ -154,10 +167,60 @@ $(document).on("change", "#discount", function() {
   updateAmountTotal();
 });
 
+function toggleSplitPayment() {
+  var on = document.getElementById('split_payment').checked;
+  document.getElementById('splitPaymentBox').style.display = on ? 'block' : 'none';
+  // When splitting, the single mode dropdown is ignored on the server; keep it
+  // enabled so it still posts a value (used as a fallback only).
+  document.getElementById('mode').style.opacity = on ? '0.5' : '1';
+  updateSplitTotal();
+}
+
+function getSplitTotal() {
+  var sum = 0;
+  $(".split-amounts").each(function(){
+    sum += +$(this).val();
+  });
+  return sum;
+}
+
+function updateSplitTotal() {
+  var splitSum = getSplitTotal();
+  document.getElementById('splitTotal').innerHTML = splitSum;
+  var finalAmount = +document.getElementById('totalAmount').value;
+  var mismatch = document.getElementById('split_payment').checked && splitSum != finalAmount;
+  document.getElementById('splitMismatch').style.display = mismatch ? 'inline' : 'none';
+}
+
+function confirmInvoice() {
+  var finalAmount = document.getElementById('totalAmount').value;
+  if(document.getElementById('split_payment').checked) {
+    var splitSum = getSplitTotal();
+    if(splitSum == 0) {
+      alert('Split is enabled but no amounts were entered. Please enter the amount received per mode.');
+      return false;
+    }
+    var msg = 'Create invoice with total amount: ' + finalAmount + ' split as ';
+    var parts = [];
+    $(".split-amounts").each(function(){
+      var val = +$(this).val();
+      if(val > 0) {
+        parts.push(this.name.replace('split_amount[','').replace(']','') + ': ' + val);
+      }
+    });
+    msg += parts.join(', ');
+    if(splitSum != finalAmount) {
+      msg += '\n\nWARNING: split total (' + splitSum + ') does not match the final amount (' + finalAmount + ').';
+    }
+    return confirm(msg + '?');
+  }
+  var modeSelect = document.getElementById('mode');
+  return confirm('Create invoice with total amount: ' + finalAmount + ' and mode of payment: ' + modeSelect.options[modeSelect.selectedIndex].text + '?');
+}
 
 </script>
 <h4>Create Invoice for <?php echo $patientName; ?></h4>
-<form onsubmit="return confirm('Create invoice with total amount: ' + document.getElementById('totalAmount').value + ' and mode of payment: ' + document.getElementById('mode').options[document.getElementById('mode').selectedIndex].text + '?');" action="" method="post" enctype="multipart/form-data" style="width:auto" >
+<form onsubmit="return confirmInvoice();" action="" method="post" enctype="multipart/form-data" style="width:auto" >
 <input type="hidden" name="p_id" value=<?php echo "'".$_GET['id']."'"; ?> />
   <input type="hidden" name="visit_id" value=<?php echo "'".$_GET['visit_id']."'"; ?> />
   <p>
@@ -179,7 +242,27 @@ $(document).on("change", "#discount", function() {
       <option value='PAYTM'>PayTM</option>
       <option value='UPI'>UPI</option>
     </select>
+    &nbsp;&nbsp;
+    <label class="grey" for="split_payment">
+      <input type="checkbox" name="split_payment" id="split_payment" value="1" onchange="toggleSplitPayment()"/>
+      Split across modes
+    </label>
   </p>
+  <div id="splitPaymentBox" style="display:none; margin: 0 0 10px 0; padding: 8px 12px; border: 1px solid #ccc; width: 320px;">
+    <p style="margin-top:0;">Enter amount received per mode (blank = not used):</p>
+    <?php
+      $splitModes = array('CASH' => 'Cash', 'CARD' => 'Card', 'PAYTM' => 'PayTM', 'UPI' => 'UPI');
+      foreach($splitModes as $value => $display) {
+        echo "<p style='margin:4px 0;'>";
+        echo "<label style='display:inline-block; width:70px;'>{$display}</label>";
+        echo "<input type='text' name='split_amount[{$value}]' class='split-amounts' onkeyup='updateSplitTotal()' onchange='updateSplitTotal()' style='font-size:15px; width:120px;'/>";
+        echo "</p>";
+      }
+    ?>
+    <p style="margin:4px 0;">Split total: <strong id="splitTotal">0</strong>
+      <span id="splitMismatch" style="color:#c0392b; display:none;">&nbsp;(does not match final amount)</span>
+    </p>
+  </div>
   <p>
     <label>Description and amount </label>
     <br>

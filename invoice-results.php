@@ -2,6 +2,7 @@
 if($_SESSION['type']!=='doctor') {
   exit();
 }
+require_once('invoice-payment-modes.php');
 //What needs to be done on this page:
 // List out all schedules for a particular date, in a form.
 // The dates *only* can be edited. Give a link for the patient also.
@@ -106,7 +107,7 @@ while($row = mysqli_fetch_assoc($result))
 <?php echo date('j M Y',strtotime($row['date'])); ?>
 </td>
 <td>
-<?php echo $row['mode']; ?>
+<?php echo invoiceFormatPaymentModes($row['mode']); ?>
 </td>
 <td>
 <?php
@@ -130,14 +131,18 @@ while($row = mysqli_fetch_assoc($result))
   }
   $grandTotal = $total - $row['discount'];
   echo $grandTotal;
-  if($row['mode'] == "CASH") {
-    $cash += $grandTotal;
-  } else if($row['mode'] == "CARD") {
-    $card += $grandTotal;
-  } else if($row['mode'] == "PAYTM") {
-    $paytm += $grandTotal;
-  } else if($row['mode'] == "UPI") {
-    $upi += $grandTotal;
+  // Attribute the grand total to its payment mode(s). Split invoices
+  // (e.g. CASH:300+UPI:200) contribute to each mode separately.
+  foreach (invoiceParsePaymentModes($row['mode'], $grandTotal) as $payMode => $payAmount) {
+    if($payMode == "CASH") {
+      $cash += $payAmount;
+    } else if($payMode == "CARD") {
+      $card += $payAmount;
+    } else if($payMode == "PAYTM") {
+      $paytm += $payAmount;
+    } else if($payMode == "UPI") {
+      $upi += $payAmount;
+    }
   }
   ?>
 </td>
