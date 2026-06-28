@@ -78,6 +78,7 @@ if($_GET['specificdate'] || $_GET['dateRange'] || $_GET['patientID'])  //If some
 <th>Amounts</th>
 <th>Discount</th>
 <th>Total</th>
+<th>Edit</th>
 <th>Delete</th>
 </tr>
 <?php
@@ -140,6 +141,9 @@ while($row = mysqli_fetch_assoc($result))
     $upi += $grandTotal;
   }
   ?>
+</td>
+<td>
+<a href=<?php echo "\"edit-invoice.php?id={$row['id']}\""; ?>>Edit</a>
 </td>
 <td>
 <input type="checkbox" name="delete[]" value=<?php echo "'{$row['id']}'"; ?> />
