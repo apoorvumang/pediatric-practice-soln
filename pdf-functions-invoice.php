@@ -1,5 +1,7 @@
 <?php
 
+require_once('invoice-payment-modes.php');
+
 class PDF extends FPDF
 {
 
@@ -128,7 +130,7 @@ class PDF extends FPDF
 		$this->Cell(70,5,"To Pay: Rs. ".$stringGrandTotal."  only",'','','L');
 		$this->Ln();
 		$this->SetFont('Arial','',12);
-		$this->Cell(70,5,"Mode of payment: ".$mode,'','','L');
+		$this->Cell(70,5,"Mode of payment: ".invoiceFormatPaymentModes($mode),'','','L');
 		$this->Ln();
 	}
 
