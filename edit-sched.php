@@ -1229,7 +1229,8 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
             $dialogId = "dialog".$prescriptionId;
             $openerId = "opener".$prescriptionId;
 			if(strpos($prescriptionUrl, '.pdf') != false) {
-				$s = "<a href={$prescriptionUrl}>Document {$i}</a>";
+				$s = "<div style='margin:5px 0;'><a href={$prescriptionUrl} target='_blank'>Document {$i}</a> ";
+				$s .= "<button type='button' onclick=\"deletePrescription({$prescriptionId})\">Delete</button></div>";
 				echo $s;
 			} else {
 			
