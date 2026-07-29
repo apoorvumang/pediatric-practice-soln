@@ -156,8 +156,19 @@ footer.php
 
 ### 6. Invoicing & Payments
 - **`create-invoice.php`** - Generate invoices (8.3KB)
+- **`edit-invoice.php`** - Edit an existing invoice: line items, amounts, discount and mode(s) of payment. The invoice number, doctor and date are deliberately read-only because they determine the invoice number series.
+- **`invoice-payments-func.php`** - Helpers for payments split across more than one mode (part cash + part UPI on one invoice)
+- **`invoice-payment-split-ui.php`** - Shared "mode of payment" form fields used by create-invoice.php and edit-invoice.php
+- **`invoice-lines-func.php`** - Reading/rebuilding the `descriptions`/`amounts` strings of an invoice
 - **`search-invoice.php`** - Search existing invoices
 - **`invoice-results.php`** - Display invoice search results
+
+**Split payments (multiple modes on one invoice)**:
+- `invoice`.`mode` always holds ONE of `CASH`/`CARD`/`PAYTM`/`UPI` - for a split payment it holds the mode with the largest amount. No existing reader of that column can break, and the `invoice` table itself is unchanged.
+- The break-up lives in the `invoice_payments` table (`invoice_id`, `mode`, `amount`), and rows are written only for invoices that really are split. An invoice with no rows there is treated as a single payment of the whole amount in `invoice`.`mode`, so every pre-existing invoice keeps behaving exactly as before.
+- The table is created on demand (`CREATE TABLE IF NOT EXISTS`) the first time a split payment is saved; the DDL is also documented at the top of `invoice-payments-func.php` if it is preferred to create it by hand. Every read path falls back to `invoice`.`mode` when the table is absent.
+
+**Line item storage**: `descriptions` and `amounts` are `*`-separated strings with one entry each per line. A description ending in `xx` marks a hand typed line - that marker is what stops `pdf-functions-invoice.php` appending the word "Vaccination" to it, so it must be preserved when editing.
 - **`payment_due.php`** - View pending payments
 - **`email-invoice.php`** + **`email-invoice-ui.php`** - Email invoices to patients
 
@@ -392,6 +403,12 @@ include('header_db_link.php');
 2. **Configure Schedule**: Set `no_of_days`, `dependent`, `sex` fields
 3. **Update Schedule Generation**: May need to modify `gen-sched-func.php` for complex dependencies
 4. **Test**: Use `edit-sched.php` to verify schedule appears correctly
+
+### Adding a New Mode of Payment
+
+1. Add it to `invoicePaymentModes()` in `invoice-payments-func.php` (this drives the dropdowns on create/edit, the split rows and the by-mode totals on `invoice-results.php`)
+2. Add it to `invoiceSplitRowModeOrder()` in the same file, in the order the split rows should appear
+3. Check the `mode` column of the `invoice` table is wide enough / includes the new value if it is an ENUM
 
 ### Modifying Invoice Template
 

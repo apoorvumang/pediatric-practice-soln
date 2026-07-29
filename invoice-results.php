@@ -1,4 +1,5 @@
 <?php include('header.php');
+include_once('invoice-payments-func.php');
 if($_SESSION['type']!=='doctor') {
   exit();
 }
@@ -63,6 +64,17 @@ if($_GET['specificdate'] || $_GET['dateRange'] || $_GET['patientID'])  //If some
 
   $result = mysqli_query($link, $query);
   $nrows = mysqli_num_rows($result);
+
+  // Read the rows first so that the payment break-ups of every invoice on the
+  // page can be fetched in a single query.
+  $invoiceRows = array();
+  while($row = mysqli_fetch_assoc($result)) {
+    $row['grandTotal'] = invoiceGrandTotalFromAmountsString($row['amounts'], $row['discount']);
+    $invoiceRows[] = $row;
+  }
+  $paymentsByInvoice = getInvoicePaymentsForInvoices($link, array_map(function($row) {
+    return array('id' => $row['id'], 'mode' => $row['mode'], 'total' => $row['grandTotal']);
+  }, $invoiceRows));
 ?>
 <form action="" method="post" enctype="multipart/form-data" style="width:auto" name="1">
 <table>
@@ -78,16 +90,18 @@ if($_GET['specificdate'] || $_GET['dateRange'] || $_GET['patientID'])  //If some
 <th>Amounts</th>
 <th>Discount</th>
 <th>Total</th>
+<th>Edit</th>
 <th>Delete</th>
 </tr>
 <?php
 $count = 0;
-$cash = 0;
-$card = 0;
-$paytm = 0;
-$upi = 0;
-while($row = mysqli_fetch_assoc($result))
+$totalsByMode = array();
+foreach(array_keys(invoicePaymentModes()) as $modeKey) {
+  $totalsByMode[$modeKey] = 0;
+}
+foreach($invoiceRows as $row)
 {
+  $payments = $paymentsByInvoice[(int)$row['id']];
 ?>
 <tr>
 <td>
@@ -106,7 +120,7 @@ while($row = mysqli_fetch_assoc($result))
 <?php echo date('j M Y',strtotime($row['date'])); ?>
 </td>
 <td>
-<?php echo $row['mode']; ?>
+<?php echo str_replace(" + ", "<br>", formatInvoicePaymentSplit($payments)); ?>
 </td>
 <td>
 <?php
@@ -123,23 +137,18 @@ while($row = mysqli_fetch_assoc($result))
 </td>
 <td>
   <?php
-  $total = 0;
-  $amounts = explode(",", $row['amounts']);
-  foreach ($amounts as $key => $amount) {
-    $total = $total + $amount;
-  }
-  $grandTotal = $total - $row['discount'];
-  echo $grandTotal;
-  if($row['mode'] == "CASH") {
-    $cash += $grandTotal;
-  } else if($row['mode'] == "CARD") {
-    $card += $grandTotal;
-  } else if($row['mode'] == "PAYTM") {
-    $paytm += $grandTotal;
-  } else if($row['mode'] == "UPI") {
-    $upi += $grandTotal;
+  echo formatInvoiceAmount($row['grandTotal']);
+  foreach ($payments as $payment) {
+    $mode = $payment['mode'];
+    if (!isset($totalsByMode[$mode])) {
+      $totalsByMode[$mode] = 0;
+    }
+    $totalsByMode[$mode] += $payment['amount'];
   }
   ?>
+</td>
+<td>
+<a href=<?php echo "\"edit-invoice.php?id={$row['id']}\""; ?>>Edit</a>
 </td>
 <td>
 <input type="checkbox" name="delete[]" value=<?php echo "'{$row['id']}'"; ?> />
@@ -149,7 +158,13 @@ while($row = mysqli_fetch_assoc($result))
 $count++;
 }
 
-$totalDisplay = "CASH: ".$cash.".00<br>CARD: ".$card.".00<br>PAYTM: ".$paytm.".00<br>UPI: ".$upi.".00<br>FINAL AMOUNT: ".($cash + $card + $paytm + $upi).".00";
+$totalDisplay = "";
+$grandTotalAllModes = 0;
+foreach ($totalsByMode as $mode => $modeTotal) {
+  $totalDisplay .= $mode.": ".number_format($modeTotal, 2, '.', '')."<br>";
+  $grandTotalAllModes += $modeTotal;
+}
+$totalDisplay .= "FINAL AMOUNT: ".number_format($grandTotalAllModes, 2, '.', '');
 
 ?>
 </tbody>

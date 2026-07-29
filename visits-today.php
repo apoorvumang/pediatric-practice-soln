@@ -134,6 +134,7 @@ if($_SESSION['type']=='doctor') {
     while ($invoiceRow = mysqli_fetch_assoc($invoiceResult)) {
       $invoiceId = $invoiceRow['invoice_id'];
       echo "<a href='pdf-invoice.php?id={$invoiceId}'><div style='background-color:#2c76a6;padding:5px;margin:5px;text-align:center;color:white'> {$invoiceId} </div></a>";
+      echo "<a href='edit-invoice.php?id={$invoiceId}' style='color:#2c76a6;font-size:12px;'>Edit invoice</a><br>";
     }
   } 
   echo "<a href='create-invoice.php?id={$row['pid']}&visit_id={$row['id']}' style='color:#2c76a6; white-space: nowrap;'>Create Invoice</a>";

@@ -2,6 +2,8 @@
 require('connect.php');
 include('header_db_link.php');
 include('header.php');
+include_once('invoice-payments-func.php');
+include_once('invoice-payment-split-ui.php');
 
 session_name('tzLogin');
 session_start();
@@ -15,7 +17,7 @@ function addInvoice($link, $invoiceInfo) {
   if($discount == '')
     $discount = '0';
   $date = date('Y-m-d', strtotime($invoiceInfo['date']));
-  $mode = $invoiceInfo["mode"];
+  $mode = sanitizeInvoicePaymentMode($invoiceInfo["mode"]);
   $visit_id = $invoiceInfo['visit_id'];
   $length = sizeof($invoiceInfo['description']);
   for($i = 0; $i < $length; $i++) {
@@ -52,6 +54,21 @@ function addInvoice($link, $invoiceInfo) {
   if($descriptionb) {
     $amountConcat .= "*".$amountb;
   }
+
+  // Payment split across more than one mode (part cash + part UPI etc.)
+  $grandTotal = invoiceGrandTotalFromAmountsString($amountConcat, $discount);
+  $paymentError = '';
+  $payments = invoicePaymentsFromPost($invoiceInfo, $grandTotal, $paymentError);
+  if($payments === false) {
+    echo "<h4 style='color:#b00'>Invoice not created: ".$paymentError."</h4>";
+    return 0;
+  }
+  if($payments) {
+    // Keep a real, known mode in invoice.mode so that everything which reads
+    // only that column keeps working - the break-up is stored separately.
+    $mode = dominantInvoicePaymentMode($payments, $mode);
+  }
+
   $time = time();
   $stime = "$time";
   $finaltime = substr($stime,-3);
@@ -85,6 +102,12 @@ function addInvoice($link, $invoiceInfo) {
   $retval = mysqli_query($link, $query);
   if($retval) {
     $invoiceId = mysqli_insert_id($link);
+    if($payments) {
+      if(!saveInvoicePayments($link, $invoiceId, $payments)) {
+        echo "<h4 style='color:#b00'>Invoice was created, but the split payment break-up could not be saved. "
+            ."The invoice shows the whole amount as {$mode} - please edit the invoice to fix the break-up.</h4>";
+      }
+    }
     // insert in new table visit_invoices, rather than updating notes table
     // to support multiple invoices per visit
     $query = "INSERT INTO visit_invoices (visit_id, invoice_id) VALUES ($visit_id, $invoiceId)";
@@ -137,6 +160,20 @@ function updateAmountTotal() {
   $("#totalBeforeDiscount").val(sum);
   sum = sum - $("#discount").val();
   $("#totalAmount").val(sum);
+  if (typeof updateSplitPaymentUI === 'function') {
+    updateSplitPaymentUI();
+  }
+}
+
+// Blocks the submit when a split payment does not add up to the invoice total.
+function confirmCreateInvoice() {
+  var error = splitPaymentError();
+  if (error !== '') {
+    alert("Please check the payment break-up: " + error);
+    return false;
+  }
+  return confirm('Create invoice with total amount: ' + $("#totalAmount").val()
+    + ' and mode of payment: ' + paymentModeDescription() + '?');
 }
 
 function setDescriptionAndAmountValues(val, id) {
@@ -157,7 +194,7 @@ $(document).on("change", "#discount", function() {
 
 </script>
 <h4>Create Invoice for <?php echo $patientName; ?></h4>
-<form onsubmit="return confirm('Create invoice with total amount: ' + document.getElementById('totalAmount').value + ' and mode of payment: ' + document.getElementById('mode').options[document.getElementById('mode').selectedIndex].text + '?');" action="" method="post" enctype="multipart/form-data" style="width:auto" >
+<form onsubmit="return confirmCreateInvoice();" action="" method="post" enctype="multipart/form-data" style="width:auto" >
 <input type="hidden" name="p_id" value=<?php echo "'".$_GET['id']."'"; ?> />
   <input type="hidden" name="visit_id" value=<?php echo "'".$_GET['visit_id']."'"; ?> />
   <p>
@@ -170,15 +207,6 @@ $(document).on("change", "#discount", function() {
   <p>
     <label for="date">Date:&nbsp;&nbsp;</label>
     <input type="text" name="date" id="date" value= <?php echo "'".date('j M Y')."'";?>/>
-  </p>
-  <p>
-    <label class="grey" for="mode">Mode of payment:&nbsp;&nbsp;</label>
-    <select name="mode" id="mode" style="margin-right:60px;">
-      <option value='CASH'>Cash</option>
-      <option value='CARD'>Card</option>
-      <option value='PAYTM'>PayTM</option>
-      <option value='UPI'>UPI</option>
-    </select>
   </p>
   <p>
     <label>Description and amount </label>
@@ -235,6 +263,7 @@ $(document).on("change", "#discount", function() {
   <p>Total before discount: <input type="text" name="totalBeforeDiscount" style="font-size:15px" id='totalBeforeDiscount' readonly="1"/></p>
   <p>Discount: <input type="text" name="discount" style="font-size:15px" id='discount'/></p>
   <p><strong>Final amount: Rs. </strong><input type="text" name="totalAmount" style="font-size:25px" id='totalAmount' readonly="1"/></p>
+  <?php renderInvoicePaymentModeFields('CASH'); ?>
   <p>
   	<input type="submit" name="submit" value="Create invoice" />
   </p>
