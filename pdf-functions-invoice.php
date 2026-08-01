@@ -1,5 +1,7 @@
 <?php
 
+include_once('invoice-payments-func.php');
+
 class PDF extends FPDF
 {
 
@@ -54,7 +56,9 @@ class PDF extends FPDF
     }
 	}
 
-	function AmountDetails($amountInfo, $mode) {
+	// $payments is the break-up of the payment: one entry for a normal invoice,
+	// one entry per mode when the invoice was paid part cash / part UPI etc.
+	function AmountDetails($amountInfo, $mode, $payments = null) {
 		$this->Ln(5);
 		$descriptions = explode("*",$amountInfo[0]);
 		$amounts = explode("*",$amountInfo[1]);
@@ -128,8 +132,17 @@ class PDF extends FPDF
 		$this->Cell(70,5,"To Pay: Rs. ".$stringGrandTotal."  only",'','','L');
 		$this->Ln();
 		$this->SetFont('Arial','',12);
-		$this->Cell(70,5,"Mode of payment: ".$mode,'','','L');
-		$this->Ln();
+		if($payments && count($payments) > 1) {
+			$this->Cell(165,5,"Mode of payment:",'','','L');
+			$this->Ln();
+			foreach($payments as $payment) {
+				$this->Cell(165,5,"      ".$payment['mode'].": Rs. ".formatInvoiceAmount($payment['amount']),'','','L');
+				$this->Ln();
+			}
+		} else {
+			$this->Cell(165,5,"Mode of payment: ".$mode,'','','L');
+			$this->Ln();
+		}
 	}
 
 
@@ -154,8 +167,10 @@ function createInvoicePDF($id, $link) {
 	$doctor = $invoiceInfo['doctor'];
 	$amountInfo = array($invoiceInfo["descriptions"], $invoiceInfo["amounts"], $invoiceInfo["discount"]);
 	$mode = $invoiceInfo["mode"];
+	$grandTotal = invoiceGrandTotalFromAmountsString($invoiceInfo["amounts"], $invoiceInfo["discount"]);
+	$payments = getInvoicePayments($link, $id, $mode, $grandTotal);
 	$pdf->InvoiceDetails($info, $doctor);
-	$pdf->AmountDetails($amountInfo, $mode);
+	$pdf->AmountDetails($amountInfo, $mode, $payments);
 	return $pdf;
 
 }

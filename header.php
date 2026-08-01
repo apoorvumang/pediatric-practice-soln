@@ -74,6 +74,9 @@ switch($currentFile)
   case "invoice-results.php":
 	$title = "Invoice results";
 	break;
+  case "edit-invoice.php":
+	$title = "Edit Invoice";
+	break;
   case "search-invoice.php":
 	$title = "Search invoice";
 	break;
