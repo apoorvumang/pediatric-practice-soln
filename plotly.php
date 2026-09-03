@@ -122,7 +122,7 @@ include('header_db_link.php');
       if($_GET['type'] == "height") {
         $displayType = "Stature (cm)";
       } else {
-        $displayType = "BMI";
+        $displayType = "BMI (kg/m<sup>2</sup>)";
       }
      ?>
      title: <?php echo "'{$displayType} for age ({$displaySex} 2-20 years)'"; ?>,
