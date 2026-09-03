@@ -63,7 +63,7 @@ if($_POST['save_changes']) {
 <th>Patient</th>
 <th>Height (cm)</th>
 <th>Weight (kg)</th>
-<th>BMI</th>
+<th>BMI (kg/m<sup>2</sup>)</th>
 <th>Note</th>
 <th>Date</th>
 <th>Invoice ID</th>

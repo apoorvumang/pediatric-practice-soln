@@ -57,7 +57,7 @@ if (isset($row['height'], $row['weight']) && is_numeric($row['height']) && is_nu
   if ($height != 0) {
       $height_squared = $height * $height;
       $bmi = $weight / $height_squared;
-      echo number_format((float)$bmi, 2, '.', '');
+      echo number_format((float)$bmi, 2, '.', '')." kg/m<sup>2</sup>";
   } else {
       echo "NA";
   }
