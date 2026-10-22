@@ -1,10 +1,15 @@
 <?php
 
-require 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 // Load environment variables
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
+foreach ([__DIR__, __DIR__ . '/../'] as $path) {
+  if (file_exists($path . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable($path);
+    $dotenv->safeLoad();
+    break;
+  }
+}
 
 class SmsGateway {
   // using smsgateway.me app

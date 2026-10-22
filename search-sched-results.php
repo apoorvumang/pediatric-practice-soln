@@ -3,11 +3,9 @@
 // List out all schedules for a particular date, in a form.
 // The dates *only* can be edited. Give a link for the patient also.
 
-include "smsGateway.php";
-include 'send_message_twilio.php';
-$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
+include "messageGateway.php";
 
-$deviceID = 84200;
+$messageGateway = new MessageGateway();
 ?>
 
 <h3>Search Results</h3>
@@ -242,91 +240,70 @@ else if(isset($_POST['save']))
 }
 else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_POST['sendemail']))
 {
-	$queryPart1 = "SELECT p.email as email, p.id as pid, p.first_name as pname, group_concat(v.name order by v.name asc separator ',') as vaccines, vs.date as date, p.phone as phone, p.phone2 as phone2 FROM patients p, vaccines v, vac_schedule vs WHERE  p.id = vs.p_id AND v.id = vs.v_id AND vs.id in(";
-	$queryPart3 = ") group by p.id, vs.date";
-	$queryPart2 = "";
-	foreach ($_POST['send_sms_id'] as $key => $value) {
-		$queryPart2 .= "{$value},";
-	}
-	$queryPart2 .="0";
-	$query = $queryPart1.$queryPart2.$queryPart3;
-	$result = mysqli_query($link, $query);
-
-	while ($row = mysqli_fetch_assoc($result))
+	if (isset($_POST['send_sms_id']))
 	{
-		$row['vaccines'] = str_replace("PNEUMOCOCCAL", "PCV", $row['vaccines']);
-		// initialize $templateName to blank, $msg_data to blank dictionary
-
-		$templateName = '';
-		$msg_data = [];
-
-		if(isset($_POST['sendautosms'])||isset($_POST['sendemail']))
-		{
-			if(strtotime($row['date']) < strtotime("now"))	//If date has passed
-			{
-				$templateName = 'vaccine_reminder_nodate';
-				$msg_data = [
-					'name' => $row['pname'],
-					'vaccine' => $row['vaccines']
-				];
-				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination\n" .$dr_name."\n".$dr_phone;
-			}
-			else
-			{
-				$templateName = 'vaccine_reminder';
-				$msg_data = [
-					'name' => $row['pname'],
-					'vaccine' => $row['vaccines'],
-					'date' => date('j M Y',strtotime($row['date']))
-				];
-				$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination on ".date('j M Y',strtotime($row['date']))."\n".$dr_name."\n".$dr_phone;
-			}
+		$queryPart1 = "SELECT p.email as email, p.id as pid, p.first_name as pname, group_concat(v.name order by v.name asc separator ',') as vaccines, vs.date as date, p.phone as phone, p.phone2 as phone2 FROM patients p, vaccines v, vac_schedule vs WHERE  p.id = vs.p_id AND v.id = vs.v_id AND vs.id in(";
+		$queryPart3 = ") group by p.id, vs.date";
+		$queryPart2 = "";
+		foreach ($_POST['send_sms_id'] as $key => $value) {
+			$queryPart2 .= "{$value},";
 		}
-		else
-		{
-			$message = $_POST['customsms'];
-		}
+		$queryPart2 .="0";
+		$query = $queryPart1.$queryPart2.$queryPart3;
+		$result = mysqli_query($link, $query);
 
-		if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
+		while ($row = mysqli_fetch_assoc($result))
 		{
-			if ($use_twilio)
+			$row['vaccines'] = str_replace("PNEUMOCOCCAL", "PCV", $row['vaccines']);
+			$messageType = 'custom';
+			$msg_data = [];
+
+			if(isset($_POST['sendautosms'])||isset($_POST['sendemail']))
 			{
-				if(isset($_POST['sendautosms'])) {
-					$phone = $row['phone'];
-					$phone2 = $row['phone2'];
-
-					if($phone)
-						$message = sendMessageTwilio($phone, $templateName, $msg_data);
-					if($phone2)
-						$message = sendMessageTwilio($phone2, $templateName, $msg_data);
-
-					echo "Twilio Whatsapp vaccine reminder msg sent with data " . json_encode($msg_data) . " to {$row['pname']} <br>";
-				} else if(isset($_POST['sendcustomsms'])) {
-					echo "Custom SMS not supported for Twilio Whatsapp <br>";
+				if(strtotime($row['date']) < strtotime("now"))	//If date has passed
+				{
+					$messageType = 'vaccine_reminder_nodate';
+					$msg_data = [
+						'name' => $row['pname'],
+						'vaccine' => $row['vaccines']
+					];
+					$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination\n" .$dr_name."\n".$dr_phone;
 				}
-
+				else
+				{
+					$messageType = 'vaccine_reminder';
+					$msg_data = [
+						'name' => $row['pname'],
+						'vaccine' => $row['vaccines'],
+						'date' => date('j M Y',strtotime($row['date']))
+					];
+					$message = "Dear {$row['pname']}\nYou are due for {$row['vaccines']} vaccination on ".date('j M Y',strtotime($row['date']))."\n".$dr_name."\n".$dr_phone;
+				}
 			}
 			else
+			{
+				$message = $_POST['customsms'];
+			}
+
+			if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 			{
 				if($row['phone'])
-					$smsResult = $smsGateway->sendMessageToNumber($row['phone'], $message, $deviceID);
+					sendClinicMessage($messageGateway, $row['phone'], $messageType, $msg_data, $message, $row['pname']);
 				if($row['phone2'])
-					$smsResult = $smsGateway->sendMessageToNumber($row['phone2'], $message, $deviceID);
-				echo "SMS sent to {$row['pname']} <br>";
+					sendClinicMessage($messageGateway, $row['phone2'], $messageType, $msg_data, $message, $row['pname']);
 			}
-			
-		}
 
-		if(isset($_POST['sendemail']))
-		{
-			if($row['email'])
+			if(isset($_POST['sendemail']))
 			{
-				mail($row['email'], 'Vaccination Due - '.$dr_name, $message, "From: ".$dr_email."\n");
-				echo "Email sent to {$row['pname']} <br>";
-			}
-			else
-			{
-				echo "Unable to send email - no email address present. Patient name: {$row['pname']} <br>";
+				if($row['email'])
+				{
+					mail($row['email'], 'Vaccination Due - '.$dr_name, $message, "From: ".$dr_email."\n");
+					echo "Email sent to {$row['pname']} <br>";
+				}
+				else
+				{
+					echo "Unable to send email - no email address present. Patient name: {$row['pname']} <br>";
+				}
 			}
 		}
 	}
@@ -346,30 +323,24 @@ else if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms'])||isset($_PO
         while ($apptRow = mysqli_fetch_assoc($apptResult))
         {
             if (isset($_POST['sendautosms']) || isset($_POST['sendemail'])) {
+                $messageType = 'appointment_reminder';
+                $templateData = [
+                    'name' => $apptRow['pname'],
+                    'date' => date('j M Y', strtotime($apptRow['date'])),
+                ];
                 $message = "Dear {$apptRow['pname']},\nYou have an appointment on " . date('j M Y', strtotime($apptRow['date'])) . ".\nDr. {$dr_name}\n{$dr_phone}";
             } else {
+                $messageType = 'custom';
+                $templateData = [];
                 $message = $_POST['customsms'];
             }
 
             // SMS sending
             if (isset($_POST['sendautosms']) || isset($_POST['sendcustomsms'])) {
-                if ($use_twilio) {
-                    if ($apptRow['phone']) {
-                        sendMessageTwilio($apptRow['phone'], 'appointment_reminder', ['name' => $apptRow['pname'], 'date' => date('j M Y', strtotime($apptRow['date']))]);
-                    }
-                    if ($apptRow['phone2']) {
-                        sendMessageTwilio($apptRow['phone2'], 'appointment_reminder', ['name' => $apptRow['pname'], 'date' => date('j M Y', strtotime($apptRow['date']))]);
-                    }
-                    echo "Twilio WhatsApp appointment reminder sent to {$apptRow['pname']}<br>";
-                } else {
-                    if ($apptRow['phone']) {
-                        $smsResult = $smsGateway->sendMessageToNumber($apptRow['phone'], $message, $deviceID);
-                    }
-                    if ($apptRow['phone2']) {
-                        $smsResult = $smsGateway->sendMessageToNumber($apptRow['phone2'], $message, $deviceID);
-                    }
-                    echo "SMS sent to {$apptRow['pname']}<br>";
-                }
+                if ($apptRow['phone'])
+                    sendClinicMessage($messageGateway, $apptRow['phone'], $messageType, $templateData, $message, $apptRow['pname']);
+                if ($apptRow['phone2'])
+                    sendClinicMessage($messageGateway, $apptRow['phone2'], $messageType, $templateData, $message, $apptRow['pname']);
             }
 
             // Email sending

@@ -1,8 +1,6 @@
 <?php include('header.php');
-include "smsGateway.php";
-$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
-
-$deviceID = 84200;
+include "messageGateway.php";
+$messageGateway = new MessageGateway();
 if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 {
 	$queryPart1 = "SELECT p.id as pid, p.name as pname, sum(pd.amount) as total_amount, group_concat(pd.comment order by pd.comment asc separator ',') as comment, p.phone as phone, p.phone2 as phone2 FROM patients p, payment_due pd WHERE  p.id = pd.p_id AND pd.id in(";
@@ -18,18 +16,25 @@ if(isset($_POST['sendautosms'])||isset($_POST['sendcustomsms']))
 	{
 		if(isset($_POST['sendautosms']))
 		{
+			$messageType = 'payment_due';
+			$templateData = [
+				'name' => $row['pname'],
+				'amount' => $row['total_amount'],
+				'comment' => $row['comment'],
+			];
 			$message = "Dear {$row['pname']} \nYou have Rs.{$row['total_amount']} payment due for {$row['comment']} \n" .$dr_name."\n".$dr_phone;
 		}
 		else if(isset($_POST['sendcustomsms']))
 		{
+			$messageType = 'custom';
+			$templateData = [];
 			$message = $_POST['customsms'];
 		}
 		
 		if($row['phone'])
-			$result = $smsGateway->sendMessageToNumber($row['phone'], $message, $deviceID);
+			sendClinicMessage($messageGateway, $row['phone'], $messageType, $templateData, $message, $row['pname']);
 		if($row['phone2'])
-			$result = $smsGateway->sendMessageToNumber($row['phone2'], $message, $deviceID);
-		echo "SMS sent to {$row['pname']} <br>";
+			sendClinicMessage($messageGateway, $row['phone2'], $messageType, $templateData, $message, $row['pname']);
 	}
 }
 

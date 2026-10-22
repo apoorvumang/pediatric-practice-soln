@@ -1,11 +1,13 @@
 <?php include('header.php');
 
-include "smsGateway.php";
+include "messageGateway.php";
 include_once "gen-sched-func.php";
 
-$smsGateway = new SmsGateway('apoorvumang@gmail.com', 'vultr123');
-
-$deviceID = 84200;
+$messageGateway = new MessageGateway();
+$defaultClinicInfoMessage = "Address: C-14 Community Centre Naraina Vihar\n"
+	."Phone: 9717585207, 49873421\n"
+	."Timings: Mon to Sat 10.30am to 1.30pm, 6.00 to 8.30pm, \n"
+	."Dr.Mahima";
 ?>
 <script>
         // $(document).ready(function() {
@@ -447,14 +449,15 @@ else if($_POST['vac_date']) {
 		// 	mail($dr_email_sms, "ets: ".$_POST['phone2'], $message, $headers);
 
 		$message = $_POST['message'];
+		$messageType = $message === $defaultClinicInfoMessage ? 'clinic_info' : 'custom';
+		$templateData = [];
 
 		if($_POST['phone'])
-			$result = $smsGateway->sendMessageToNumber($_POST['phone'], $message, $deviceID);
+			sendClinicMessage($messageGateway, $_POST['phone'], $messageType, $templateData, $message, 'patient');
 		else
 			echo 'Problem sending SMS to phone number 1! <br>';
 		if($_POST['phone2'])
-			$result = $smsGateway->sendMessageToNumber($_POST['phone2'], $message, $deviceID);
-		echo "SMS sent! <br>";
+			sendClinicMessage($messageGateway, $_POST['phone2'], $messageType, $templateData, $message, 'patient');
 
 	} else if($_POST['save_dues']) {
 		foreach ($_POST['due_paid_date'] as $key => $value) {
@@ -1041,11 +1044,7 @@ else if($_POST['vac_date']) {
               <label for="message">Message:</label>
               <br />
               <?php
-                $message = "Address: C-14 Community Centre Naraina Vihar\n"
-                ."Phone: 9717585207, 49873421\n"
-                ."Timings: Mon to Sat 10.30am to 1.30pm, 6.00 to 8.30pm, \n"
-                ."Dr.Mahima";
-                echo "<textarea name=\"message\" id = \"message\" rows=4 cols=80>".$message."</textarea>";
+                echo "<textarea name=\"message\" id = \"message\" rows=4 cols=80>".$defaultClinicInfoMessage."</textarea>";
               ?>
             </div>
             <input type="hidden" name="phone" value=<?php echo "\"".$patient['phone']."\""?>>

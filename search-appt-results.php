@@ -1,6 +1,6 @@
 <?php include('header.php');
-include "smsGateway.php";
-$smsGateway = new SmsGateway();
+include "messageGateway.php";
+$messageGateway = new MessageGateway();
 ?>
 
 <h3>Appointment Search Results</h3>
@@ -111,17 +111,24 @@ $count++;
         $date = date('j M Y',strtotime($row['date']));
         if(isset($_POST['sendautosms']))
         {
+            $messageType = 'appointment_reminder';
+            $templateData = [
+                'name' => $row['first_name'],
+                'date' => $date,
+                'time' => $row['time'],
+            ];
             $message = "Dear {$row['first_name']}\nYou have an appointment on {$date} {$row['time']}\n" .$dr_name."\n".$dr_phone;
         }
         if(isset($_POST['sendcustomsms']))
         {
+            $messageType = 'custom';
+            $templateData = [];
             $message = $_POST['customsms'];
         }
-        if(row['phone'])
-            $result = $smsGateway->sendMessageToNumber($row['phone'], $message, $deviceID);
-        if(row['phone2'])
-            $result = $smsGateway->sendMessageToNumber($row['phone2'], $message, $deviceID);
-        echo "SMS sent to {$row['first_name']} <br>";
+        if($row['phone'])
+            sendClinicMessage($messageGateway, $row['phone'], $messageType, $templateData, $message, $row['first_name']);
+        if($row['phone2'])
+            sendClinicMessage($messageGateway, $row['phone2'], $messageType, $templateData, $message, $row['first_name']);
 	}
 }
 else
