@@ -272,13 +272,13 @@ $( function() {
 		<input type="submit" name="submit" value="Save"/>
 	</p>
 	<p>
-		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&delete=999\"" ?> onclick="return confirm('Confirm delete?');"><strong><font color="red">Delete patient</font></strong></a>
+		<a href=<?php echo "\"editpatient.php?id={$patient['id']}&delete=999\"" ?> onclick="return confirm('Confirm delete?');"><strong><font color="red">Delete patient</font></strong></a>
 	</p>
 	<p>
-		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&reschedule=999\"" ?> onclick="return confirm('Confirm reschedule?');"><strong><font color="blue">Reschedule patient</font></strong></a>
+		<a href=<?php echo "\"editpatient.php?id={$patient['id']}&reschedule=999\"" ?> onclick="return confirm('Confirm reschedule?');"><strong><font color="blue">Reschedule patient</font></strong></a>
 	</p>
 	<p>
-		<a href=<?php echo "\"editpatient.php?id={$patient[id]}&reschedule_tuesday=999\"" ?> onclick="return confirm('Confirm reschedule for tuesdays?');"><strong><font color="green">Reschedule only tuesdays</font></strong></a>
+		<a href=<?php echo "\"editpatient.php?id={$patient['id']}&reschedule_tuesday=999\"" ?> onclick="return confirm('Confirm reschedule for tuesdays?');"><strong><font color="green">Reschedule only tuesdays</font></strong></a>
 	</p>
 
 </form>

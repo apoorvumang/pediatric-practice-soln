@@ -96,7 +96,7 @@ if($_POST['specificdob']||$_POST['specificdob_noyear']||$_POST['specificname']||
 		</td>
 		<td>
 			<?php echo $row['phone']; ?>
-			<?php if($row['phone2']) echo "<br />" + $row['phone2']; ?>
+			<?php if($row['phone2']) echo "<br />" . $row['phone2']; ?>
 		</td>
 		<td>
 			<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$row['id']}\""; ?> phoneCount= <?php if($row['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $row['id'];?>/>
