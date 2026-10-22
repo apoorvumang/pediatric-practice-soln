@@ -1,4 +1,5 @@
 <?php
+mysqli_report(MYSQLI_REPORT_OFF); // PHP 8.1+ throws on failed queries by default; keep the PHP 7 behaviour of returning false
 session_name('tzLogin');
 session_set_cookie_params(2*7*24*60*60);
 session_start();

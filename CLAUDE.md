@@ -13,7 +13,8 @@ This is a **PHP + MySQL web-based practice management system** designed specific
 ## Technology Stack
 
 ### Backend
-- **Language**: PHP 7.x+
+- **Language**: PHP 8.2+ (tested on 8.3; the locked Composer dependencies need >= 8.2). The code still runs on 7.4, but 7.4 gets no security fixes.
+  - `mysqli_report(MYSQLI_REPORT_OFF)` is set at every DB entry point, because PHP 8.1+ otherwise throws on a failed query where the code expects `false`
 - **Database**: MySQL 5.5.16+ (InnoDB/MyISAM engines)
 - **Server**: Apache with .htaccess support
 - **Session Management**: Custom session handling with cookie-based "Remember Me"

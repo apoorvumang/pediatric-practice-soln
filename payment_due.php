@@ -69,7 +69,7 @@ while($payment_due = mysqli_fetch_assoc($result)) {
 	?>
 	<td>
 		<?php echo $payment_due['phone']; ?>
-		<?php if($payment_due['phone2']) echo "<br />" + $payment_due['phone2']; ?>
+		<?php if($payment_due['phone2']) echo "<br />" . $payment_due['phone2']; ?>
 	</td>
 	<td>
 		<input type="checkbox" name="send_sms_id[]" value= <?php echo "\"{$payment_due['pd_id']}\""; ?> phoneCount= <?php if($payment_due['phone2']) echo "2"; else echo "1"; ?> patientID = <?php echo $payment_due['id'];?>/>

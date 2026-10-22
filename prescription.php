@@ -1,4 +1,5 @@
 <?php
+mysqli_report(MYSQLI_REPORT_OFF); // PHP 8.1+ throws on failed queries by default; keep the PHP 7 behaviour of returning false
 require('connect.php');
 // $db_host		= 'localhost';
 $db_user		= 'drmahima_com';
