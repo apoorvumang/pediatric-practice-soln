@@ -70,6 +70,8 @@ function setNoOfDays() {
 	<h3>Medical Certificate with Fitness</h3>
   <form action="pdf-medcert_with_fitness.php" method="post">
     <input type="checkbox" name="save_pdf" value="true" checked /> Save certificate <br>
+    <input type="hidden" name="include_letterhead" value="0" />
+    <label><input type="checkbox" name="include_letterhead" value="1" checked /> Include clinic letterhead</label><br>
     Date: <input type="text" name="date" style="width:80px" id="date" value=<?php echo "\"".date('j M Y')."\"";?>/>
     <input type="hidden" name="p_id" value=<?php echo "'{$patient['id']}'"; ?> />
     <input type="hidden" name="patient_name" value=<?php echo "'{$patient['name']}'"; ?> />
