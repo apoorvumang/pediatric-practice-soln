@@ -1,9 +1,10 @@
 <?php
 
-class PDF extends FPDF
-{
+require_once __DIR__ . '/pdf-functions-medcert-base.php';
 
-	private $medcert_info;
+class PDF extends MedicalCertificatePDF
+{
+	protected $certificateTitle = 'Medical Certificate';
 
 	function WordWrap(&$text, $maxwidth)
 	{
@@ -59,34 +60,6 @@ class PDF extends FPDF
 	    }
 	    $text = rtrim($text);
 	    return $count;
-	}
-
-	function setVars($medcert_info)
-	{
-		$this->medcert_info = $medcert_info;
-	}
-
-	function Header()
-	{
-		// Arial bold 15
-		$medcert_info = $this->medcert_info;
-		$this->Ln(65);
-		$this->SetFont('Arial','',12);
-		$this->Write(5,$medcert_info['date']);
-		$this->Ln(10);
-		$this->SetFont('Arial','B',20);
-		// $medcert_info = $this->medcert_info;
-		$title = "Medical Certificate";
-		$w = $this->GetStringWidth($title)+6;
-		// Move to the right
-		$this->SetX((200-$w)/2);
-		// Thickness of frame (1 mm)
-		$this->SetLineWidth(1);
-		// Title
-		$this->Cell($w,9,$title);
-		// Line break
-		$this->Ln(20);
-
 	}
 
 	function body() {

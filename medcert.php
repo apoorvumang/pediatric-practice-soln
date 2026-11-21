@@ -65,6 +65,8 @@ function setNoOfDays() {
     <input type="hidden" name="p_id" value=<?php echo "'{$patient['id']}'"; ?> />
     <input type="hidden" name="patient_sex" value=<?php echo "'{$patient['sex']}'"; ?> />
     <input type="checkbox" name="save_pdf" value="true" checked /> Save certificate <br>
+    <input type="hidden" name="include_letterhead" value="0" />
+    <label><input type="checkbox" name="include_letterhead" value="1" checked /> Include clinic letterhead</label><br>
     Date: <input type="text" name="date" style="width:80px" id="date" value=<?php echo "\"".date('j M Y')."\"";?>/>
     <p> This is to certify that <?php echo "<b>".$patient['name']."</b>"; ?>
       <?php
